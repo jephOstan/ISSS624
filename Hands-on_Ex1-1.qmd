@@ -1,0 +1,357 @@
+---
+title: "Geospatial Data Wrangling with R [1]"
+editor: visual
+date: 18 Nov 2022
+---
+
+## 1.1 OVERVIEW
+
+Learning outcome to be expected from this exercise :
+
+-   installing and loading [sf](https://r-spatial.github.io/sf/) and [tidyverse](https://www.tidyverse.org/) packages into R environment,
+
+-   importing geospatial data by using appropriate functions of **sf** package,
+
+-   importing aspatial data by using appropriate function of **readr** package,
+
+-   exploring the content of simple feature data frame by using appropriate **Base R** and **sf** functions,
+
+-   assigning or transforming coordinate systems by using using appropriate *sf* functions,
+
+-   converting an aspatial data into a sf data frame by using appropriate function of **sf** package,
+
+-   performing geoprocessing tasks by using appropriate functions of **sf** package,
+
+-   performing data wrangling tasks by using appropriate functions of **dplyr** package and
+
+-   performing Exploratory Data Analysis (EDA) by using appropriate functions from **ggplot2** package.
+
+## 1.2 R PACKAGE REQUIRED
+
+Following are the packages require for this exercise :
+
+-   **sf** for importing, managing, and processing geospatial data.
+
+-   **tidyverse** for performing data science tasks such as importing, wrangling and visualising data.
+
+    -   **readr** for importing csv data
+
+    -   **readxl** for importing Excel worksheet
+
+    -   **tidyr** for manipulating data
+
+    -   **dplyr** for transforming data
+
+    -   **ggplot2** for visualising data
+
+This is the getting start paragraph.
+
+```{r}
+packages = c('sf', 'tidyverse','readr','readxl','tidyr','dplyr','ggplot2','pacman')
+for (p in packages){
+  if(!require(p, character.only = T)){
+    install.packages(p)
+  }
+  library(p,character.only = T)
+}
+pacman::p_load(sf, tidyverse, readr, readxl, ggplot2, dplyr, tidyr)
+```
+
+note : [all functions and methods in sf that operate on spatial data are prefixed by "st\_" .](https://r-spatial.github.io/sf/articles/sf1.html)
+
+## 1.3 GEOSPATIAL DATA
+
+### 1.3.1 acquire data source
+
+-   [***Master Plan 2014 Subzone Boundary (Web)***]{.underline} from [data.gov.sg](https://data.gov.sg/)
+
+-   [***Pre-Schools Location***]{.underline} from [data.gov.sg](https://data.gov.sg/)
+
+-   [***Cycling Path***]{.underline} from [LTADataMall](https://www.mytransport.sg/content/mytransport/home/dataMall.html)
+
+-   Latest version of Singapore Airbnb listing data from [Inside Airbnb](http://insideairbnb.com/get-the-data.html)
+
+### 1.3.2 import polygon data in shapefile format
+
+argument :
+
+`st_read` [to read simple features from file or database, or retrieve layer names and their geometry type(s)](https://r-spatial.github.io/sf/reference/st_read.html#arguments-1)
+
+`dsn` to define the data path
+
+`layer` to provide the shapefile name.
+
+```{r}
+mpsz = st_read(dsn = "data/geospatial", 
+                  layer = "MP14_SUBZONE_WEB_PL")
+```
+
+[Geometry type : multipolygon features]{style="color:#ad700c"}
+
+[Dimension : X and Y]{style="color:#ad700c"}
+
+### 1.3.3 import polyline data in shapefile form
+
+```{r}
+cyclingpath = st_read(dsn = "/jephOstan/ISSS624/data/geospatial",                 
+                      layer = "CyclingPath")
+```
+
+[Geometry type : linestring feature]{style="color:#ad700c"}
+
+[Dimension : X and Y]{style="color:#ad700c"}
+
+### 1.3.4 import GIS data in kml format
+
+```{r}
+preschool = st_read("/jephOstan/ISSS624/data/geospatial/pre-schools-location-kml.kml")
+```
+
+[Geometry type : point feature]{style="color:#ad700c"}
+
+[Dimension : X, Y and Z]{style="color:#ad700c"}
+
+## 1.4 CONTENT REVIEW
+
+### 1.4.1 retrieve geometry list-column
+
+There are 3 methods to do so :
+
+1.  mpsz\$geom
+2.  mpsz\[\[1\]\]
+3.  st_geometry()
+
+```{r}
+st_geometry(mpsz)
+```
+
+```{r}
+mpsz$geom
+```
+
+### 1.4.2 learn associated attribute
+
+*glimpse()* of dplyr reveals the data type of each fields.
+
+```{r}
+glimpse(mpsz)
+```
+
+### 1.4.3 reveal complete information of a feature object
+
+argument :
+
+n = number of records to display
+
+```{r}
+head(mpsz, n=5) 
+```
+
+## 1.5 PLOTTING GEOSPATIAL DATA
+
+```{r}
+plot(mpsz)
+```
+
+### 1.5.1 plot geometry only
+
+```{r}
+plot(st_geometry(mpsz))
+```
+
+### 1.5.2 plot with specific attribute
+
+```{r}
+plot(mpsz["PLN_AREA_N"])
+```
+
+## 1.6 PROJECTION TRANSFORMATION
+
+Ensure both geospatial data are projected using similar coordinate system
+
+### 1.6.1 assign EPSG code
+
+```{r}
+st_crs(mpsz)
+```
+
+### 1.6.2 assign correct EPSG code
+
+```{r}
+mpsz3414 <- st_set_crs(mpsz, 3414)
+```
+
+### 1.6.3 verify the EPSG code
+
+```{r}
+st_crs(mpsz3414)
+```
+
+### 1.6.4 transform wgs84 to svy21
+
+*st_transform()* is used whenneed to reproject x from one coordinate system to another coordinate system mathematically, which is not capable by *st_set_crs()*
+
+```{r}
+preschool3414 <- st_transform(preschool, 
+                              crs = 3414)
+st_geometry(preschool3414)
+```
+
+## 1.7 ASPATIAL DATA IMPORTATION AND CONVERSION
+
+### 1.7.1 import aspatial data
+
+```{r}
+listings <- read_csv("/jephOstan/ISSS624/data/aspatial/listings.csv")
+```
+
+### 1.7.2 review data with list()
+
+\>\> listing tibble data frame consists of 4252 rows and 16 columns.
+
+\>\> given the decimal in degree format, assumption made i.e. wgs84 Geographic Coordinate System.
+
+```{r}
+list(listings)
+```
+
+### 1.7.3 create sf data frame from aspatial data frame
+
+argument :
+
+-   *coords* - provide x-coordinates first before y-coordinates.
+
+-   *crs* - provide the coordinates system in EPSG format.
+
+-   *%\>%* is used to nest *st_transform()* to transform the newly created simple feature data frame into svy21 projected coordinates system.
+
+```{r}
+listings_sf <- st_as_sf(listings, 
+                       coords = c("longitude", "latitude"),
+                       crs=4326) %>%
+  st_transform(crs = 3414)
+```
+
+note : new column - 'geometry' is added while 'longitude' and 'latitude' are removed.
+
+```{r}
+glimpse(listings_sf)
+```
+
+## 1.8 GEOPROCESSING / GIS ANALYSIS
+
+Focus on 2 common geoprocessing functions -
+
+-   buffering
+
+-   point-in-polygon count
+
+### 1.8.1 set up buffering
+
+scenario : The authority is planning to upgrade the exiting cycling path. To do so, they need to acquire 5 metres of reserved land on the both sides of the current cycling path. You are tasked to determine the extend of the land need to be acquired and their total area.
+
+solution :
+
+```{r}
+buffer_cycling <- st_buffer(cyclingpath, 
+                               dist=5, nQuadSegs = 30)
+
+buffer_cycling$AREA <- st_area(buffer_cycling)
+
+sum(buffer_cycling$AREA)
+```
+
+### 1.8.2 point-in-polygon count
+
+scenario : A pre-school service group want to find out the numbers of pre-schools in each Planning Subzone.
+
+solution : [*st_intersects()*](https://r-spatial.github.io/sf/reference/geos_binary_pred.html) - identify pre-schools located inside each Planning Subzone
+
+*length()* - calculate numbers of pre-schools that fall inside each planning subzone.
+
+```{r}
+mpsz3414$`PreSch Count`<- lengths(st_intersects(mpsz3414, preschool3414))
+
+summary(mpsz3414$`PreSch Count`)
+```
+
+#### 1.8.2.1 list planning subzone with the most number of pre-school
+
+```{r}
+top_n(mpsz3414, 1, `PreSch Count`)
+```
+
+#### 1.8.2.2 **calculate the density of pre-school by planning subzone.**
+
+step 1 - use [*st_area()*](https://r-spatial.github.io/sf/reference/geos_measures.html) to derive the area of each planning subzone
+
+```{r}
+mpsz3414$Area <- mpsz3414 %>%
+  st_area()
+```
+
+step 2 -
+
+```{r}
+mpsz3414 <- mpsz3414 %>%
+  mutate(`PreSch Density` = `PreSch Count`/Area * 1000000)
+```
+
+## 1.9 EXPLORATORY DATA ANALYSIS (EDA)
+
+ggplot2 - *hist()* to reveal the distribution of `PreSch Density`. Too basic for further customisation.
+
+```{r}
+hist(mpsz3414$`PreSch Density`)
+```
+
+### 1.9.1 plot histogram
+
+with appropriate ggplot2 functions
+
+```{r}
+ggplot(data=mpsz3414, 
+       aes(x= as.numeric(`PreSch Density`)))+
+  geom_histogram(bins=20, 
+                 color="black", 
+                 fill="light blue") +
+  labs(title = "Are pre-school even distributed in Singapore?",
+       subtitle= "There are many planning sub-zones with a single pre-school, on the other hand, \nthere are two planning sub-zones with at least 20 pre-schools",
+      x = "Pre-school density (per km sq)",
+      y = "Frequency")
+```
+
+### 1.9.2 plot scatter plot
+
+method : **ggplot2**
+
+plot a scatterplot showing the relationship between Pre-school Density and Pre-school Count.
+
+```{r}
+glimpse(mpsz3414)
+```
+
+argument : *geom_point (size, color, shape)*
+
+*\>\>* \[**add label next to each observations** :\]{.underline, style="color:#ad700c"}
+
+*ggplot(dataset, aes(x=variable, y=variable)) + geom_point() + geom_text(label=rownames(dataset))*
+
+[[\>\> Change the line type and color :]{.underline}](http://www.sthda.com/english/wiki/ggplot2-scatter-plots-quick-start-guide-r-software-and-data-visualization) *ggplot(mtcars, aes(x=wt, y=mpg)) + geom_point(shape=18, color="blue")+ geom_smooth(method=lm, se=FALSE, linetype="dashed", color="darkred")*
+
+[\>\> Change the confidence interval fill color :]{.underline} *ggplot(mtcars, aes(x=wt, y=mpg)) + geom_point(shape=18, color="blue")+ geom_smooth(method=lm, linetype="dashed", color="darkred", fill="blue")*
+
+```{r}
+ggplot(mpsz3414,aes(x= as.numeric(`PreSch Density`), y=(`PreSch Count`))) + geom_point()
+
+  labs(title = "Are pre-school even distributed in Singapore?",
+       subtitle= "There are many planning sub-zones with a single pre-school, on the other hand, \nthere are two planning sub-zones with at least 20 pre-schools",
+      x = "Pre-school density (per km sq)",
+      y = "Count")
+```
+
+## 1.10 References
+
+-   r4gdsa.netlify.app. https://r4gdsa.netlify.app/chap02.html#data-preparation
+
+-   STHDA (Statistical tools for high-throughput data analysis), (N.A.), ggplot2 scatter plots : Quick start guide - R software and data visualization. http://www.sthda.com/english/wiki/ggplot2-scatter-plots-quick-start-guide-r-software-and-data-visualization
