@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-11-24">
+
+<title>ISSS624 - PN#Spatial Autocorrelation &amp; Spatial Dependency</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">ISSS624</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-references--notes" role="button" data-bs-toggle="dropdown" aria-expanded="false">References &amp; Notes</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-references--notes">    
+        <li>
+    <a class="dropdown-item" href="../personal_note/Acronym_Terminology.html">
+ <span class="dropdown-text">Acronym &amp; Terminology</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal_note/Personal_notes.html">
+ <span class="dropdown-text">PN#Common Errors and Basic Concepts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal_note/SpatialAutocorrelationSpatialDependency.html">
+ <span class="dropdown-text">PN#Spatial Autocorrelation &amp; Spatial Dependency</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal_note/SpatialConstrainedClusterAnalysis.html">
+ <span class="dropdown-text">PN#Spatially Constrained Cluster Analysis</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercises" role="button" data-bs-toggle="dropdown" aria-expanded="false">Hands-on Exercises</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">    
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex1-1.qmd">
+ <span class="dropdown-text">Geospatial Data Wrangling with R [1]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex1-2.qmd">
+ <span class="dropdown-text">Choropleth Mapping with R [2]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex2-4.qmd">
+ <span class="dropdown-text">Global &amp; Local Measures of Spatial Autocorrelation [4]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex3-5.qmd">
+ <span class="dropdown-text">Spatially Constrained Clustering Techniques [5]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex4-6.qmd">
+ <span class="dropdown-text">Geographically Weighted Regression [6]</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercises" role="button" data-bs-toggle="dropdown" aria-expanded="false">In-class Exercises</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercises">    
+        <li>
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex1/In-class_Ex1.qmd">
+ <span class="dropdown-text">Spatial Weights &amp; Applications [3]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex2/In-class_Ex2.qmd">
+ <span class="dropdown-text">In-class Exercise 2 - Case Study 1.1 Spatial Autocorrelation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex3/In-class_Ex3.qmd">
+ <span class="dropdown-text">In-class Exercise 3 - Case Study 1.2 Clustering Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex4/In-class_Ex4.qmd">
+ <span class="dropdown-text">In-class Exercise 4 - Case Study 2.1 Geographically Weighted Regression</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-class-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false">Class Projects</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-class-projects">    
+        <li>
+    <a class="dropdown-item" href="../class_project/project_1/spatial_weights.qmd">
+ <span class="dropdown-text">Spatial Weights &amp; Applications [1]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../class_project/project_2/Regionalisation_scca.qmd">
+ <span class="dropdown-text">Regionalisation with Spatially Constrained Cluster Analysis [2]</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">About</a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#spatial-relationships" id="toc-spatial-relationships" class="nav-link active" data-scroll-target="#spatial-relationships">SPATIAL RELATIONSHIPS</a>
+  <ul class="collapse">
+  <li><a href="#spatial-relationships-types" id="toc-spatial-relationships-types" class="nav-link" data-scroll-target="#spatial-relationships-types"><strong>Spatial Relationships Types</strong></a></li>
+  </ul></li>
+  <li><a href="#spatial-dependency" id="toc-spatial-dependency" class="nav-link" data-scroll-target="#spatial-dependency"><strong>SPATIAL DEPENDENCY</strong></a></li>
+  <li><a href="#spatial-autocorrelation" id="toc-spatial-autocorrelation" class="nav-link" data-scroll-target="#spatial-autocorrelation"><strong>SPATIAL AUTOCORRELATION</strong></a>
+  <ul class="collapse">
+  <li><a href="#variable-values-assumption" id="toc-variable-values-assumption" class="nav-link" data-scroll-target="#variable-values-assumption">VARIABLE VALUES ASSUMPTION</a>
+  <ul class="collapse">
+  <li><a href="#interpret-spatial-distribution" id="toc-interpret-spatial-distribution" class="nav-link" data-scroll-target="#interpret-spatial-distribution">interpret spatial distribution</a></li>
+  </ul></li>
+  <li><a href="#global-spatial-autocorrelation-gsa-measurement" id="toc-global-spatial-autocorrelation-gsa-measurement" class="nav-link" data-scroll-target="#global-spatial-autocorrelation-gsa-measurement">GLOBAL SPATIAL AUTOCORRELATION (GSA) MEASUREMENT</a>
+  <ul class="collapse">
+  <li><a href="#morans-i" id="toc-morans-i" class="nav-link" data-scroll-target="#morans-i"><strong>Moran’s I</strong></a></li>
+  <li><a href="#gearys-c" id="toc-gearys-c" class="nav-link" data-scroll-target="#gearys-c">Geary’s C</a></li>
+  <li><a href="#getis-ord-global-g" id="toc-getis-ord-global-g" class="nav-link" data-scroll-target="#getis-ord-global-g"><strong>Getis-Ord Global G</strong></a></li>
+  </ul></li>
+  <li><a href="#local-spatial-autocorrelation" id="toc-local-spatial-autocorrelation" class="nav-link" data-scroll-target="#local-spatial-autocorrelation">LOCAL SPATIAL AUTOCORRELATION</a>
+  <ul class="collapse">
+  <li><a href="#local-indicator-of-spatial-association-lisa" id="toc-local-indicator-of-spatial-association-lisa" class="nav-link" data-scroll-target="#local-indicator-of-spatial-association-lisa">local indicator of spatial association (LISA)</a></li>
+  <li><a href="#interpret-local-moran-scatterplot" id="toc-interpret-local-moran-scatterplot" class="nav-link" data-scroll-target="#interpret-local-moran-scatterplot">interpret Local Moran &amp; scatterplot</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#detect-hot-cold-spot-areas-with-getis-ord-gi-statistic" id="toc-detect-hot-cold-spot-areas-with-getis-ord-gi-statistic" class="nav-link" data-scroll-target="#detect-hot-cold-spot-areas-with-getis-ord-gi-statistic">detect hot &amp; cold spot areas with Getis-Ord Gi statistic</a></li>
+  </ul></li>
+  <li><a href="#spatial-randomness" id="toc-spatial-randomness" class="nav-link" data-scroll-target="#spatial-randomness"><strong>SPATIAL RANDOMNESS</strong></a>
+  <ul class="collapse">
+  <li><a href="#null-hypothesis-h0" id="toc-null-hypothesis-h0" class="nav-link" data-scroll-target="#null-hypothesis-h0">Null hypothesis (H0)</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"></a></li>
+  <li><a href="#assess-the-violation-of-assumptions" id="toc-assess-the-violation-of-assumptions" class="nav-link" data-scroll-target="#assess-the-violation-of-assumptions">assess the violation of assumptions</a></li>
+  </ul></li>
+  <li><a href="#considerations-for-weighting-scheme" id="toc-considerations-for-weighting-scheme" class="nav-link" data-scroll-target="#considerations-for-weighting-scheme">CONSIDERATIONS FOR WEIGHTING SCHEME</a>
+  <ul class="collapse">
+  <li><a href="#fixed-weighting-scheme" id="toc-fixed-weighting-scheme" class="nav-link" data-scroll-target="#fixed-weighting-scheme">fixed weighting scheme</a></li>
+  <li><a href="#adaptive-weighting-scheme" id="toc-adaptive-weighting-scheme" class="nav-link" data-scroll-target="#adaptive-weighting-scheme">adaptive weighting scheme</a></li>
+  </ul></li>
+  <li><a href="#suitability-of-spatial-weighting-method" id="toc-suitability-of-spatial-weighting-method" class="nav-link" data-scroll-target="#suitability-of-spatial-weighting-method">SUITABILITY OF SPATIAL WEIGHTING METHOD</a>
+  <ul class="collapse">
+  <li><a href="#polygon-contiguity-method" id="toc-polygon-contiguity-method" class="nav-link" data-scroll-target="#polygon-contiguity-method"><strong>polygon contiguity method</strong></a></li>
+  <li><a href="#fixed-distance-method" id="toc-fixed-distance-method" class="nav-link" data-scroll-target="#fixed-distance-method"><strong>fixed distance method</strong></a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2"></a></li>
+  <li><a href="#inverse-distance-method" id="toc-inverse-distance-method" class="nav-link" data-scroll-target="#inverse-distance-method">inverse distance method</a></li>
+  <li><a href="#k-nearest-neighbours-method" id="toc-k-nearest-neighbours-method" class="nav-link" data-scroll-target="#k-nearest-neighbours-method">k-nearest neighbours method</a></li>
+  </ul></li>
+  <li><a href="#guide-to-select-fixed-distance-band-value" id="toc-guide-to-select-fixed-distance-band-value" class="nav-link" data-scroll-target="#guide-to-select-fixed-distance-band-value">GUIDE TO SELECT FIXED-DISTANCE BAND VALUE</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">PN#Spatial Autocorrelation &amp; Spatial Dependency</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 24, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<p>PERSONAL NOTES</p>
+<section id="spatial-relationships" class="level1">
+<h1>SPATIAL RELATIONSHIPS</h1>
+<section id="spatial-relationships-types" class="level3">
+<h3 class="anchored" data-anchor-id="spatial-relationships-types"><strong>Spatial Relationships Types</strong></h3>
+<p>Adjacency, contiguity, overlap, and proximity are the four ways of describing the relationship between two or more entities.</p>
+<p>Spacial relationship either -</p>
+<ul>
+<li><p><strong>variable values</strong> for themes defined space - rainfall.</p></li>
+<li><p><strong>locations</strong> for themes defined objects - cities.</p></li>
+<li><p>&gt;&gt; measured as the existence of statistical dependence in a collection of random variables, each of which is associated with a different geographical location</p></li>
+</ul>
+</section>
+</section>
+<section id="spatial-dependency" class="level1">
+<h1><strong>SPATIAL DEPENDENCY</strong></h1>
+<p>Tools for exploring spatial dependence include :</p>
+<ul>
+<li><p><a href="https://en.wikipedia.org/wiki/Spatial_correlation" title="Spatial correlation">spatial correlation</a>, (?)</p></li>
+<li><p><a href="https://en.wikipedia.org/wiki/Spatial_covariance_function" title="Spatial covariance function">spatial covariance functions</a> (?)</p></li>
+<li><p><a href="https://en.wikipedia.org/wiki/Semivariogram" title="Semivariogram">semivariograms</a> (?)</p></li>
+</ul>
+<p>Methods for spatial interpolation include <a href="https://en.wikipedia.org/wiki/Kriging" title="Kriging">Kriging</a>, which is a type of <a href="https://en.wikipedia.org/wiki/Best_linear_unbiased_prediction" title="Best linear unbiased prediction">best linear unbiased prediction</a>. (?)</p>
+<p><br></p>
+</section>
+<section id="spatial-autocorrelation" class="level1">
+<h1><strong>SPATIAL AUTOCORRELATION</strong></h1>
+<p>Spatial dependency is the co-variation of properties within geographic space : characteristics at proximal locations appear to be correlated, either positively or negatively.</p>
+<p>Spatial dependency leads to the <strong>spatial <a href="https://en.wikipedia.org/wiki/Autocorrelation" title="Autocorrelation">autocorrelation</a></strong> problem in statistics as it violates standard statistical techniques that assume independence among observations.</p>
+<p>Spatial autocorrelation measures and analyse the degree of dependency among observations in a geographic space.</p>
+<ul>
+<li><p>Spatial autocorrelation statistics are global in the sense that they estimate the overall degree of spatial autocorrelation for a dataset. The possibility of spatial heterogeneity suggests that the estimated degree of autocorrelation may vary significantly across geographic space.</p></li>
+<li><p><strong>Local spatial autocorrelation statistics</strong> provide estimates disaggregated to the level of the spatial analysis units, allowing assessment of the dependency relationships across space.</p></li>
+</ul>
+<section id="variable-values-assumption" class="level2">
+<h2 class="anchored" data-anchor-id="variable-values-assumption">VARIABLE VALUES ASSUMPTION</h2>
+<p>The variable can assume values either :</p>
+<ul>
+<li><p>At <strong>any point</strong> on a <strong>continuous surface</strong> (e.g.&nbsp;land use type or annual precipitation levels in a region);</p></li>
+<li><p>At a <strong>set of fixed sites</strong> located within a region (e.g.&nbsp;prices at a set of retail outlets);</p></li>
+<li><p>Across a set of areas that subdivide a region (e.g.&nbsp;the count or proportion of households with two or more cars in a set of Census tracts that divide an urban region).</p></li>
+</ul>
+<p><br></p>
+<section id="interpret-spatial-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="interpret-spatial-distribution">interpret spatial distribution</h3>
+<ul>
+<li><p>clustering spatial distribution = high spatial autocorrelation</p></li>
+<li><p>checkerboard spatial distribution = low spatial autocorrelation</p></li>
+</ul>
+<table class="table">
+<caption>Table 1 : Summary of spatial autocorrelation relationship.</caption>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 44%">
+<col style="width: 39%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>trait</th>
+<th>Positive Spatial Autocorrelation</th>
+<th>Negative Spatial Autocorrelation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>clustering</td>
+<td>similar values tend to be in similar locations, cluster pattern</td>
+<td>dispersed, regular pattern (** != random pattern)</td>
+</tr>
+<tr class="even">
+<td>neighbours similarity</td>
+<td>high similarity than under spatial randomness.</td>
+<td>low similarity than under spatial randomness.</td>
+</tr>
+<tr class="odd">
+<td>compatibility</td>
+<td>compatible with diffusion, but not necessary caused by diffusion.</td>
+<td>compatible to competition, but not necessary competition.</td>
+</tr>
+<tr class="even">
+<td>visual ref</td>
+<td><img src="images/paste-C64372AD.png" class="img-fluid"></td>
+<td><img src="images/paste-0D24D306.png" class="img-fluid"></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+</section>
+</section>
+<section id="global-spatial-autocorrelation-gsa-measurement" class="level2">
+<h2 class="anchored" data-anchor-id="global-spatial-autocorrelation-gsa-measurement">GLOBAL SPATIAL AUTOCORRELATION (GSA) MEASUREMENT</h2>
+<ul>
+<li><p><strong>Moran’s I</strong> = describe how features differ from the values in the study area <strong>as a whole</strong>.</p></li>
+<li><p><strong>Geary’s C</strong> = describe how features differ from their <strong>immediate neighbours</strong>.</p></li>
+</ul>
+<p>Relationship of Moran’s I &amp; Geary’s C :</p>
+<ul>
+<li><p>C approaches 0 and I approaches 1 when similar values are <strong>clustered</strong>.</p></li>
+<li><p>C approaches 3 and I approaches -1 when dissimilar values <strong>tend to cluster</strong>.</p></li>
+<li><p>High values of C measures correspond to low values of I = <strong>both measures are<br>
+inversely related</strong>.</p></li>
+<li><p>I is a measure of global spatial autocorrelation, while C is more sensitive to local spatial autocorrelation.</p></li>
+</ul>
+<section id="morans-i" class="level3">
+<h3 class="anchored" data-anchor-id="morans-i"><strong>Moran’s I</strong></h3>
+<p>Moran I (Z value) is :</p>
+<ul>
+<li><p>positive (I&gt;0): Clustered, observations tend to be similar;</p></li>
+<li><p>negative(I&lt;0): Dispersed, observations tend to be dissimilar;</p></li>
+<li><p>approximately zero: observations are arranged randomly over space</p></li>
+</ul>
+</section>
+<section id="gearys-c" class="level3">
+<h3 class="anchored" data-anchor-id="gearys-c">Geary’s C</h3>
+<p>Geary C (Z value) is :</p>
+<ul>
+<li><p>Large c value (&gt;1) : Dispersed, observations tend to be dissimilar;</p></li>
+<li><p>Small c value (&lt;1) : Clustered, observations tend to be similar;</p></li>
+<li><p>c = 1: observations are arranged randomly over space.</p></li>
+</ul>
+</section>
+<section id="getis-ord-global-g" class="level3">
+<h3 class="anchored" data-anchor-id="getis-ord-global-g"><strong>Getis-Ord Global G</strong></h3>
+<p>Measures of global high / low clustering.</p>
+<ul>
+<li><p>Concerned with the overall concentration or lack of concentration in all pairs that are neighbours given the definition of neighbouring areas.</p></li>
+<li><p>The variable MUST contain only positive values to be used.</p>
+<p>&gt;&gt; e.g.&nbsp;growth rate that consists +ve &amp; -ve. The value will be off if involve -ve value.</p></li>
+</ul>
+<table class="table">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 25%">
+<col style="width: 35%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>interpretation</th>
+<th style="text-align: left;">cannot reject H0</th>
+<th style="text-align: left;">may reject H0</th>
+<th style="text-align: left;">may reject H0</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>p-value</td>
+<td style="text-align: left;">not significant</td>
+<td style="text-align: left;">statistically significant</td>
+<td style="text-align: left;">statistically significant</td>
+</tr>
+<tr class="even">
+<td>z-score</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">positive</td>
+<td style="text-align: left;">negative</td>
+</tr>
+<tr class="odd">
+<td>remarks</td>
+<td style="text-align: left;">Observed spatial pattern of values could be one of many possible versions of <strong>complete spatial randomness</strong>.</td>
+<td style="text-align: left;"><strong>Spatial distribution of high values</strong> in the dataset is more spatially clustered than would be expected if underlying spatial processes were truly random.</td>
+<td style="text-align: left;"><strong>Spatial distribution of low values</strong> in the dataset is more spatially clustered than would be expected if underlying spatial processes were truly random.</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>** revision corner **</p>
+<p><img src="images/paste-35408948.png" class="img-fluid" width="368"></p>
+<ul>
+<li><p>select confident interval 95% =&gt; alpha value = 0.05</p></li>
+<li><p>reject Null hypothesis (H0) if p-value &lt; alpha value</p></li>
+<li><p>failed to reject H0 if p-value &gt; alpha value</p></li>
+</ul>
+<p><br></p>
+</section>
+</section>
+<section id="local-spatial-autocorrelation" class="level2">
+<h2 class="anchored" data-anchor-id="local-spatial-autocorrelation">LOCAL SPATIAL AUTOCORRELATION</h2>
+<ul>
+<li><p>A collection of geospatial statistical analysis methods for analysing the location related tendency (clusters or outliers) in the attributes of geographically referenced data (points or areas).</p></li>
+<li><p>Can be indecies decomposited from their global measures such as local Moran’s I, local Geary’s c, and Getis-Ord Gi*.</p></li>
+<li><p>These spatial statistics are well suited for :</p>
+<ul>
+<li><p>detecting clusters or outliers;</p></li>
+<li><p>identifying hot spot or cold spot areas;</p></li>
+<li><p>assessing the assumptions of stationarity;</p></li>
+<li><p>identifying distances beyond which no discernible association obtains.</p></li>
+</ul></li>
+</ul>
+<section id="local-indicator-of-spatial-association-lisa" class="level3">
+<h3 class="anchored" data-anchor-id="local-indicator-of-spatial-association-lisa">local indicator of spatial association (LISA)</h3>
+<p>A subset of localised geospatial statistics methods.</p>
+<p>Any spatial statistics that satisfies the following two requirements :</p>
+<ul>
+<li><p>the LISA for <strong>each observation gives an indication of the extent of significant spatial clustering</strong> of similar values around that observation;</p></li>
+<li><p>the sum of LISAs for <strong>all observations is proportional to a global indicator</strong> of spatial association.</p></li>
+</ul>
+<p>Local Indicators of Spatial Association or LISA are statistics that evaluate the existence of clusters in the spatial arrangement of a given variable.</p>
+<p>For instance if we are studying cancer rates among census tracts in a given city local clusters in the rates mean that there are areas that have higher or lower rates than is to be expected by chance alone; that is, the values occurring are above or below those of a random distribution in space.</p>
+</section>
+<section id="interpret-local-moran-scatterplot" class="level3">
+<h3 class="anchored" data-anchor-id="interpret-local-moran-scatterplot">interpret Local Moran &amp; scatterplot</h3>
+<p>An <strong>outlier</strong> = <strong>significant &amp; negative</strong> if location i is associated with relatively low values in surrounding locations.</p>
+<p>A <strong>cluster</strong> = <strong>significant &amp; positive</strong> if location i is associated with relatively high values of the surrounding locations.</p>
+<ul>
+<li><p>In either instance, the p-value for the feature must be small enough for the cluster or outlier to be considered statistically significant.</p></li>
+<li><p>The commonly used alpha-values are 0.1, 0.05, 0.01, 0.001 corresponding the 90%, 95, 99% and 99.9% confidence intervals respectively.</p></li>
+</ul>
+</section>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+</section>
+<section id="detect-hot-cold-spot-areas-with-getis-ord-gi-statistic" class="level3">
+<h3 class="anchored" data-anchor-id="detect-hot-cold-spot-areas-with-getis-ord-gi-statistic">detect hot &amp; cold spot areas with Getis-Ord Gi statistic</h3>
+<p>Interpretation of Getis-Ord Gi and Gi :</p>
+<ul>
+<li><p>A <strong>hot spot</strong> area: <strong>significant and positive</strong> if location i is associated with relatively <strong>high values</strong> of the surrounding locations.</p></li>
+<li><p>A <strong>cold spot</strong> area: <strong>significant and negative</strong> if location i is associated with relatively <strong>low values</strong> in surrounding locations.</p></li>
+</ul>
+<p><br></p>
+</section>
+</section>
+<section id="spatial-randomness" class="level2">
+<h2 class="anchored" data-anchor-id="spatial-randomness"><strong>SPATIAL RANDOMNESS</strong></h2>
+<section id="null-hypothesis-h0" class="level3">
+<h3 class="anchored" data-anchor-id="null-hypothesis-h0">Null hypothesis (H0)</h3>
+<ul>
+<li><p>Observed spatial pattern of values is <strong>equally likely</strong> as any other spatial pattern.</p></li>
+<li><p>Values at one location <strong>do not depend</strong> on values at other (neighbouring) locations.</p></li>
+<li><p>Under spatial randomness, the <strong>location of values</strong> <strong>may be altered without affecting</strong><br>
+the <strong>information content</strong> of the data.</p></li>
+</ul>
+</section>
+<section id="section-1" class="level3">
+<h3 class="anchored" data-anchor-id="section-1"></h3>
+</section>
+<section id="assess-the-violation-of-assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="assess-the-violation-of-assumptions">assess the violation of assumptions</h3>
+<p>Use a <strong>Monte Carlo simulation</strong> to assess the assumptions of Moran’s I are true (normality and randomisation).</p>
+<ul>
+<li><p>Simulate Moran’s I n times under the assumption of no spatial pattern,</p></li>
+<li><p>Assigning all regions the mean value</p></li>
+<li><p>Calculate Moran’s I,</p></li>
+<li><p>Compare actual value of Moran’s I to randomly simulated distribution to obtain p-value (pseudo significance).</p></li>
+</ul>
+<p><br></p>
+</section>
+</section>
+<section id="considerations-for-weighting-scheme" class="level2">
+<h2 class="anchored" data-anchor-id="considerations-for-weighting-scheme">CONSIDERATIONS FOR WEIGHTING SCHEME</h2>
+<section id="fixed-weighting-scheme" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-weighting-scheme">fixed weighting scheme</h3>
+<ul>
+<li><p>All features should have at least one neighbour.</p></li>
+<li><p>No feature should have all other features as neighbours.</p></li>
+<li><p>Especially when input field values are skewed, focus on features to have about eight neighbors each.</p></li>
+<li><p>Might produce large estimate variances where data are sparse, while mask subtle local variations where data are dense.</p></li>
+<li><p>In extreme condition, fixed schemes might not be able to calibrate in local areas where data are too sparse to satisfy the calibration requirements (observations must be more than parameters).<br>
+</p></li>
+</ul>
+</section>
+<section id="adaptive-weighting-scheme" class="level3">
+<h3 class="anchored" data-anchor-id="adaptive-weighting-scheme">adaptive weighting scheme</h3>
+<ul>
+<li><p>Adaptive schemes adjust itself according to the density of data</p></li>
+<li><p>Shorter bandwidths where data are dense and longer where sparse.</p></li>
+<li><p>Finding nearest neighbors are one of the oen used approaches.</p></li>
+</ul>
+<p><br></p>
+</section>
+</section>
+<section id="suitability-of-spatial-weighting-method" class="level2">
+<h2 class="anchored" data-anchor-id="suitability-of-spatial-weighting-method">SUITABILITY OF SPATIAL WEIGHTING METHOD</h2>
+<section id="polygon-contiguity-method" class="level3">
+<h3 class="anchored" data-anchor-id="polygon-contiguity-method"><strong>polygon contiguity method</strong></h3>
+<ul>
+<li><p>Effective when polygons are similar in size and distribution, and</p></li>
+<li><p>When spatial relationships are a function of polygon proximity (if two polygons share a boundary, spatial interaction between them increases).</p></li>
+<li><p>When select a polygon contiguity conceptualization - select row standardization for tools that have the Row Standardization parameter.<br>
+</p></li>
+</ul>
+</section>
+<section id="fixed-distance-method" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-distance-method"><strong>fixed distance method</strong></h3>
+<ul>
+<li><p>Works well for point data. It is often a good option for polygon data.</p></li>
+<li><p>When there is a <strong>large variation in polygon size</strong> (very large polygons at the edge of the study area and <strong>very small polygons at the center</strong> of the study area.</p></li>
+<li><p>Ensure a consistent scale of analysis.</p></li>
+</ul>
+</section>
+<section id="section-2" class="level3">
+<h3 class="anchored" data-anchor-id="section-2"></h3>
+</section>
+<section id="inverse-distance-method" class="level3">
+<h3 class="anchored" data-anchor-id="inverse-distance-method">inverse distance method</h3>
+<ul>
+<li><p>Most appropriate with continuous data or to model processes where the closer two features are in space, the more likely they are to interact / influence each other.</p></li>
+<li><p>Every feature is potentially a neighbour of every other feature, and with large datasets, the number of computations involved will be enormous.</p></li>
+</ul>
+</section>
+<section id="k-nearest-neighbours-method" class="level3">
+<h3 class="anchored" data-anchor-id="k-nearest-neighbours-method">k-nearest neighbours method</h3>
+<p>Effective when you want to ensure you have a minimum number of neighbors for your analysis.</p>
+<p>Works well when the data distribution varies across the study area so that some features are far away from all other features.</p>
+<ul>
+<li><p>Especially when the associated features values are skewed (are not normally distributed), it is important that each feature is evaluated within the context of at least eight or so neighbors (this is a rule of thumb only).</p></li>
+<li><p>Spatial context of the analysis changes depending on variations in the sparsity/density of the features.</p></li>
+<li><p>When fixing the scale of analysis is less important than fixing the number of neighbors, the k-nearest neighbours method is appropriate.</p></li>
+</ul>
+<p><br></p>
+</section>
+</section>
+<section id="guide-to-select-fixed-distance-band-value" class="level2">
+<h2 class="anchored" data-anchor-id="guide-to-select-fixed-distance-band-value">GUIDE TO SELECT FIXED-DISTANCE BAND VALUE</h2>
+<ul>
+<li><p>Select a distance based on what you know about the geographic extent of the spatial processes promoting clustering for the phenomena you are studying.</p></li>
+<li><p>Use a distance band that is large enough to ensure all features will have at least one neighbor, or results will not be valid.</p></li>
+<li><p>Try not to get stuck on the idea that there is only one correct distance band.</p></li>
+<li><p>Most likely, there are multiple/interacting spatial processes<br>
+promoting observed clustering.</p></li>
+<li><p>Select an appropriate distance band or threshold distance.</p></li>
+<li><p>All features should have at least one neighbour.</p></li>
+<li><p>No feature should have all other features as a neighbour.</p></li>
+<li><p>Especially if the values for the input field are skewed, each feature should have about eight neighbours.</p></li>
+</ul>
+<p><br>
+</p>
+<p><br>
+</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

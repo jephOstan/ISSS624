@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-11-19">
+
+<title>ISSS624 - PN#Common Errors and Basic Concepts</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">ISSS624</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-references--notes" role="button" data-bs-toggle="dropdown" aria-expanded="false">References &amp; Notes</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-references--notes">    
+        <li>
+    <a class="dropdown-item" href="../personal_note/Acronym_Terminology.html">
+ <span class="dropdown-text">Acronym &amp; Terminology</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal_note/Personal_notes.html">
+ <span class="dropdown-text">PN#Common Errors and Basic Concepts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal_note/SpatialAutocorrelationSpatialDependency.html">
+ <span class="dropdown-text">PN#Spatial Autocorrelation &amp; Spatial Dependency</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../personal_note/SpatialConstrainedClusterAnalysis.html">
+ <span class="dropdown-text">PN#Spatially Constrained Cluster Analysis</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercises" role="button" data-bs-toggle="dropdown" aria-expanded="false">Hands-on Exercises</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">    
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex1-1.qmd">
+ <span class="dropdown-text">Geospatial Data Wrangling with R [1]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex1-2.qmd">
+ <span class="dropdown-text">Choropleth Mapping with R [2]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex2-4.qmd">
+ <span class="dropdown-text">Global &amp; Local Measures of Spatial Autocorrelation [4]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex3-5.qmd">
+ <span class="dropdown-text">Spatially Constrained Clustering Techniques [5]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Hands-on_Ex4-6.qmd">
+ <span class="dropdown-text">Geographically Weighted Regression [6]</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercises" role="button" data-bs-toggle="dropdown" aria-expanded="false">In-class Exercises</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercises">    
+        <li>
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex1/In-class_Ex1.qmd">
+ <span class="dropdown-text">Spatial Weights &amp; Applications [3]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex2/In-class_Ex2.qmd">
+ <span class="dropdown-text">In-class Exercise 2 - Case Study 1.1 Spatial Autocorrelation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex3/In-class_Ex3.qmd">
+ <span class="dropdown-text">In-class Exercise 3 - Case Study 1.2 Clustering Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex4/In-class_Ex4.qmd">
+ <span class="dropdown-text">In-class Exercise 4 - Case Study 2.1 Geographically Weighted Regression</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-class-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false">Class Projects</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-class-projects">    
+        <li>
+    <a class="dropdown-item" href="../class_project/project_1/spatial_weights.qmd">
+ <span class="dropdown-text">Spatial Weights &amp; Applications [1]</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../class_project/project_2/Regionalisation_scca.qmd">
+ <span class="dropdown-text">Regionalisation with Spatially Constrained Cluster Analysis [2]</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">Home</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">About</a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#common-errors" id="toc-common-errors" class="nav-link active" data-scroll-target="#common-errors">COMMON ERRORS</a></li>
+  <li><a href="#concept-notes-for-geocomputation-with-r" id="toc-concept-notes-for-geocomputation-with-r" class="nav-link" data-scroll-target="#concept-notes-for-geocomputation-with-r">CONCEPT NOTES FOR GEOCOMPUTATION WITH R</a>
+  <ul class="collapse">
+  <li><a href="#toblers-first-law-of-geography" id="toc-toblers-first-law-of-geography" class="nav-link" data-scroll-target="#toblers-first-law-of-geography">Tobler’s First law of Geography</a></li>
+  </ul></li>
+  <li><a href="#code-references" id="toc-code-references" class="nav-link" data-scroll-target="#code-references">CODE REFERENCES</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">REFERENCES</a></li>
+  <li><a href="#quarto-quick-references" id="toc-quarto-quick-references" class="nav-link" data-scroll-target="#quarto-quick-references">QUARTO QUICK REFERENCES</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">PN#Common Errors and Basic Concepts</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 19, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="common-errors" class="level2">
+<h2 class="anchored" data-anchor-id="common-errors">COMMON ERRORS</h2>
+<ol type="1">
+<li><p>During importing geospatial data, the coordinate system of the source data was either missing (such as due to missing .proj for ESRI shapefile) or wrongly assigned during the importing process.</p></li>
+<li><p>Input feature class contains less than 30 features.</p>
+<p>&gt;&gt; produce low reliability results.</p></li>
+<li><p>The input field in categorical attribute field.</p></li>
+<li><p>Use WGS84, or even undefined.</p>
+<p>&gt;&gt; Should always use projection based coordinates.</p></li>
+</ol>
+<p><br></p>
+</section>
+<section id="concept-notes-for-geocomputation-with-r" class="level2">
+<h2 class="anchored" data-anchor-id="concept-notes-for-geocomputation-with-r">CONCEPT NOTES FOR GEOCOMPUTATION WITH R</h2>
+<p>Following notes are quoted from <a href="https://bookdown.org/robinlovelace/geocompr/spatial-class.html">Geocomputation with R</a></p>
+<ol type="1">
+<li><p>simple feature geometries (basic) &gt; sfg - objects &gt; sfc - ‘list columns’ of class &gt; sf - (full objects)</p></li>
+<li><p><code>sfg</code> class :</p>
+<p>2.1 - represents the different simple feature geometry types in R : point, linestring, polygon (and their ‘multi’ equivalents, such as multipoints) or geometry collection.</p>
+<ul>
+<li><p>A point: <code>st_point()</code></p></li>
+<li><p>A linestring: <code>st_linestring()</code></p></li>
+<li><p>A polygon: <code>st_polygon()</code></p></li>
+<li><p>A multipoint: <code>st_multipoint()</code></p></li>
+<li><p>A multilinestring: <code>st_multilinestring()</code></p></li>
+<li><p>A multipolygon: <code>st_multipolygon()</code></p></li>
+<li><p>A geometry collection: <code>st_geometrycollection()</code></p></li>
+</ul>
+<p>2.2 - <code>sfg</code> objects can be created from three base R data types:</p>
+<ul>
+<li><p>A numeric vector: a single point</p></li>
+<li><p>A matrix: a set of points, where each row represents a point, a multipoint or linestring</p></li>
+<li><p>A list: a collection of objects such as matrices, multilinestrings or geometry collections</p></li>
+</ul>
+<p><em>#further read-up is required</em></p></li>
+<li><p><code>sfc</code> class :</p>
+<p>3.1 - <code>sfc</code> is a list of <code>sfg</code> objects, which is additionally able to contain information about the coordinate reference system in use. For instance, to combine two simple features into one object with two features, we can use the <code>st_sfc()</code> function. This is important since <code>sfc</code> represents the geometry column in <strong>sf</strong> data frames</p>
+<p><em>#further read up is required</em></p></li>
+<li><p><code>sf</code> represent a set of data by combining the attributes (<code>data.frame</code>) with the simple feature geometry column (<code>sfc</code>). They are created with <code>st_sf()</code> .</p>
+<p><em>#further read-up is required</em></p></li>
+<li><p>In geospatial analytics, it is very common for us to transform the original data from geographic coordinate system ( 0-360 range of decimal degree) to projected coordinate system.</p>
+<p>&gt;&gt; geographic coordinate system is not appropriate if the analysis need to use distance or/and area measurements.</p></li>
+<li><p>Shape objects can be vector or raster data</p>
+<ul>
+<li><p><code>sf</code> objects for vector data</p></li>
+<li><p><code>stars</code> objects for raster data</p>
+<p><a href="https://r-tmap.github.io/tmap-book/tmshape.html">In <strong>tmap</strong>, a shape object needs to be defined with the function <code>tm_shape()</code>. When multiple shape objects are used, each has to be defined in a separate <code>tm_shape()</code> call.</a></p>
+<pre><code>tm_shape(worldelevation) +
+  tm_raster("worldelevation.tif", palette = terrain.colors(8)) +
+tm_shape(worldvector) +
+  tm_borders() +
+tm_shape(worldcities) +
+  tm_dots() +
+  tm_text("name")</code></pre>
+<p>three shapes: <code>worldelevation</code> which is a <code>stars</code> object containing an attribute called <code>"worldelevation.tif"</code>, <code>worldvector</code> which is an <code>sf</code> object with country borders, and <code>worldcities</code>, which is an <code>sf</code> object that contains metropolitan areas of at least 20 million inhabitants.</p>
+<p>Each <code>tm_shape()</code> function call is succeeded by one or more layer functions.</p>
+<p>The order of the <code>tm_shape()</code> functions’ calls is crucial. The first <code>tm_shape()</code>, known as the main shape, is not only shown below the following <em>shapes</em>, but also sets the projection and extent of the whole map.</p></li>
+</ul></li>
+</ol>
+<section id="toblers-first-law-of-geography" class="level3">
+<h3 class="anchored" data-anchor-id="toblers-first-law-of-geography">Tobler’s First law of Geography</h3>
+<p>” Everything is related to everything else, but near things are more related than distant things.”</p>
+<p>Foundation of :</p>
+<ul>
+<li><p>spatial dependence</p></li>
+<li><p>spatial autocorrelation</p></li>
+</ul>
+<p><br></p>
+</section>
+</section>
+<section id="code-references" class="level2">
+<h2 class="anchored" data-anchor-id="code-references">CODE REFERENCES</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>EPSG code</th>
+<th>geodetic CRS</th>
+<th>datum</th>
+<th>ellipsoid</th>
+<th>area of use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://epsg.io/3414">3414 - 4326</a></td>
+<td>SVY21</td>
+<td>SVY21</td>
+<td>WGS 84 (4326)</td>
+<td>Singapore - onshore and offshore</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">REFERENCES</h2>
+<ul>
+<li>wiki.gis.com. Datum (geodesy) - http://wiki.gis.com/wiki/index.php/Datum_(geodesy)</li>
+<li>Chapter 4 Specifying Spatial Data - https://r-tmap.github.io/tmap-book/tmshape.html</li>
+</ul>
+<p><br></p>
+</section>
+<section id="quarto-quick-references" class="level2">
+<h2 class="anchored" data-anchor-id="quarto-quick-references">QUARTO QUICK REFERENCES</h2>
+<ul>
+<li><p>HTML Theming - https://quarto.org/docs/output-formats/html-themes.html</p></li>
+<li><p>HTML Code Blocks - https://quarto.org/docs/output-formats/html-code.html</p></li>
+<li><p>HTML Options - https://quarto.org/docs/reference/formats/html.html</p></li>
+<li><p>Article Layout - https://quarto.org/docs/authoring/article-layout.html</p></li>
+<li><p>Tables - https://quarto.org/docs/authoring/tables.html</p></li>
+<li><p>reStructuredText Options - https://quarto.org/docs/reference/formats/rst.html</p></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

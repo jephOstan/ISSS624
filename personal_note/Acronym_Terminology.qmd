@@ -1,0 +1,161 @@
+---
+title: "Acronym & Terminology"
+editor: visual
+date: 19 Nov 2022
+---
+
+# ACRONYM
+
+ASP = Aspect ratio.
+
+chr = Character (one of the basic data types in R. Others : integer, complex, logical, and double)
+
+CRS = Coordinate Reference Systems
+
+EDA = Exploratory Data Analysis
+
+dbl = Double (one of the basic data types in R. Others : integer, complex, logical, and character)
+
+DBF = Dbase Database File
+
+DSN = Data Source Name
+
+EDA = Exploratory Data Analysis
+
+ESDA = Exploratory Spatial Data Analysis
+
+EPSG = European Petroleum Survey Group
+
+GEOREF = World Geographic Reference system
+
+GIS = Geographic Information System
+
+GLSA = Global and Local Measure of Spatial Autocorrelation
+
+GSA = Global Spatial Autocorrelation
+
+GWR = Geographically Weighted Regression
+
+IDW = Inverse Distance Weighting
+
+JOG = Joint Operations Graphic maps
+
+knn = k nearest neighbours
+
+LGA = Local Government Areas
+
+LISA = Local Indicator of Spatial Association
+
+MGRS = Military Grid Reference System
+
+nb = neighbourhood object
+
+ONC = Operational Navigation Chart
+
+PN = Personal Notes :)
+
+pch = point shapes
+
+PRJ = Projection Definition File
+
+qtm = Quick Thematic Map plot
+
+SFC = Simple Feature Columns
+
+SFG = Simple Feature Geometries
+
+SPCS = U.S. State Plane Coordinate System zone
+
+SRIDs = Spatial Reference System Identifiers
+
+USGS = U.S. Geological Survey
+
+UTM = Universal Transverse Mercator (grids / projection / zone boundaries)
+
+VIF = Variance Inflation Factors
+
+WKT = Well Known Text
+
+<br>
+
+# TERMINOLOGY
+
+## A
+
+-   <font size = "5pt"> **Autocorrelation** </font> = also known as **serial correlation** in the discrete time case. The analysis of autocorrelation is a mathematical tool for finding repeating patterns, such as the presence of a periodic signal obscured by noise, or identifying the missing fundamental frequency in a signal implied by its harmonic frequencies.
+
+## C
+
+-   <font size = "5pt"> [**Cardinal directions**](https://study.com/learn/lesson/cardinal-intermediate-directions-map-compass.html) </font> = Cardinal directions are the main directions of the compass.
+
+    -   **intercardinal directions**, or **ordinal directions**, are the four points in between the cardinal directions.
+
+    -   **Secondary intercardinal directions** : north-northeast (NNE), east-northeast (ENE), east-southeast (ESE), etc.
+
+-   <font size = "5pt"> **Cartography** </font> = Cartographic (adj). relating to the science or practice of drawing maps.
+
+-   <font size = "5pt"> **Contiguity** </font> = the topological concept that allows the vector data model to determine adjacency. Polygon topology defines contiguity. Polygons are contiguous to each other if they share a common arc.
+
+    \>\> contiguous = land adjoining or touching by a common corner or a common boundary line.
+
+## D
+
+-   <font size = "5pt"> [**Datum (geodesy)**](http://wiki.gis.com/wiki/index.php/Datum_(geodesy)) </font> = a reference from which spatial measurements are made. In [surveying](http://wiki.gis.com/wiki/index.php/Surveying "Surveying") and [geodesy](http://wiki.gis.com/wiki/index.php/Geodesy "Geodesy"), a [**datum**](http://wiki.gis.com/wiki/index.php/GIS_Glossary/D#datum "GIS Glossary/D") is a set of reference points on the earth's surface against which position measurements are made, and (often) an associated model of the shape of the earth ([reference ellipsoid](http://wiki.gis.com/wiki/index.php/Reference_ellipsoid "Reference ellipsoid")) to define a [geographic coordinate system](http://wiki.gis.com/wiki/index.php/Geographic_coordinate_system "Geographic coordinate system").
+
+-   <font size = "5pt"> [**Delimited**](https://doc.arcgis.com/en/iot/ingest/delimited.htm) </font>= Delimited data is a common format that separates values in each row with specific delimiter characters. Often use commas as the field delimiter to separate data from different columns. However, delimited files can also separate, or delimit, columns with other characters including pipes, colons, semicolons, slashes, and more.
+
+## E
+
+-   <font size = "5pt"> [**Enumerated data**](https://en.wikipedia.org/wiki/Enumerated_type)</font> = **enumerated type** (also called **enumeration**, **enum**, or **factor** in the R programming language, and a categorical variable in statistics) is a data type consisting of a set of named values called *elements*, *members*, *enumeral*, or *enumerators* of the type.
+
+    -   The enumerator names are usually **identifiers** that behave as constants in the language.
+
+    -   An enumerated type can be seen as a degenerate [tagged union](https://en.wikipedia.org/wiki/Tagged_union "Tagged union") of unit type.
+
+    -   A variable that has been declared as having an enumerated type can be assigned any of the enumerators as a value.
+
+    -   e.g.
+
+        \>\> the four suits in a deck of cards may be four enumerators named *Club*, *Diamond*, *Heart*, and *Spade*, belonging to an enumerated type named *suit*.
+
+        \>\> If a variable *V* is declared having *suit* as its data type, one can assign any of those four values to it.
+
+## G
+
+-   <font size = "5pt"> **Graduated colour** </font>**=** colour symbology is used to show a quantitative difference between mapped features by varying the color of symbols.
+
+    -   Data is classified into ranges that are each assigned a different color from a color scheme to represent the range.
+
+    -   e.g. if a classification scheme has 5 classes, 5 different symbol colors are assigned.
+
+        \>\> The size of the [symbols stays the same]{.underline}. Maps that vary in color this way are usually called choropleth maps.
+
+        \>\> choose a [continuous color scheme]{.underline} to apply different shades of the same color : lighter shades match lower data values & darker shades match higher data values.
+
+-   <font size = "5pt"> [**Graticules**](https://pro.arcgis.com/en/pro-app/latest/help/layouts/add-and-modify-graticules.htm) </font>= are a network of lines on a map that delineate the geographic coordinates (degrees of latitude and longitude).
+
+    -   Graticules can be used to measure distances, while the grid can be used to measure the number of items within a particular area.
+
+    -   Graticules also helps to [indicate cardinal directions](https://en.wikipedia.org/wiki/Graticule_(cartography)) and place locations having knowing coordinates.
+
+## H
+
+-   <font size = "5pt"> **Hedonic Pricing** </font>**=** identifies the internal and external factors and characteristics that affect an item's price in the market.
+
+    -   Hedonic pricing is most often seen in the housing market, since real estate prices are determined by the characteristics of the property itself as well as the neighborhood or environment within which it exists.
+
+    -   Hedonic pricing captures a consumer's willingness to pay for what they perceive are environmental differences that add or detract from the intrinsic value of an asset or property.
+
+## P
+
+-   <font size = "5pt"> **Proximity Matrix** </font>= measures of similarity or dissimilarity. This is the initial step before the combination clustering for Agglomerative clustering method.
+
+## S
+
+-   <font size = "5pt"> **Shapefile** </font>= a format created by ESRI that consists of multiple different parts for vector data. Shapefiles are usually composed of 3-4 mandatory files : .shp, .shx, .dbf and / or .prj.
+
+-   <font size = "5pt"> **Spatial Autocorrelation** </font>= Describe the presence of systematic spatial variation in a variable.
+
+-   <font size = "5pt"> **Spatial Dependency** </font>= is measured as the existence of statistical dependence in a collection of random variables, each of which is associated with a different geographical location.
+
+-   <font size = "5pt"> **Spatial Heterogeneity** </font>= overall parameters estimated for the entire system may not adequately describe the process at any given location.

@@ -1,0 +1,61 @@
+project:
+  type: website
+
+website:
+  title: "ISSS624"
+  navbar:
+    left: 
+      - text: References & Notes
+        menu: 
+          - text: Acronym & Terminology
+            href: personal_note/Acronym_Terminology.qmd
+          - text: PN#Common Errors and Basic Concepts
+            href: personal_note/Personal_notes.qmd
+          - text: PN#Spatial Autocorrelation & Spatial Dependency  
+            href: personal_note/SpatialAutocorrelationSpatialDependency.qmd
+          - text: PN#Spatially Constrained Cluster Analysis 
+            href: personal_note/SpatialConstrainedClusterAnalysis.qmd
+            
+      - text: Hands-on Exercises
+        menu: 
+          - text: Geospatial Data Wrangling with R [1]
+            href: Hands-on_Ex1-1.qmd
+          - text: Choropleth Mapping with R [2]
+            href: Hands-on_Ex1-2.qmd
+          - text: Global & Local Measures of Spatial Autocorrelation [4]
+            href: Hands-on_Ex2-4.qmd  
+          - text: Spatially Constrained Clustering Techniques [5]
+            href: Hands-on_Ex3-5.qmd
+          - text: Geographically Weighted Regression [6]
+            href: Hands-on_Ex4-6.qmd  
+            
+      - text: In-class Exercises
+        menu: 
+          - text: Spatial Weights & Applications [3]
+            href: in-class_ex/in-class_ex1/In-class_Ex1.qmd
+          - text: In-class Exercise 2 - Case Study 1.1 Spatial Autocorrelation
+            href: in-class_ex/in-class_ex2/In-class_Ex2.qmd
+          - text: In-class Exercise 3 - Case Study 1.2 Clustering Analysis
+            href: in-class_ex/in-class_ex3/In-class_Ex3.qmd
+          - text: In-class Exercise 4 - Case Study 2.1 Geographically Weighted Regression
+            href: in-class_ex/in-class_ex4/In-class_Ex4.qmd            
+            
+      - text: Class Projects
+        menu: 
+          - text: Spatial Weights & Applications [1]
+            href: class_project/project_1/spatial_weights.qmd
+          - text: Regionalisation with Spatially Constrained Cluster Analysis [2]  
+            href: class_project/project_2/Regionalisation_scca.qmd
+    right:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+
+format:
+  html:
+    theme: sandstone
+    css: styles.css
+    toc: true
+
+editor: visual
+

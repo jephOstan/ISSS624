@@ -1,0 +1,132 @@
+---
+title: "PN#Common Errors and Basic Concepts"
+editor: visual
+date: 19 Nov 2022
+---
+
+## COMMON ERRORS
+
+1.  During importing geospatial data, the coordinate system of the source data was either missing (such as due to missing .proj for ESRI shapefile) or wrongly assigned during the importing process.
+
+2.  Input feature class contains less than 30 features.
+
+    \>\> produce low reliability results.
+
+3.  The input field in categorical attribute field.
+
+4.  Use WGS84, or even undefined.
+
+    \>\> Should always use projection based coordinates.
+
+<br>
+
+## CONCEPT NOTES FOR GEOCOMPUTATION WITH R
+
+Following notes are quoted from [Geocomputation with R](https://bookdown.org/robinlovelace/geocompr/spatial-class.html)
+
+1.  simple feature geometries (basic) \> sfg - objects \> sfc - 'list columns' of class \> sf - (full objects)
+
+2.  `sfg` class :
+
+    2.1 - represents the different simple feature geometry types in R : point, linestring, polygon (and their 'multi' equivalents, such as multipoints) or geometry collection.
+
+    -   A point: `st_point()`
+
+    -   A linestring: `st_linestring()`
+
+    -   A polygon: `st_polygon()`
+
+    -   A multipoint: `st_multipoint()`
+
+    -   A multilinestring: `st_multilinestring()`
+
+    -   A multipolygon: `st_multipolygon()`
+
+    -   A geometry collection: `st_geometrycollection()`
+
+    2.2 - `sfg` objects can be created from three base R data types:
+
+    -   A numeric vector: a single point
+
+    -   A matrix: a set of points, where each row represents a point, a multipoint or linestring
+
+    -   A list: a collection of objects such as matrices, multilinestrings or geometry collections
+
+    *#further read-up is required*
+
+3.  `sfc` class :
+
+    3.1 - `sfc` is a list of `sfg` objects, which is additionally able to contain information about the coordinate reference system in use. For instance, to combine two simple features into one object with two features, we can use the `st_sfc()` function. This is important since `sfc` represents the geometry column in **sf** data frames
+
+    *#further read up is required*
+
+4.  `sf` represent a set of data by combining the attributes (`data.frame`) with the simple feature geometry column (`sfc`). They are created with `st_sf()` .
+
+    *#further read-up is required*
+
+5.  In geospatial analytics, it is very common for us to transform the original data from geographic coordinate system ( 0-360 range of decimal degree) to projected coordinate system.
+
+    \>\> geographic coordinate system is not appropriate if the analysis need to use distance or/and area measurements.
+
+6.  Shape objects can be vector or raster data
+
+    -   `sf` objects for vector data
+
+    -   `stars` objects for raster data
+
+        [In **tmap**, a shape object needs to be defined with the function `tm_shape()`. When multiple shape objects are used, each has to be defined in a separate `tm_shape()` call.](https://r-tmap.github.io/tmap-book/tmshape.html)
+
+            tm_shape(worldelevation) +
+              tm_raster("worldelevation.tif", palette = terrain.colors(8)) +
+            tm_shape(worldvector) +
+              tm_borders() +
+            tm_shape(worldcities) +
+              tm_dots() +
+              tm_text("name")
+
+        three shapes: `worldelevation` which is a `stars` object containing an attribute called `"worldelevation.tif"`, `worldvector` which is an `sf` object with country borders, and `worldcities`, which is an `sf` object that contains metropolitan areas of at least 20 million inhabitants.
+
+        Each `tm_shape()` function call is succeeded by one or more layer functions.
+
+        The order of the `tm_shape()` functions' calls is crucial. The first `tm_shape()`, known as the main shape, is not only shown below the following *shapes*, but also sets the projection and extent of the whole map.
+
+### Tobler's First law of Geography
+
+" Everything is related to everything else, but near things are more related than distant things."
+
+Foundation of :
+
+-   spatial dependence
+
+-   spatial autocorrelation
+
+<br>
+
+## CODE REFERENCES
+
+| EPSG code                           | geodetic CRS | datum | ellipsoid     | area of use                      |
+|-------------------------------------|--------------|-------|---------------|----------------------------------|
+| [3414 - 4326](https://epsg.io/3414) | SVY21        | SVY21 | WGS 84 (4326) | Singapore - onshore and offshore |
+
+<br>
+
+## REFERENCES
+
+-   wiki.gis.com. Datum (geodesy) - http://wiki.gis.com/wiki/index.php/Datum\_(geodesy)
+-   Chapter 4 Specifying Spatial Data - https://r-tmap.github.io/tmap-book/tmshape.html
+
+<br>
+
+## QUARTO QUICK REFERENCES
+
+-   HTML Theming - https://quarto.org/docs/output-formats/html-themes.html
+
+-   HTML Code Blocks - https://quarto.org/docs/output-formats/html-code.html
+
+-   HTML Options - https://quarto.org/docs/reference/formats/html.html
+
+-   Article Layout - https://quarto.org/docs/authoring/article-layout.html
+
+-   Tables - https://quarto.org/docs/authoring/tables.html
+
+-   reStructuredText Options - https://quarto.org/docs/reference/formats/rst.html

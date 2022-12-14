@@ -1,0 +1,37 @@
+---
+title: ""
+---
+
+# **GEOSPATIAL ANALYSIS**
+
+<font size = "6pt">with R Markdown, R Studio and Quarto</font>
+
+<br>
+
+[module]{style="color:#a39f9d"}: [**ISSS624-AY2022023Nov Applied Geospatial Analytics**](https://isss624-ay2022-23nov.netlify.app/ "syllabus for this module")
+
+[instructor]{style="color:#a39f9d"} : [**Dr. Kam Tin Seong**](https://www.smu.edu.sg/faculty/profile/9618/KAM-Tin-Seong), Associate Professor of Information Systems (Practice)
+
+[institute]{style="color:#a39f9d"} : [**MITB-Analytics Track**](https://scis.smu.edu.sg/master-it-business/analytics-track/curriculum "MITB_analyticsTrack") , Singapore Management University (SMU)
+
+[timeline]{style="color:#a39f9d"} : November 19, 2022 to December 14, 2022
+
+<br>
+
++-----------------------------------+---------------------------------+---------------------------------------+----------------------------------------------------------+
+| [**date**]{style="color:#a39f9d"} | [lesson]{style="color:#a39f9d"} | [lesson cover]{style="color:#a39f9d"} | [topic]{style="color:#a39f9d"}                           |
++===================================+=================================+=======================================+==========================================================+
+| Nov19, 2022                       | Lesson 1                        | Hands-on Ex1                          | Geospatial Data Wrangling with R \[1\]                   |
++-----------------------------------+---------------------------------+---------------------------------------+----------------------------------------------------------+
+| Nov19, 2022                       | Lesson 1                        | Hands-on Ex1                          | Choropleth Mapping with R \[2\]                          |
++-----------------------------------+---------------------------------+---------------------------------------+----------------------------------------------------------+
+| Nov19, 2022                       | Lesson 1                        | In-class Ex1                          | Spatial Weights and Applications \[3\]                   |
++-----------------------------------+---------------------------------+---------------------------------------+----------------------------------------------------------+
+| Nov24, 2022                       | Lesson 2                        | Hands-on Ex2                          | Global & Local Measures of Spatial Autocorrelation \[4\] |
++-----------------------------------+---------------------------------+---------------------------------------+----------------------------------------------------------+
+| Dec2, 2022                        | Lesson 3                        | Hands-on Ex3                          | Spatially Constrained Cluster Analysis \[5\]             |
++-----------------------------------+---------------------------------+---------------------------------------+----------------------------------------------------------+
+| Dec10, 2022                       | Lesson 4                        | Hands-on Ex4                          | Geographically Weighted Regression \[6\]                 |
+|                                   |                                 |                                       |                                                          |
+|                                   |                                 | In-class Ex4                          |                                                          |
++-----------------------------------+---------------------------------+---------------------------------------+----------------------------------------------------------+

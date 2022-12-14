@@ -1,0 +1,23 @@
+{
+  "index.qmd": {
+    "index.html": "d0d4176e"
+  },
+  "about.qmd": {
+    "about.html": "0696ede6"
+  },
+  "personal_note/Acronym_Terminology.qmd": {
+    "Acronym_Terminology.html": "ded5113f"
+  },
+  "personal_note/Personal_notes.qmd": {
+    "Personal_notes.html": "08fcbd1e"
+  },
+  "personal_note/SpatialAutocorrelationSpatialDependency.qmd": {
+    "SpatialAutocorrelationSpatialDependency.html": "417314be"
+  },
+  "personal_note/SpatialConstrainedClusterAnalysis.qmd": {
+    "SpatialConstrainedClusterAnalysis.html": "02743309"
+  },
+  "personal_note/Summary_R_packages.qmd": {
+    "Summary_R_packages.html": "978b78e9"
+  }
+}

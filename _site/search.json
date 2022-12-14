@@ -1,0 +1,177 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ISSS624",
+    "section": "",
+    "text": "with R Markdown, R Studio and Quarto\n\nmodule: ISSS624-AY2022023Nov Applied Geospatial Analytics\ninstructor : Dr. Kam Tin Seong, Associate Professor of Information Systems (Practice)\ninstitute : MITB-Analytics Track , Singapore Management University (SMU)\ntimeline : November 19, 2022 to December 14, 2022\n\n\n\n\n\n\n\n\n\n\ndate\nlesson\nlesson cover\ntopic\n\n\n\n\nNov19, 2022\nLesson 1\nHands-on Ex1\nGeospatial Data Wrangling with R [1]\n\n\nNov19, 2022\nLesson 1\nHands-on Ex1\nChoropleth Mapping with R [2]\n\n\nNov19, 2022\nLesson 1\nIn-class Ex1\nSpatial Weights and Applications [3]\n\n\nNov24, 2022\nLesson 2\nHands-on Ex2\nGlobal & Local Measures of Spatial Autocorrelation [4]\n\n\nDec2, 2022\nLesson 3\nHands-on Ex3\nSpatially Constrained Cluster Analysis [5]\n\n\nDec10, 2022\nLesson 4\nHands-on Ex4\nIn-class Ex4\nGeographically Weighted Regression [6]"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "personal_note/Acronym_Terminology.html",
+    "href": "personal_note/Acronym_Terminology.html",
+    "title": "Acronym & Terminology",
+    "section": "",
+    "text": "ASP = Aspect ratio.\nchr = Character (one of the basic data types in R. Others : integer, complex, logical, and double)\nCRS = Coordinate Reference Systems\nEDA = Exploratory Data Analysis\ndbl = Double (one of the basic data types in R. Others : integer, complex, logical, and character)\nDBF = Dbase Database File\nDSN = Data Source Name\nEDA = Exploratory Data Analysis\nESDA = Exploratory Spatial Data Analysis\nEPSG = European Petroleum Survey Group\nGEOREF = World Geographic Reference system\nGIS = Geographic Information System\nGLSA = Global and Local Measure of Spatial Autocorrelation\nGSA = Global Spatial Autocorrelation\nGWR = Geographically Weighted Regression\nIDW = Inverse Distance Weighting\nJOG = Joint Operations Graphic maps\nknn = k nearest neighbours\nLGA = Local Government Areas\nLISA = Local Indicator of Spatial Association\nMGRS = Military Grid Reference System\nnb = neighbourhood object\nONC = Operational Navigation Chart\nPN = Personal Notes :)\npch = point shapes\nPRJ = Projection Definition File\nqtm = Quick Thematic Map plot\nSFC = Simple Feature Columns\nSFG = Simple Feature Geometries\nSPCS = U.S. State Plane Coordinate System zone\nSRIDs = Spatial Reference System Identifiers\nUSGS = U.S. Geological Survey\nUTM = Universal Transverse Mercator (grids / projection / zone boundaries)\nVIF = Variance Inflation Factors\nWKT = Well Known Text"
+  },
+  {
+    "objectID": "personal_note/Acronym_Terminology.html#a",
+    "href": "personal_note/Acronym_Terminology.html#a",
+    "title": "Acronym & Terminology",
+    "section": "A",
+    "text": "A\n\n Autocorrelation  = also known as serial correlation in the discrete time case. The analysis of autocorrelation is a mathematical tool for finding repeating patterns, such as the presence of a periodic signal obscured by noise, or identifying the missing fundamental frequency in a signal implied by its harmonic frequencies."
+  },
+  {
+    "objectID": "personal_note/Acronym_Terminology.html#c",
+    "href": "personal_note/Acronym_Terminology.html#c",
+    "title": "Acronym & Terminology",
+    "section": "C",
+    "text": "C\n\n Cardinal directions  = Cardinal directions are the main directions of the compass.\n\nintercardinal directions, or ordinal directions, are the four points in between the cardinal directions.\nSecondary intercardinal directions : north-northeast (NNE), east-northeast (ENE), east-southeast (ESE), etc.\n\n Cartography  = Cartographic (adj). relating to the science or practice of drawing maps.\n Contiguity  = the topological concept that allows the vector data model to determine adjacency. Polygon topology defines contiguity. Polygons are contiguous to each other if they share a common arc.\n>> contiguous = land adjoining or touching by a common corner or a common boundary line."
+  },
+  {
+    "objectID": "personal_note/Acronym_Terminology.html#d",
+    "href": "personal_note/Acronym_Terminology.html#d",
+    "title": "Acronym & Terminology",
+    "section": "D",
+    "text": "D\n\n Datum (geodesy)  = a reference from which spatial measurements are made. In surveying and geodesy, a datum is a set of reference points on the earth’s surface against which position measurements are made, and (often) an associated model of the shape of the earth (reference ellipsoid) to define a geographic coordinate system.\n Delimited = Delimited data is a common format that separates values in each row with specific delimiter characters. Often use commas as the field delimiter to separate data from different columns. However, delimited files can also separate, or delimit, columns with other characters including pipes, colons, semicolons, slashes, and more."
+  },
+  {
+    "objectID": "personal_note/Acronym_Terminology.html#e",
+    "href": "personal_note/Acronym_Terminology.html#e",
+    "title": "Acronym & Terminology",
+    "section": "E",
+    "text": "E\n\n Enumerated data = enumerated type (also called enumeration, enum, or factor in the R programming language, and a categorical variable in statistics) is a data type consisting of a set of named values called elements, members, enumeral, or enumerators of the type.\n\nThe enumerator names are usually identifiers that behave as constants in the language.\nAn enumerated type can be seen as a degenerate tagged union of unit type.\nA variable that has been declared as having an enumerated type can be assigned any of the enumerators as a value.\ne.g.\n>> the four suits in a deck of cards may be four enumerators named Club, Diamond, Heart, and Spade, belonging to an enumerated type named suit.\n>> If a variable V is declared having suit as its data type, one can assign any of those four values to it."
+  },
+  {
+    "objectID": "personal_note/Acronym_Terminology.html#g",
+    "href": "personal_note/Acronym_Terminology.html#g",
+    "title": "Acronym & Terminology",
+    "section": "G",
+    "text": "G\n\n Graduated colour = colour symbology is used to show a quantitative difference between mapped features by varying the color of symbols.\n\nData is classified into ranges that are each assigned a different color from a color scheme to represent the range.\ne.g. if a classification scheme has 5 classes, 5 different symbol colors are assigned.\n>> The size of the symbols stays the same. Maps that vary in color this way are usually called choropleth maps.\n>> choose a continuous color scheme to apply different shades of the same color : lighter shades match lower data values & darker shades match higher data values.\n\n Graticules = are a network of lines on a map that delineate the geographic coordinates (degrees of latitude and longitude).\n\nGraticules can be used to measure distances, while the grid can be used to measure the number of items within a particular area.\nGraticules also helps to indicate cardinal directions and place locations having knowing coordinates."
+  },
+  {
+    "objectID": "personal_note/Acronym_Terminology.html#h",
+    "href": "personal_note/Acronym_Terminology.html#h",
+    "title": "Acronym & Terminology",
+    "section": "H",
+    "text": "H\n\n Hedonic Pricing = identifies the internal and external factors and characteristics that affect an item’s price in the market.\n\nHedonic pricing is most often seen in the housing market, since real estate prices are determined by the characteristics of the property itself as well as the neighborhood or environment within which it exists.\nHedonic pricing captures a consumer’s willingness to pay for what they perceive are environmental differences that add or detract from the intrinsic value of an asset or property."
+  },
+  {
+    "objectID": "personal_note/Acronym_Terminology.html#p",
+    "href": "personal_note/Acronym_Terminology.html#p",
+    "title": "Acronym & Terminology",
+    "section": "P",
+    "text": "P\n\n Proximity Matrix = measures of similarity or dissimilarity. This is the initial step before the combination clustering for Agglomerative clustering method."
+  },
+  {
+    "objectID": "personal_note/Acronym_Terminology.html#s",
+    "href": "personal_note/Acronym_Terminology.html#s",
+    "title": "Acronym & Terminology",
+    "section": "S",
+    "text": "S\n\n Shapefile = a format created by ESRI that consists of multiple different parts for vector data. Shapefiles are usually composed of 3-4 mandatory files : .shp, .shx, .dbf and / or .prj.\n Spatial Autocorrelation = Describe the presence of systematic spatial variation in a variable.\n Spatial Dependency = is measured as the existence of statistical dependence in a collection of random variables, each of which is associated with a different geographical location.\n Spatial Heterogeneity = overall parameters estimated for the entire system may not adequately describe the process at any given location."
+  },
+  {
+    "objectID": "personal_note/Personal_notes.html",
+    "href": "personal_note/Personal_notes.html",
+    "title": "PN#Common Errors and Basic Concepts",
+    "section": "",
+    "text": "During importing geospatial data, the coordinate system of the source data was either missing (such as due to missing .proj for ESRI shapefile) or wrongly assigned during the importing process.\nInput feature class contains less than 30 features.\n>> produce low reliability results.\nThe input field in categorical attribute field.\nUse WGS84, or even undefined.\n>> Should always use projection based coordinates."
+  },
+  {
+    "objectID": "personal_note/Personal_notes.html#concept-notes-for-geocomputation-with-r",
+    "href": "personal_note/Personal_notes.html#concept-notes-for-geocomputation-with-r",
+    "title": "PN#Common Errors and Basic Concepts",
+    "section": "CONCEPT NOTES FOR GEOCOMPUTATION WITH R",
+    "text": "CONCEPT NOTES FOR GEOCOMPUTATION WITH R\nFollowing notes are quoted from Geocomputation with R\n\nsimple feature geometries (basic) > sfg - objects > sfc - ‘list columns’ of class > sf - (full objects)\nsfg class :\n2.1 - represents the different simple feature geometry types in R : point, linestring, polygon (and their ‘multi’ equivalents, such as multipoints) or geometry collection.\n\nA point: st_point()\nA linestring: st_linestring()\nA polygon: st_polygon()\nA multipoint: st_multipoint()\nA multilinestring: st_multilinestring()\nA multipolygon: st_multipolygon()\nA geometry collection: st_geometrycollection()\n\n2.2 - sfg objects can be created from three base R data types:\n\nA numeric vector: a single point\nA matrix: a set of points, where each row represents a point, a multipoint or linestring\nA list: a collection of objects such as matrices, multilinestrings or geometry collections\n\n#further read-up is required\nsfc class :\n3.1 - sfc is a list of sfg objects, which is additionally able to contain information about the coordinate reference system in use. For instance, to combine two simple features into one object with two features, we can use the st_sfc() function. This is important since sfc represents the geometry column in sf data frames\n#further read up is required\nsf represent a set of data by combining the attributes (data.frame) with the simple feature geometry column (sfc). They are created with st_sf() .\n#further read-up is required\nIn geospatial analytics, it is very common for us to transform the original data from geographic coordinate system ( 0-360 range of decimal degree) to projected coordinate system.\n>> geographic coordinate system is not appropriate if the analysis need to use distance or/and area measurements.\nShape objects can be vector or raster data\n\nsf objects for vector data\nstars objects for raster data\nIn tmap, a shape object needs to be defined with the function tm_shape(). When multiple shape objects are used, each has to be defined in a separate tm_shape() call.\ntm_shape(worldelevation) +\n  tm_raster(\"worldelevation.tif\", palette = terrain.colors(8)) +\ntm_shape(worldvector) +\n  tm_borders() +\ntm_shape(worldcities) +\n  tm_dots() +\n  tm_text(\"name\")\nthree shapes: worldelevation which is a stars object containing an attribute called \"worldelevation.tif\", worldvector which is an sf object with country borders, and worldcities, which is an sf object that contains metropolitan areas of at least 20 million inhabitants.\nEach tm_shape() function call is succeeded by one or more layer functions.\nThe order of the tm_shape() functions’ calls is crucial. The first tm_shape(), known as the main shape, is not only shown below the following shapes, but also sets the projection and extent of the whole map.\n\n\n\nTobler’s First law of Geography\n” Everything is related to everything else, but near things are more related than distant things.”\nFoundation of :\n\nspatial dependence\nspatial autocorrelation"
+  },
+  {
+    "objectID": "personal_note/Personal_notes.html#code-references",
+    "href": "personal_note/Personal_notes.html#code-references",
+    "title": "PN#Common Errors and Basic Concepts",
+    "section": "CODE REFERENCES",
+    "text": "CODE REFERENCES\n\n\n\nEPSG code\ngeodetic CRS\ndatum\nellipsoid\narea of use\n\n\n\n\n3414 - 4326\nSVY21\nSVY21\nWGS 84 (4326)\nSingapore - onshore and offshore"
+  },
+  {
+    "objectID": "personal_note/Personal_notes.html#references",
+    "href": "personal_note/Personal_notes.html#references",
+    "title": "PN#Common Errors and Basic Concepts",
+    "section": "REFERENCES",
+    "text": "REFERENCES\n\nwiki.gis.com. Datum (geodesy) - http://wiki.gis.com/wiki/index.php/Datum_(geodesy)\nChapter 4 Specifying Spatial Data - https://r-tmap.github.io/tmap-book/tmshape.html"
+  },
+  {
+    "objectID": "personal_note/Personal_notes.html#quarto-quick-references",
+    "href": "personal_note/Personal_notes.html#quarto-quick-references",
+    "title": "PN#Common Errors and Basic Concepts",
+    "section": "QUARTO QUICK REFERENCES",
+    "text": "QUARTO QUICK REFERENCES\n\nHTML Theming - https://quarto.org/docs/output-formats/html-themes.html\nHTML Code Blocks - https://quarto.org/docs/output-formats/html-code.html\nHTML Options - https://quarto.org/docs/reference/formats/html.html\nArticle Layout - https://quarto.org/docs/authoring/article-layout.html\nTables - https://quarto.org/docs/authoring/tables.html\nreStructuredText Options - https://quarto.org/docs/reference/formats/rst.html"
+  },
+  {
+    "objectID": "personal_note/SpatialAutocorrelationSpatialDependency.html",
+    "href": "personal_note/SpatialAutocorrelationSpatialDependency.html",
+    "title": "PN#Spatial Autocorrelation & Spatial Dependency",
+    "section": "",
+    "text": "PERSONAL NOTES"
+  },
+  {
+    "objectID": "personal_note/SpatialAutocorrelationSpatialDependency.html#variable-values-assumption",
+    "href": "personal_note/SpatialAutocorrelationSpatialDependency.html#variable-values-assumption",
+    "title": "PN#Spatial Autocorrelation & Spatial Dependency",
+    "section": "VARIABLE VALUES ASSUMPTION",
+    "text": "VARIABLE VALUES ASSUMPTION\nThe variable can assume values either :\n\nAt any point on a continuous surface (e.g. land use type or annual precipitation levels in a region);\nAt a set of fixed sites located within a region (e.g. prices at a set of retail outlets);\nAcross a set of areas that subdivide a region (e.g. the count or proportion of households with two or more cars in a set of Census tracts that divide an urban region).\n\n\n\ninterpret spatial distribution\n\nclustering spatial distribution = high spatial autocorrelation\ncheckerboard spatial distribution = low spatial autocorrelation\n\n\nTable 1 : Summary of spatial autocorrelation relationship.\n\n\n\n\n\n\n\ntrait\nPositive Spatial Autocorrelation\nNegative Spatial Autocorrelation\n\n\n\n\nclustering\nsimilar values tend to be in similar locations, cluster pattern\ndispersed, regular pattern (** != random pattern)\n\n\nneighbours similarity\nhigh similarity than under spatial randomness.\nlow similarity than under spatial randomness.\n\n\ncompatibility\ncompatible with diffusion, but not necessary caused by diffusion.\ncompatible to competition, but not necessary competition.\n\n\nvisual ref"
+  },
+  {
+    "objectID": "personal_note/SpatialAutocorrelationSpatialDependency.html#global-spatial-autocorrelation-gsa-measurement",
+    "href": "personal_note/SpatialAutocorrelationSpatialDependency.html#global-spatial-autocorrelation-gsa-measurement",
+    "title": "PN#Spatial Autocorrelation & Spatial Dependency",
+    "section": "GLOBAL SPATIAL AUTOCORRELATION (GSA) MEASUREMENT",
+    "text": "GLOBAL SPATIAL AUTOCORRELATION (GSA) MEASUREMENT\n\nMoran’s I = describe how features differ from the values in the study area as a whole.\nGeary’s C = describe how features differ from their immediate neighbours.\n\nRelationship of Moran’s I & Geary’s C :\n\nC approaches 0 and I approaches 1 when similar values are clustered.\nC approaches 3 and I approaches -1 when dissimilar values tend to cluster.\nHigh values of C measures correspond to low values of I = both measures are\ninversely related.\nI is a measure of global spatial autocorrelation, while C is more sensitive to local spatial autocorrelation.\n\n\nMoran’s I\nMoran I (Z value) is :\n\npositive (I>0): Clustered, observations tend to be similar;\nnegative(I<0): Dispersed, observations tend to be dissimilar;\napproximately zero: observations are arranged randomly over space\n\n\n\nGeary’s C\nGeary C (Z value) is :\n\nLarge c value (>1) : Dispersed, observations tend to be dissimilar;\nSmall c value (<1) : Clustered, observations tend to be similar;\nc = 1: observations are arranged randomly over space.\n\n\n\nGetis-Ord Global G\nMeasures of global high / low clustering.\n\nConcerned with the overall concentration or lack of concentration in all pairs that are neighbours given the definition of neighbouring areas.\nThe variable MUST contain only positive values to be used.\n>> e.g. growth rate that consists +ve & -ve. The value will be off if involve -ve value.\n\n\n\n\n\n\n\n\n\n\ninterpretation\ncannot reject H0\nmay reject H0\nmay reject H0\n\n\n\n\np-value\nnot significant\nstatistically significant\nstatistically significant\n\n\nz-score\n-\npositive\nnegative\n\n\nremarks\nObserved spatial pattern of values could be one of many possible versions of complete spatial randomness.\nSpatial distribution of high values in the dataset is more spatially clustered than would be expected if underlying spatial processes were truly random.\nSpatial distribution of low values in the dataset is more spatially clustered than would be expected if underlying spatial processes were truly random.\n\n\n\n\n** revision corner **\n\n\nselect confident interval 95% => alpha value = 0.05\nreject Null hypothesis (H0) if p-value < alpha value\nfailed to reject H0 if p-value > alpha value"
+  },
+  {
+    "objectID": "personal_note/SpatialAutocorrelationSpatialDependency.html#local-spatial-autocorrelation",
+    "href": "personal_note/SpatialAutocorrelationSpatialDependency.html#local-spatial-autocorrelation",
+    "title": "PN#Spatial Autocorrelation & Spatial Dependency",
+    "section": "LOCAL SPATIAL AUTOCORRELATION",
+    "text": "LOCAL SPATIAL AUTOCORRELATION\n\nA collection of geospatial statistical analysis methods for analysing the location related tendency (clusters or outliers) in the attributes of geographically referenced data (points or areas).\nCan be indecies decomposited from their global measures such as local Moran’s I, local Geary’s c, and Getis-Ord Gi*.\nThese spatial statistics are well suited for :\n\ndetecting clusters or outliers;\nidentifying hot spot or cold spot areas;\nassessing the assumptions of stationarity;\nidentifying distances beyond which no discernible association obtains.\n\n\n\nlocal indicator of spatial association (LISA)\nA subset of localised geospatial statistics methods.\nAny spatial statistics that satisfies the following two requirements :\n\nthe LISA for each observation gives an indication of the extent of significant spatial clustering of similar values around that observation;\nthe sum of LISAs for all observations is proportional to a global indicator of spatial association.\n\nLocal Indicators of Spatial Association or LISA are statistics that evaluate the existence of clusters in the spatial arrangement of a given variable.\nFor instance if we are studying cancer rates among census tracts in a given city local clusters in the rates mean that there are areas that have higher or lower rates than is to be expected by chance alone; that is, the values occurring are above or below those of a random distribution in space.\n\n\ninterpret Local Moran & scatterplot\nAn outlier = significant & negative if location i is associated with relatively low values in surrounding locations.\nA cluster = significant & positive if location i is associated with relatively high values of the surrounding locations.\n\nIn either instance, the p-value for the feature must be small enough for the cluster or outlier to be considered statistically significant.\nThe commonly used alpha-values are 0.1, 0.05, 0.01, 0.001 corresponding the 90%, 95, 99% and 99.9% confidence intervals respectively.\n\n\n\n\n\n\ndetect hot & cold spot areas with Getis-Ord Gi statistic\nInterpretation of Getis-Ord Gi and Gi :\n\nA hot spot area: significant and positive if location i is associated with relatively high values of the surrounding locations.\nA cold spot area: significant and negative if location i is associated with relatively low values in surrounding locations."
+  },
+  {
+    "objectID": "personal_note/SpatialAutocorrelationSpatialDependency.html#spatial-randomness",
+    "href": "personal_note/SpatialAutocorrelationSpatialDependency.html#spatial-randomness",
+    "title": "PN#Spatial Autocorrelation & Spatial Dependency",
+    "section": "SPATIAL RANDOMNESS",
+    "text": "SPATIAL RANDOMNESS\n\nNull hypothesis (H0)\n\nObserved spatial pattern of values is equally likely as any other spatial pattern.\nValues at one location do not depend on values at other (neighbouring) locations.\nUnder spatial randomness, the location of values may be altered without affecting\nthe information content of the data.\n\n\n\n\n\n\nassess the violation of assumptions\nUse a Monte Carlo simulation to assess the assumptions of Moran’s I are true (normality and randomisation).\n\nSimulate Moran’s I n times under the assumption of no spatial pattern,\nAssigning all regions the mean value\nCalculate Moran’s I,\nCompare actual value of Moran’s I to randomly simulated distribution to obtain p-value (pseudo significance)."
+  },
+  {
+    "objectID": "personal_note/SpatialAutocorrelationSpatialDependency.html#considerations-for-weighting-scheme",
+    "href": "personal_note/SpatialAutocorrelationSpatialDependency.html#considerations-for-weighting-scheme",
+    "title": "PN#Spatial Autocorrelation & Spatial Dependency",
+    "section": "CONSIDERATIONS FOR WEIGHTING SCHEME",
+    "text": "CONSIDERATIONS FOR WEIGHTING SCHEME\n\nfixed weighting scheme\n\nAll features should have at least one neighbour.\nNo feature should have all other features as neighbours.\nEspecially when input field values are skewed, focus on features to have about eight neighbors each.\nMight produce large estimate variances where data are sparse, while mask subtle local variations where data are dense.\nIn extreme condition, fixed schemes might not be able to calibrate in local areas where data are too sparse to satisfy the calibration requirements (observations must be more than parameters).\n\n\n\n\nadaptive weighting scheme\n\nAdaptive schemes adjust itself according to the density of data\nShorter bandwidths where data are dense and longer where sparse.\nFinding nearest neighbors are one of the oen used approaches."
+  },
+  {
+    "objectID": "personal_note/SpatialAutocorrelationSpatialDependency.html#suitability-of-spatial-weighting-method",
+    "href": "personal_note/SpatialAutocorrelationSpatialDependency.html#suitability-of-spatial-weighting-method",
+    "title": "PN#Spatial Autocorrelation & Spatial Dependency",
+    "section": "SUITABILITY OF SPATIAL WEIGHTING METHOD",
+    "text": "SUITABILITY OF SPATIAL WEIGHTING METHOD\n\npolygon contiguity method\n\nEffective when polygons are similar in size and distribution, and\nWhen spatial relationships are a function of polygon proximity (if two polygons share a boundary, spatial interaction between them increases).\nWhen select a polygon contiguity conceptualization - select row standardization for tools that have the Row Standardization parameter.\n\n\n\n\nfixed distance method\n\nWorks well for point data. It is often a good option for polygon data.\nWhen there is a large variation in polygon size (very large polygons at the edge of the study area and very small polygons at the center of the study area.\nEnsure a consistent scale of analysis.\n\n\n\n\n\n\ninverse distance method\n\nMost appropriate with continuous data or to model processes where the closer two features are in space, the more likely they are to interact / influence each other.\nEvery feature is potentially a neighbour of every other feature, and with large datasets, the number of computations involved will be enormous.\n\n\n\nk-nearest neighbours method\nEffective when you want to ensure you have a minimum number of neighbors for your analysis.\nWorks well when the data distribution varies across the study area so that some features are far away from all other features.\n\nEspecially when the associated features values are skewed (are not normally distributed), it is important that each feature is evaluated within the context of at least eight or so neighbors (this is a rule of thumb only).\nSpatial context of the analysis changes depending on variations in the sparsity/density of the features.\nWhen fixing the scale of analysis is less important than fixing the number of neighbors, the k-nearest neighbours method is appropriate."
+  },
+  {
+    "objectID": "personal_note/SpatialAutocorrelationSpatialDependency.html#guide-to-select-fixed-distance-band-value",
+    "href": "personal_note/SpatialAutocorrelationSpatialDependency.html#guide-to-select-fixed-distance-band-value",
+    "title": "PN#Spatial Autocorrelation & Spatial Dependency",
+    "section": "GUIDE TO SELECT FIXED-DISTANCE BAND VALUE",
+    "text": "GUIDE TO SELECT FIXED-DISTANCE BAND VALUE\n\nSelect a distance based on what you know about the geographic extent of the spatial processes promoting clustering for the phenomena you are studying.\nUse a distance band that is large enough to ensure all features will have at least one neighbor, or results will not be valid.\nTry not to get stuck on the idea that there is only one correct distance band.\nMost likely, there are multiple/interacting spatial processes\npromoting observed clustering.\nSelect an appropriate distance band or threshold distance.\nAll features should have at least one neighbour.\nNo feature should have all other features as a neighbour.\nEspecially if the values for the input field are skewed, each feature should have about eight neighbours."
+  },
+  {
+    "objectID": "personal_note/SpatialConstrainedClusterAnalysis.html",
+    "href": "personal_note/SpatialConstrainedClusterAnalysis.html",
+    "title": "PN#Spatially Constrained Cluster Analysis",
+    "section": "",
+    "text": "Bottom-up. Plot with dendrogram.\nEach object initially considered as a single-element cluster (leaf).\nAlgorithm for each step is to combine 2 clusters that are most similar into a new bigger cluster (node).\n\ncompute proximity matrix before the combination of data points. Subsequently, update the proximity matrix each iteration.\n\n3 common methods to calculate proximity matrix :\n- Euclidean distance\n- City-block distance\n- Chebychev distance\n\ncommon methods :\n\nMaximum / Complete Linkage Clustering\nMinimum / Single Linkage Clustering\nMean / Average Linkage\nCentroid\nWard’s Minimum Variance method\n\n\n\n\n\n\n\nTop-down.\nEach step, the most heterogeneous cluster is divided into two.\n\n\n\n\n\n==========\n\n\n\n\ncheck the distribution of the cluster variables.\ndetermine the differences in data ranges.\nvariable standardisation techniques if unable to change the scales for the variables’ value :\n\nZ-score\nMin-max = value range of 0 to 1\nDecimal scaling\n\nvariable standardisation techniques above need to be done first before the transformation for clustering.\n\n\n\n\n\ncheck the correlation between input variables (i.e. correlation coefficient >= 0.85).\nnot recommended to apply PCA for highly correlated social economic aspects. Unless clustering analysis is single/home value, e.g. reflection index value from satellite images.\nVIF (variance inflation factor) method to determine which highly correlated variables not to include in the analysis - regression? (!!!!! confirm this statement)\nstandardisation should not change distribution, should provide quite similar output while transformation can resulted relatively large differences. (!!!!! confirm this statement)\n\n==========\n\n\n\n2 grouping approaches :\n\nGrouping Objects\n\ngrouping similar contiguous objects into new aggregrate areal units.\n\ntension between attribute similarity\n\n\nGrouping Observations\n\nlocational similarity : group spatially contiguous observations only.\n\n\n==========\n\n\n\n\nConstruct minimum spanning tree from adjacency graph.\nPrune the tree (cut edges) to achieve maximum internal homogeneity.\nSpatially Constrained Clustering using SKATER method.\n\nReference: AssunÇão, R. M ; Neves, M. C ; Câmara, G ; Da Costa Freitas, C (2006) “Efficient regionalization techniques for socio-economic geographical units using\nminimum spanning trees”, International Journal of Geographical Information Science, Vol.20 (7), p.797-811\n\n==========\n\n\n\n\nObjective is to minimize within-group dissimilarity (maximize between-group).\nNetwork connectivity based on adjacency between nodes (locations).\nEdge value reflects dissimilarity between nodes.\n\n==========\n\n\n\n\nConnectivity graph, G = (V, L),\nV = vertices (nodes),\nL = edges path - a sequence of nodes connected by edges v1 to vk :\n(v1,v2), ..., (vk-1,vk).\nSpanning tree - tree with n nodes of G unique path connecting any two nodes n-1 edges.\nMinimum spanning tree - spanning tree that minimizes a cost function minimise sum of dissimilarities over all nodes.\n\n\n\nReferences\nWhat Is Geographic Segmentation And Why You Need It.. https://manychat.com/blog/geographic-segmentation/\nOctober 16, 2019 Michael Keenan"
+  }
+]
