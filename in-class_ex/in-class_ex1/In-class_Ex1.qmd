@@ -1,0 +1,960 @@
+---
+title: "Spatial Weights & Applications [3]"
+editor: visual
+date: 19 Nov 2022
+---
+
+## 3.1 OVERVIEW
+
+Learning outcome to be expected from this exercise :
+
+-   compute spatial weight
+
+<br>
+
+## 3.2 R PACKAGE REQUIRED
+
+Following are the packages require for this exercise :
+
+-   **spdep** compute :
+
+    -   [*poly2nb( )*](https://r-spatial.github.io/spdep/reference/poly2nb.html) *-* compute contiguity weight matrices for the study area.
+
+    -   [*dnearneigh( )*](https://r-spatial.github.io/spdep/reference/dnearneigh.html) - derive distance-based weight matrices.
+
+    -   [*knearneigh ( )*](https://r-spatial.github.io/spdep/reference/knearneigh.html) - return matrix with the indices of points belonging to the set of the k nearest neighbours of each other.
+
+    -   [*knn2nb( )*](https://r-spatial.github.io/spdep/reference/knn2nb.html) - convert knn object to a neighbours list of class nb.
+
+    -   [*nbdist( )*](https://www.rdocumentation.org/packages/spdep/versions/1.2-4/topics/nbdists) - return the length of neighbour relationship edges.
+
+    -   [*nb2listw( )*](https://www.rdocumentation.org/packages/spdep/versions/1.2-7/topics/nb2listw) - supplements a neighbours list with spatial weights for the chosen coding scheme.
+
+    -   *table( )* - table the weight matrix structure and wrap with *card( )*.
+
+    -   *card( )* - tallies the numbers of neighbours of regions in the neighbours list.
+
+-   **tmap** package
+
+    -   [*qtm( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/qtm)- to plot quick thematic map.
+    -   [*tmap_arrange( )*](https://search.r-project.org/CRAN/refmans/tmap/html/tmap_arrange.html) - create multiple stand-alone maps.
+
+-   [**sf**](https://cran.r-project.org/web/packages/sf/) :
+
+    -   *st_read( )* - import shapefile as a simple feature data frame.
+    -   [*st_join( )*](https://r-spatial.github.io/sf/reference/st_join.html) - for spatial join, spatial filter.
+    -   [*st_centroid( )*](https://r-spatial.github.io/sf/reference/geos_unary.html) - takes a polygon or multipolygon and returns the geometric center of the bounding box of the polygon or multipolygon as a point.
+
+-   **tidyverse**, consists the following functions :
+
+    -   [**readr**](https://readr.tidyverse.org/) :
+
+        -   *read_csv( )* - importing delimited text file.
+
+    -   [**dplyr**](https://dplyr.tidyverse.org/):
+
+        -   *left_join( )* - join geographical data and attribute table.
+
+    -   purrr:
+
+        -   [*map_dbl( )*](https://purrr.tidyverse.org/reference/map.html) - output double vectors.
+
+-   [*str( )*](https://www.geeksforgeeks.org/display-the-internal-structure-of-an-object-in-r-programming-str-function/#:~:text=str()%20function%20in%20R,the%20object%20and%20its%20constituents.) - structure of the object and information about the class, length and content of each column.
+
+-   [*cbind( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cbind) - Take a sequence of vector, matrix or data-frame arguments and combine by *c*olumns or *r*ows, respectively.
+
+-   [*head( )*](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/head) - Returns the first or last parts of a vector, matrix, table, data frame or function.
+
+-   [*plot( )*](https://rspatial.github.io/terra/reference/plot.html) - Generic function for plotting of R objects.
+
+-   [*par(mfrow= c( ))*](http://rfunction.com/archives/1538) = Create a multi-paneled plotting window.
+
+-   [*unlist( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/unlist) = remove the list structure of the returned object.
+
+-   *lapply( )* = returns a list of the same length as **`X`**, each element of which is the result of applying **`FUN`** to the corresponding element of **`X`**.
+
+```{r}
+pacman::p_load(spdep, tmap, sf, tidyverse, readr, dplyr)
+```
+
+<br>
+
+## 3.3 GEOSPATIAL DATA
+
+### 3.3.1 acquire data source
+
+Two data sets for this exercise are :
+
+-   [***Hunan county boundary layer***]{.underline} : ESRI, shapefile format.
+
+-   [***Hunan_2012.csv***]{.underline} : Contains selected Hunan's local development indicators.
+
+### 3.3.2 import shapefile data
+
+```{r}
+hunan <- st_read(dsn = "/jephOstan/ISSS624/in-class_ex/in-class_ex1/data/geospatial",
+                 layer = "Hunan")
+```
+
+```{r}
+hunan
+```
+
+### 3.3.2 import csv data
+
+::: {.column-margin style="color: #9e6024; border-width: 3px;   border-style: solid;   border-color: #ebbd8f;"}
+![](/in-class_ex/images/Asset%209.png){width="25"} use %\>%
+
+to combine import and transformation to projected coordinates system.
+:::
+
+```{r}
+hunan2012 <- read_csv("/jephOstan/ISSS624/in-class_ex/in-class_ex1/data/aspatial/Hunan_2012.csv")
+```
+
+### 3.3.3 perform relational join with mutating joins
+
+Mutating joins add columns from `y` to `x`, matching rows based on the keys.
+
+4 types of mutating joins :
+
+1.  `inner_join()`: includes all rows in `x` and `y`.
+2.  `left_join()`: includes all rows in `x`.
+3.  `right_join()`: includes all rows in `y`.
+4.  `full_join()`: includes all rows in `x` or `y`.
+
+Below is the st_join syntax, by default it's a left join.
+
+-   Returns all records of the `x` object with `y` fields for non-matched records filled with `NA` values;
+
+-   An inner join returns only records that spatially match.
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+st_join(
+  x, y, join = st_intersects, ..., suffix = c(".x", ".y"), left = TRUE,
+  largest = FALSE
+)
+
+arguments
+
+* x = object of class sf
+
+* y = object of class sf
+
+* join = geometry predicate function with the same profile as st_intersects
+
+* ... for st_join: arguments passed on to the join function or to st_intersection when largest is TRUE;
+
+* suffix = length 2 character vector; see merge
+
+* left = logical; if TRUE return the left join, otherwise an inner join; see details. see also left_join
+
+* largest = logical; if TRUE, return x features augmented with the fields of y that have the largest overlap with each of the features of x
+```
+
+```{r}
+hunan <- left_join(hunan,hunan2012)
+```
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+left_join(
+  x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...,  keep = FALSE
+  na_matches = c("na", "never")
+)
+
+arguments : 
+
+* x, y = A pair of data frames, data frame extensions (e.g. a tibble), or lazy data frames (e.g. from dbplyr or dtplyr)
+
+* by = A character vector of variables to join by.
+
+>> If NULL, the default, *_join() will perform a natural join, using all variables in common across x and y. A message lists the variables so that you can check they're correct; suppress the message by supplying by explicitly.
+
+>> To join by different variables on x and y, use a named vector. For example, by = c("a" = "b") will match x$a to y$b.
+
+>> To join by multiple variables, use a vector with length > 1. For example, by = c("a", "b") will match x$a to y$a and x$b to y$b. 
+
+>> Use a named vector to match different variables in x and y. For example, by = c("a" = "b", "c" = "d") will match x$a to y$b and x$c to y$d.
+
+>> To perform a cross-join, generating all combinations of x and y, use by = character().
+
+* copy = If x and y are not from the same data source, and copy is TRUE, then y will be copied into the same src as x.
+
+* suffix = If there are non-joined duplicate variables in x and y, these suffixes will be added to the output to disambiguate them. Should be a character vector of length 2.
+
+* keep = Should the join keys from both x and y be preserved in the output?
+
+* na_matches = Should NA and NaN values match one another?
+
+>> The default, "na", treats two NA or NaN values as equal, like %in%, match(), merge().
+
+>> Use "never" to always treat two NA or NaN values as different, like joins for database sources, similarly to merge(incomparables = FALSE).
+```
+
+<br>
+
+## 3.4 VISUALISING PRELIMINARY DATASET
+
+Build a basemap and a choropleth map with *qtm( )* of tmap package.
+
+The syntax and arguments for *qtm( )* can refers to section 2.4.1 under Hands-on 2.
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+tmap_arrange(
+  ...,  ncol = NA, nrow = NA, widths = NA, heights = NA, sync = FALSE,
+  asp = 0, outer.margins = 0.02
+)
+
+arguments :
+
+* asp = aspect ratio. 
+>> The aspect ratio of each map. Normally, this is controlled by the asp argument from tm_layout (also a tmap option). 
+
+>> This argument will overwrite it, unless set to NULL. 
+
+>> The default value for asp is 0, which means that the aspect ratio is adjusted to the size of the device divided by the number of columns and rows. 
+
+>> When asp is set to NA, which is also the default value for tm_layout, the aspect ratio will be adjusted to the used shapes.
+```
+
+```{r}
+basemap <- tm_shape(hunan) +
+  tm_polygons() +
+  tm_text("NAME_3", size=0.5)
+
+gdppc <- qtm(hunan, "GDPPC")
+tmap_arrange(basemap, gdppc, asp=1, ncol=2)
+```
+
+<br>
+
+## 3.5 COMPUTING CONTIGUITY SPATIAL WEIGHTS
+
+Use *poly2nb( )* of spdep package to compute contiguity weight matrices for the study area. This function :
+
+-   builds a neighbours list based on regions with contiguous boundaries.
+
+-   by default, return a list of first order neighbours based on Queen criteria.
+
+### 3.5.1 compute (QUEEN) contiguity based neighbours
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+poly2nb(
+    pl, row.names = NULL, snap=sqrt(.Machine$double.eps),
+    queen=TRUE, useC=TRUE, foundInBox=NULL
+    )
+ 
+arguments : 
+
+* pl = list of polygons of class extending SpatialPolygons, or an sf or sfc object containing non-empty (multi-)polygon objects
+
+* snap = boundary points less than snap distance apart are considered to indicate contiguity; 
+>> used both to find candidate and actual neighbours for planar geometries, but only actual neighbours for spherical geometries, as spherical spatial indexing itself injects some fuzzyness.
+
+* queen = default is TRUE.
+>> If TRUE, a single shared boundary point meets the contiguity condition.
+
+>> if FALSE, more than one shared point is required; note that more than one shared boundary point does not necessarily mean a shared boundary line.
+
+* useC = default TRUE, doing the work loop in C, may be set to false to revert to R code calling two C functions in an n*k work loop, where k is the average number of candidate neighbours
+
+* foundInBox = default NULL using R code or st_intersects( ) to generate candidate neighbours (using snap= if the geometries are not spherical); 
+>> if not NULL (for legacy purposes) a list of length (n-1) with integer vectors of candidate neighbours (j > i) (as created by the poly_findInBoxGEOS function in rgeos for clean polygons).
+```
+
+```{r}
+wm_q <- poly2nb(hunan, queen=TRUE)
+summary(wm_q)
+```
+
+interpretation :
+
+-   88 area units in Hunan.
+
+-   Highest links - #85 - 11 links
+
+-   Lowest links - #30, #65 - 1 link
+
+[!!!!! what is percentage nonzero weights indicate?]{style="color:red"}
+
+[!!!!! what is the usage of info given by the average number of links?]{style="color:red"}
+
+<br>
+
+#### 3.5.1.1 list the neighbours for the \[1\] polygon in the object
+
+interpretation :
+
+-   Polygon \[1\] has 5 neighbours = 2, 3, 4, 57, 85
+
+-   \[1\] = polygon ID stored in hunan SpatialPolygonsDataFrame class. layman terms = system ID
+
+```{r}
+wm_q[[1]]
+```
+
+#### 3.5.1.2 display the first polygon name
+
+```{r}
+hunan$County[1]
+```
+
+```{r}
+hunan$NAME_2[1]
+```
+
+#### 3.5.1.3 list the neighboring polygons' names
+
+```{r}
+hunan$NAME_3[c(2,3,4,57,85)]
+```
+
+#### 3.5.1.4 get variable's value for the first order neighbours of \[1\]
+
+```{r}
+nb1 <- wm_q[[1]]
+nb1 <- hunan$GDPPC[nb1]
+nb1
+```
+
+#### 3.5.1.5 list the complete weight matrix
+
+```{r}
+str(wm_q)
+```
+
+### 3.5.2 create (ROOK) contiguity based neighbours
+
+```{r}
+wm_r <- poly2nb(hunan, queen=FALSE)
+summary(wm_r)
+```
+
+### 3.5.3 visualise contiguity weights
+
+A connectivity graph takes a point and displays a line to each neighboring point.
+
+Hence, to plot connectivity graph :
+
+-   Getting Latitude and Longitude of Polygon Centroids with sf package
+
+-   Need the coordinates in a separate data frame to associate with each polygon before plot the connectivity graph. [*!!! need further read up.*](https://r4gdsa.netlify.app/chap03.html)
+
+#### 3.5.3.1 get the longitude for each centroid
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+st_centroid(x, ..., of_largest_polygon = FALSE)
+
+arguments : 
+
+* x = object of class sfg, sfc or sf
+
+* of_largest_polygon = logical; for st_centroid: 
+>> if TRUE, return centroid of the largest (sub)polygon of a MULTIPOLYGON rather than of the whole MULTIPOLYGON
+```
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+map_dbl(.x, .f, ...)
+
+arguments :
+
+* .x = A list or atomic vector.
+
+* .f = A function, formula, or vector (not necessarily atomic).
+
+>> If a function, it is used as is.
+
+>> If a formula, e.g. ~ .x + 2, it is converted to a function. There are three ways to refer to the arguments:
+
+>>>> For a single argument function, use .
+
+>>>> For a two argument function, use .x and .y
+
+>>>> For more arguments, use ..1, ..2, ..3 etc
+
+>> This syntax allows you to create very compact anonymous functions.
+
+>> If character vector, numeric vector, or list, it is converted to an extractor function. 
+
+>> Character vectors index by name and numeric vectors index by position; use a list to index by position and name at different levels. 
+
+>> If a component is not present, the value of .default will be returned.
+```
+
+double bracket notation \[\[ \]\] & 1 allows to get the first value in each centroid for the longitude.
+
+```{r}
+longitude <- map_dbl(hunan$geometry, ~st_centroid(.x)[[1]])
+```
+
+#### 3.5.3.2 get the latitude for each centroid
+
+```{r}
+latitude <- map_dbl(hunan$geometry, ~st_centroid(.x)[[2]])
+```
+
+#### 3.5.3.3 combine both longitude and latitude
+
+```{r}
+coords <- cbind(longitude, latitude)
+```
+
+#### 3.5.3.4 review the format
+
+Shows first 6 rows of observations.
+
+```{r}
+head(coords)
+```
+
+#### 3.5.3.5 plot Queen contiguity based neighbours map
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+plot(
+    x, y=1, col, type, mar=NULL, legend=TRUE, axes=TRUE, plg=list(), 
+    pax=list(), maxcell=500000, smooth=FALSE, range=NULL, levels=NULL,         all_levels=FALSE, breaks=NULL, breakby="eqint", fun=NULL, colNA=NULL,      alpha=NULL, sort=FALSE, decreasing=FALSE, grid=FALSE, ext=NULL, 
+    reset=FALSE, add=FALSE, background=NULL,
+  ...)
+
+arguments : 
+
+* add = logical. If TRUE add the object to the current plot.
+
+* pch = define point shape.
+>> e.g. in this study, pch = 19, solid circle, NA to ommit the points.
+
+* cex = the size of pch symbols.
+
+* col = character. Colors. 
+>> The default is rev(grDevices::terrain.colors(50)). 
+
+* bg = the background (or fill) color for the open plot symbols. 
+>> It can be used only when pch = 21:25.
+
+* lwd = the line width for the plotting symbols.
+```
+
+![](http://www.sthda.com/sthda/RDoc/figure/graphs/r-plot-pch-symbols-points-in-r.png){style="border-   border-style: solid;   border-color: #ebbd8f;" width="200"}
+
+(source : [sthda](http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r))
+
+```{r}
+plot(hunan$geometry, border="lightgrey")
+plot(wm_q, coords, pch = 19, cex = 0.6, add = TRUE, col= "red")
+```
+
+#### 3.5.3.6 plot Rook contiguity based neighbours map
+
+```{r}
+plot(hunan$geometry, border="lightgrey")
+plot(wm_r, coords, pch = 19, cex = 0.6, add = TRUE, col = "red")
+```
+
+#### 3.5.3.7 plot both Queen and Rook contiguity based neighbours maps
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+par(mfrow = c(r, c))
+
+arguments : 
+
+* r, c = A vector of length 2, where the first argument specifies the number of rows and the second the number of columns of plots.
+```
+
+```{r}
+par(mfrow=c(1,2))
+plot(hunan$geometry, border="lightgrey")
+plot(wm_q, coords, pch = 19, cex = 0.6, add = TRUE, col= "red", main="Queen Contiguity")
+plot(hunan$geometry, border="lightgrey")
+plot(wm_r, coords, pch = 19, cex = 0.6, add = TRUE, col = "red", main="Rook Contiguity")
+```
+
+## 3.6 COMPUTING DISTANCE BASED NEIGHBOURS
+
+Derive distance-based weight matrices with *dnearneigh( )*.
+
+-   Main function is to identify neighbours of region points by Euclidean distance with a distance band with lower d1= and upper d2= bounds controlled by the bounds= argument.
+
+-   If unprojected coordinates are used and either specified in the coordinates object x or with x as a two column matrix and longlat=TRUE, great circle distances in **km** will be calculated assuming the WGS84 reference ellipsoid.
+
+-   If `x` is an `"sf"` object and `use_s2=` is `TRUE`, spherical distances in km are used.
+
+### 3.6.1 step 1 - determine the cut-off (upper limit) for distance band
+
+Key functions involved in this step are *knearneigh( ), knn2nb( ), nbdist( )* and *unlist( ).*
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+knearneigh(x, k=1, longlat = NULL, use_kd_tree=TRUE)
+
+arguments : 
+
+* x = matrix of point coordinates, an object inheriting from SpatialPoints or an "sf" or "sfc" object; if the "sf" or "sfc" object geometries are in geographical coordinates (sf::st_is_longlat(x) == TRUE and sf::sf_use_s2() == TRUE), s2 will be used to find the neighbours because it uses spatial indexing https://github.com/r-spatial/s2/issues/125 as opposed to the legacy method which uses brute-force
+
+* k = number of nearest neighbours to be returned
+
+* longlat = TRUE if point coordinates are longitude-latitude decimal degrees, in which case distances are measured in kilometers; 
+>> if x is a SpatialPoints object, the value is taken from the object itself; longlat will override kd_tree.
+
+* use_kd_tree = logical value, if the dbscan package is available, use for finding k nearest neighbours when longlat is FALSE, and when there are no identical points; the input data may have more than two columns if dbscan is used.
+```
+
+-   Knn objects that returned by *knearneigh( )* are then converted into a neighbours list of class nb with a list of integer vectors containing neighbour region number ids by using [*knn2nb()*](https://r-spatial.github.io/spdep/reference/knn2nb.html).
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+knn2nb(knn, row.names = NULL, sym = FALSE)
+
+arguments :
+  
+* knn = A knn object returned by knearneigh
+
+* row.names = character vector of region ids to be added to the neighbours list as attribute region.id, default seq(1, nrow(x))
+
+* sym = force the output neighbours list to symmetry
+```
+
+-   Use *nbdist( )* to return the length of neighbour relationship edges.
+
+-   Given a list of spatial neighbour links (a neighbours list of object type **`nb`**), the function returns the Euclidean distances along the links in a list of the same form as the neighbours list. If longlat = TRUE, Great Circle distances are used.
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+nbdists(nb, coords, longlat = NULL)
+
+arguments :
+
+* nb = an object of class nb
+
+* coords = matrix of point coordinates, an object inheriting from SpatialPoints or an "sf" or "sfc" object; 
+
+>> if the "sf" or "sfc" object geometries are in geographical coordinates (sf::st_is_longlat(x) == TRUE and sf::sf_use_s2() == TRUE), s2 will be used to find distances. 
+>> extra reading materials - https://github.com/r-spatial/s2/issues/125
+
+* longlat - TRUE if point coordinates are longitude-latitude decimal degrees, in which case distances are measured in kilometers; 
+>> if coords is a SpatialPoints object, the value is taken from the object itself
+```
+
+-   Remove the list structure of the returned object by using *unlist( )*.
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+unlist(x, recursive = TRUE, use.names = TRUE)
+
+arguments : 
+
+* x = an R object, typically a list or vector.
+
+* recursive = logical. Should unlisting be applied to list components of x?
+
+* use.names = logical. Should names be preserved?
+```
+
+```{r}
+#coords <- coordinates(hunan)
+k1 <- knn2nb(knearneigh(coords))
+k1dists <- unlist(nbdists(k1, coords, longlat = TRUE))
+summary(k1dists)
+```
+
+[The summary report shows that the largest first nearest neighbour distance is 61.79 km, so using this as the upper threshold gives certainty that all units will have at least one neighbour.]{style="color:red"}
+
+This is the interpretation for distance calculation.
+
+### 3.6.2 step 2 - compute fixed distance weight matrix
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+dnearneigh(x, d1, d2, row.names = NULL, longlat = NULL, bounds=c("GE", "LE"),
+ use_kd_tree=TRUE, symtest=FALSE, use_s2=packageVersion("s2") > "1.0.7", k=200,
+ dwithin=TRUE)
+
+arguments :
+
+* x = matrix of point coordinates, an object inheriting from SpatialPoints or an "sf" or "sfc" object; if the "sf" or "sfc" object geometries are in geographical coordinates (use_s2=FALSE, sf::st_is_longlat(x) == TRUE and sf::sf_use_s2() == TRUE), s2 will be used to find the neighbours because it will use spatial indexing as opposed to the legacy method which uses brute-force (at present s2 also uses brute-force). (need to read up more..)
+
+* d1 = lower distance bound in the metric of the points if planar coordinates, in km if in geographical coordinates.
+
+* d2 = upper distance boundd in the metric of the points if planar coordinates, in km if in geographical coordinates.
+
+* longlat = TRUE if point coordinates are geographical longitude-latitude decimal degrees, in which case distances are measured in kilometers; 
+>> if x is a SpatialPoints object, the value is taken from the object itself, and overrides this argument if not NULL.
+```
+
+```{r}
+wm_d62 <- dnearneigh(coords, 0, 62, longlat = TRUE)
+wm_d62
+```
+
+#### 3.6.2.1 list all fixed distance weight matrix
+
+```{r}
+str(wm_d62)
+```
+
+#### 3.6.2.2 combine functions to display the structure of the weight matrix
+
+```{r}
+table(hunan$County, card(wm_d62))
+```
+
+```{r}
+n_comp <- n.comp.nb(wm_d62)
+n_comp$nc
+```
+
+```{r}
+table(n_comp$comp.id)
+```
+
+#### 3.6.2.3 plot fixed distance weight matrix
+
+-   The red lines show the links of 1st nearest neighbours.
+
+-   The black lines show the links of neighbours within the cut-off distance of 62km.
+
+```{r}
+plot(hunan$geometry, border="lightgrey")
+plot(wm_d62, coords, add=TRUE)
+plot(k1, coords, add=TRUE, col="red", length=0.08)
+
+```
+
+#### 3.6.2.4 plot both of them next to each other
+
+```{r}
+par(mfrow=c(1,2))
+plot(hunan$geometry, border="lightgrey")
+plot(k1, coords, add=TRUE, col="red", length=0.08, main="1st nearest neighbours")
+plot(hunan$geometry, border="lightgrey")
+plot(wm_d62, coords, add=TRUE, pch = 19, cex = 0.6, main="Distance link")
+
+```
+
+### 3.6.3 step 3 - compute adaptive distance weight matrix
+
+One of the characteristics of fixed distance weight matrix :
+
+-   more densely settled areas (usually the urban areas) tend to have more neighbours.
+
+-   having many neighbours smooths the neighbour relationship across more neighbours.
+
+```{r}
+knn6 <- knn2nb(knearneigh(coords, k=6))
+knn6
+```
+
+Each county has exactly 6 neighbours.
+
+```{r}
+str(knn6)
+```
+
+#### 3.6.3.1 Plotting distance based neighbours
+
+```{r}
+plot(hunan$geometry, border="lightgrey")
+plot(knn6, coords, pch = 19, cex = 0.6, add = TRUE, col = "red")
+```
+
+<br>
+
+## 3.7 SPATIAL WEIGHTS WITH IDW
+
+-   Inverse distance weighting (IDW) is **a type of deterministic method for multivariate interpolation with a known scattered set of points**.
+
+-   The assigned values to unknown points are calculated with a weighted average of the values available at the known points.
+
+```{r}
+dist <- nbdists(wm_q, coords, longlat = TRUE)
+ids <- lapply(dist, function(x) 1/(x))
+ids
+```
+
+### 3.7.1 row-standardised weights matrix
+
+Assign equal weights (style = "W") to each neighbouring polygon.
+
+-   i.e. the fraction 1/(#ofneighbors) to each neighboring county then summing the weighted income values.
+
+-   since its based on lagged values on few polygons, thus 1 drawback - tend to over- or under-estimating the true nature of the spatial autocorrelation in the data.
+
+``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
+
+nb2listw(neighbours, glist=NULL, style="W", zero.policy=NULL)
+
+arguments : 
+  
+* neighbours = an object of class nb
+
+* glist = list of general weights corresponding to neighbours
+
+* style = style can take values “W”, “B”, “C”, “U”, “minmax” and “S”
+
+* zero.policy = default NULL, use global option value; 
+>> if FALSE stop with error for any empty neighbour sets, 
+>> if TRUE permit the weights list to be formed with zero-length weights vectors.
+```
+
+```{r}
+rswm_q <- nb2listw(wm_q, style="W", zero.policy = TRUE)
+rswm_q
+```
+
+zero.policy=TRUE option allows for lists of non-neighbors.
+
+-   used with caution if not aware of missing neighbors in the dataset.
+
+```{r}
+rswm_q$weights[10]
+```
+
+-   Each neighbor is assigned a 0.2 of the total weight, thus, each neighbor's income will be multiplied by 0.2 before being tallied.
+
+```{r}
+rswm_ids <- nb2listw(wm_q, glist=ids, style="B", zero.policy=TRUE)
+rswm_ids
+```
+
+```{r}
+rswm_ids$weights[1]
+```
+
+```{r}
+summary(unlist(rswm_ids$weights))
+
+```
+
+<br>
+
+## 3.8 APPLICATION OF SPATIAL WEIGHT MATRIX
+
+Create 4 different spatial lagged :
+
+-   spatial lag with row-standardised weights
+
+-   spatial lag as a sum of neighbouring values
+
+-   spatial window average
+
+-   spatial window sum
+
+### 3.8.1 compute spatial lagged values with row-standardised weights
+
+```{r}
+GDPPC.lag <- lag.listw(rswm_q, hunan$GDPPC)
+GDPPC.lag
+```
+
+!!!!! the meaning of Spatial lag with row-standardized weights now?
+
+```{r}
+nb1 <- wm_q[[1]]
+nb1 <- hunan$GDPPC[nb1]
+nb1
+```
+
+#### 3.8.1.1 append the spatially lag values
+
+append the spatially lag GDPPC values onto hunan sf data frame by using the code chunk below.
+
+```{r}
+lag.list <- list(hunan$NAME_3, lag.listw(rswm_q, hunan$GDPPC))
+lag.res <- as.data.frame(lag.list)
+colnames(lag.res) <- c("NAME_3", "lag GDPPC")
+hunan <- left_join(hunan,lag.res)
+```
+
+#### 3.8.1.2 review the values
+
+The following table shows the average neighboring income values (stored in the Inc.lag object) for each county.
+
+```{r}
+head(hunan)
+```
+
+#### 3.8.1.3 plot both the GDPPC and spatial lag GDPPC for comparison
+
+```{r}
+gdppc <- qtm(hunan, "GDPPC")
+lag_gdppc <- qtm(hunan, "lag GDPPC")
+tmap_arrange(gdppc, lag_gdppc, asp=1, ncol=2)
+```
+
+### 3.8.2 calculate spatial lag as a sum of neighboring values
+
+Calculate spatial lag as a sum of neighboring values.
+
+Next assign binary weights with glist = in the nb2listw function.
+
+```{r}
+b_weights <- lapply(wm_q, function(x) 0*x + 1)
+b_weights2 <- nb2listw(wm_q, 
+                       glist = b_weights, 
+                       style = "B")
+b_weights2
+```
+
+Use lag.listw to compute a lag variable from our weight and GDPPC.
+
+```{r}
+lag_sum <- list(hunan$NAME_3, lag.listw(b_weights2, hunan$GDPPC))
+lag.res <- as.data.frame(lag_sum)
+colnames(lag.res) <- c("NAME_3", "lag_sum GDPPC")
+```
+
+```{r}
+lag_sum
+```
+
+understand the meaning of Spatial lag as a sum of neighboring values now?
+
+```{r}
+hunan <- left_join(hunan, lag.res)
+```
+
+```{r}
+gdppc <- qtm(hunan, "GDPPC")
+lag_sum_gdppc <- qtm(hunan, "lag_sum GDPPC")
+tmap_arrange(gdppc, lag_sum_gdppc, asp=1, ncol=2)
+```
+
+### 3.8.3 calculate spatial window average
+
+The spatial window average uses row-standardized weights and includes the diagonal element.
+
+-   Add the diagonal element before assigning weights.
+
+```{r}
+wm_q1 <- wm_q
+```
+
+#### 3.8.3.1 add the diagonal element to the neighbour list
+
+```{r}
+include.self(wm_q1)
+```
+
+```{r}
+wm_q1 <- nb2listw(wm_q1)
+wm_q1
+```
+
+```{r}
+lag_w_avg_gpdpc <- lag.listw(wm_q1, 
+                             hunan$GDPPC)
+lag_w_avg_gpdpc
+```
+
+#### 3.8.3.2 convert into data.frame
+
+Convert the lag variable listw object into a data.frame by using *as.data.frame()*
+
+```{r}
+lag.list.wm_q1 <- list(hunan$NAME_3, lag.listw(wm_q1, hunan$GDPPC))
+lag_wm_q1.res <- as.data.frame(lag.list.wm_q1)
+colnames(lag_wm_q1.res) <- c("NAME_3", "lag_window_avg GDPPC")
+```
+
+-   Note: The third command line on the code chunk above renames the field names of *lag_wm_q1.res* object into *NAME_3* and *lag_window_avg GDPPC* respectively.
+
+-   Next, the code chunk below will be used to append *lag_window_avg GDPPC* values onto *hunan* sf data.frame by using *left_join()* of **dplyr** package.
+
+```{r}
+hunan <- left_join(hunan, lag_wm_q1.res)
+```
+
+*qtm()* of **tmap** package is used to plot the GDPPC and lag_window_avg GDPPC map next to each other for quick comparison.
+
+```{r}
+gdppc <- qtm(hunan, "GDPPC")
+w_avg_gdppc <- qtm(hunan, "lag_window_avg GDPPC")
+tmap_arrange(gdppc, w_avg_gdppc, asp=1, ncol=2)
+```
+
+### 3.8.4 compute spatial window sum
+
+-   The spatial window sum is the counter part of the window average, but without using row-standardized weights.
+
+-   To do this we assign binary weights to the neighbor structure that includes the diagonal element.
+
+```{r}
+wm_q1 <- wm_q
+```
+
+To add the diagonal element to the neighbour list, we just need to use *include.self()* from **spdep**.
+
+```{r}
+include.self(wm_q1)
+```
+
+```{r}
+wm_q1
+```
+
+assign binary weights to the neighbour structure that includes the diagonal element.
+
+```{r}
+b_weights <- lapply(wm_q1, function(x) 0*x + 1)
+b_weights[1]
+```
+
+use *nb2listw()* and *glist()* to explicitly assign weight values.
+
+```{r}
+b_weights2 <- nb2listw(wm_q1, 
+                       glist = b_weights, 
+                       style = "B")
+b_weights2
+```
+
+With our new weight structure, we can compute the lag variable with *lag.listw()*.
+
+```{r}
+w_sum_gdppc <- list(hunan$NAME_3, lag.listw(b_weights2, hunan$GDPPC))
+w_sum_gdppc
+```
+
+Convert the lag variable listw object into a data.frame by using *as.data.frame()*.
+
+```{r}
+w_sum_gdppc.res <- as.data.frame(w_sum_gdppc)
+colnames(w_sum_gdppc.res) <- c("NAME_3", "w_sum GDPPC")
+```
+
+Note: The second command line on the code chunk above renames the field names of *w_sum_gdppc.res* object into *NAME_3* and *w_sum GDPPC* respectively.
+
+Next, the code chunk below will be used to append *w_sum GDPPC* values onto *hunan* sf data.frame by using *left_join()* of **dplyr** package.
+
+```{r}
+hunan <- left_join(hunan, w_sum_gdppc.res)
+```
+
+*qtm()* of **tmap** package is used to plot the GDPPC and lag_sum GDPPC map next to each other for quick comparison.
+
+```{r}
+gdppc <- qtm(hunan, "GDPPC")
+w_sum_gdppc <- qtm(hunan, "w_sum GDPPC")
+tmap_arrange(gdppc, w_sum_gdppc, asp=1, ncol=2)
+```
+
+## 3.9 References
+
+-   Arrange small multiples in grid layout. https://search.r-project.org/CRAN/refmans/tmap/html/tmap_arrange.html
+
+-   Construct neighbours list from polygon list. https://r-spatial.github.io/spdep/reference/poly2nb.html
+
+-   Edzer P. (N.A.). spatial join, spatial filter. r-spatial.github.io, https://r-spatial.github.io/sf/reference/st_join.html
+
+-   Hadley W., Romain F., Lionel H., Kirill M. (N.A.). Mutating joins. dplyr.tidyverse.org. https://dplyr.tidyverse.org/reference/mutate-joins.html
+
+-   qtm: Quick thematic map plot. https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/qtm
+
+-   r4gdsa.netlify.app. https://r4gdsa.netlify.app/chap02.html#data-preparation

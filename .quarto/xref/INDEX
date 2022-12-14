@@ -25,5 +25,17 @@
   },
   "class_project/project_1/spatial_weights.qmd": {
     "spatial_weights.html": "c576b7ab"
+  },
+  "in-class_ex/in-class_ex4/In-class_Ex4.qmd": {
+    "In-class_Ex4.html": "c8828fe1"
+  },
+  "in-class_ex/in-class_ex1/In-class_Ex1.qmd": {
+    "In-class_Ex1.html": "9064b6b4"
+  },
+  "in-class_ex/in-class_ex2/In-class_Ex2.qmd": {
+    "In-class_Ex2.html": "75398531"
+  },
+  "in-class_ex/in-class_ex3/In-class_Ex3.qmd": {
+    "In-class_Ex3.html": "59b2a884"
   }
 }
