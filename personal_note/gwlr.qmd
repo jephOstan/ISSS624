@@ -8,6 +8,8 @@ citation-location: margin
 
 #PERSONAL NOTES
 
+## 1. OVERVIEW
+
 ::: callout-note
 ## Key Focuses
 
@@ -25,11 +27,59 @@ citation-location: margin
 -   How do I tell if my model is providing reasonable prediction?
 :::
 
-Logistic regression model can be used as :
+## 2. DATA TYPE
 
--   explanatory model
+Various types of data :
 
--   predictive model
+-   Branch (Categorical: Toronto, Montreal, Seattle, etc.)
+
+-   Attrition (Binary: Stay, Churn)
+
+-   Promotion (Binary: Promoted, Not Promoted)
+
+-   Sales Plan (Continuous, this is how much an employee must sell in that month)
+
+But, in the context of spatial data, there are two (2) primary types[^1] :
+
+[^1]: GISGeography. (2022, May 28 May). *Vector vs Raster: What's the Difference Between GIS Spatial Data Types?* https://gisgeography.com/spatial-data-types-vector-raster/
+
+-   [**Vector data**]{.underline} is comprised of vertices and paths.
+
+    -   3 basic symbol types :
+
+        -   **points** = XY coordinates with a spatial reference frame.
+
+        -   **lines** = Each dot representing a vertex. Lines connect each vertex in a set order to be a vector line.
+
+        -   **polygons** (areas) = vector polygon formed when joining a set of vertices in a particular order and closing it.
+
+[**Raster data**]{.underline} consists of 2 categories :
+
+-   **Discrete Raster** has a distinct theme or category.
+
+    -   Each land cover cell is definable.
+
+    -   It can be discreetly defined where the class begins and ends.
+
+    -   Usually consists of integers to present classes. E.g. value 1 = urban areas, 2 = forest, etc.
+
+-   Continuous Raster (non-discrete) are grid cells with gradually changing data.
+
+    -   E.g. elevation, temperature, aerial photograph, etc.
+
+    -   A continuous raster surface can be derived from a **fixed registration point**.
+
+        \-- Digital elevation models use sea level as a registration point.
+
+        \-- Cell values for **aspect map**[^2] have fixed directions such as north, east, south, or west.
+
+[^2]: GISGeography. (2022, November 9). *What is an Aspect Map?* https://gisgeography.com/aspect-map/
+
+Continuous data is poorly stored and displayed as vectors. To display continuous data as a vector would require substantial generalisation. Although topology is useful for vector data, it is often processing intensive.
+
+[![](https://gisgeography.com/wp-content/uploads/2015/05/Map-Algebra-300x263.png){width="228"}](https://gisgeography.com/spatial-data-types-vector-raster/)
+
+Generally, quantitative analysis is intuitive with discrete or continuous raster. However, it can be potentially huge at the cost of processing speed and data storage.
 
 ::: {.callout-caution collapse="true"}
 ## Example 1
@@ -43,7 +93,49 @@ Whether a customer churns, (y = 1) or not churns (y = 0) after signed up a mobil
     -   average days delinquent
 :::
 
-## Suitability of Linear Regression
+## 3. LOGISTIC REGRESSION MODELS
+
+Logistic regression model can be used as :
+
+-   explanatory model
+
+-   predictive model
+
+The **logistic model** (or **logit model**)[^3] is a statistical model that models the probability of an event taking place by having the log-odds for the event be a linear combination of one or more independent variables.
+
+[^3]: Wikipedia. (n.d.). *Logistic regression*. https://en.wikipedia.org/wiki/Logistic_regression
+
+In regression analysis, **logistic regression** (or **logit regression**) estimates the parameters of a logistic model (the coefficients in the linear combination).
+
+::: callout-tip
+## Revision Note
+
+**Regression analysis**[^4] is a set of statistical processes for estimating the relationships between :
+
+-   a dependent variable (often called the 'outcome' or 'response' variable, or a 'label' in machine learning parlance), and
+
+-   one or more independent variables (often called 'predictors', 'covariates', 'explanatory variables' or 'features')
+:::
+
+[^4]: Wikipedia. (n.a.). *Regression analysis*. https://en.wikipedia.org/wiki/Regression_analysis
+
+In **Binary Logistic Regression,** usually consists :
+
+-   A single binary dependent variable, coded by an indicator variable, where the two values are labelled "0" and "1".
+
+-   The independent variables can each be a binary variable (two classes coded by an indicator variable) or a continuous variable (any real value).
+
+    -   The corresponding probability of the value labelled "1" can vary between 0 and 1.
+
+    -   Logistic function converts log-odds to probability.
+
+        \-- Logistic functions are used in logistic regression to model how the probability p of an event may be affected by one or more explanatory variables.
+
+    -   The unit of measurement for the log-odds scale is called a *logit*, from ***log**istic un**it***.
+
+## 3.1 Linear Regression
+
+### 3.1.1 Assumptions of Linear Regression
 
 When the value of a variable is a binary response, the linear regression assumptions are not valid based on the following :
 
@@ -65,7 +157,9 @@ If proceeding in light of these violations, the results would be :
 -   the magnitude of the effects of independent variables may be greatly underestimated.
 :::
 
-A simple linear regression modelled the mean μ of the response variable y as a linear function of the explanatory variable : 𝜇 = 𝛽0 + 𝛽1𝑥.
+## 3.2 Logistic Regression
+
+A simple linear regression modeled the mean μ of the response variable y as a linear function of the explanatory variable : 𝜇 = 𝛽0 + 𝛽1𝑥.
 
 A logistic regression would model the mean of the response variable p in terms of an explanatory variable x.
 
@@ -95,7 +189,7 @@ note : logistic regressions work with odds rather than proportions.
 
     -   𝛽0 + 𝛽1𝑥 gets really small, p approaches 0
 
-## Definition of Odds
+### 3.2.1 Odds Definition
 
 Odds are the ratio of the proportions for the two possible outcomes.
 
@@ -117,7 +211,7 @@ Odds = 0.0827 / 0.9173 = 0.0902
 [The odds that a customer is going to churn as 9 to 100.]{style="color:#d69c3c"}
 :::
 
-## Interpretation of a simple logistic regression
+### 3.2.2 Interpret Simple Logistic Regression
 
 ::: {.callout-caution collapse="true"}
 ## Example 3
@@ -143,14 +237,13 @@ note :
 [A customer with 20 months account_age has an average of 0.5213 chance that she/he will churn.]{style="color:#d69c3c"}
 :::
 
-## Differences between Multiple Logistic Regression and Linear Regression
+## 3.3 Difference of Multiple Logistic Regression & Linear Regression
 
 Instead of using a least-squared deviations criterion for the best fit, it uses a maximum likelihood method, which maximizes the probability of getting the observed results given the fitted regression coefficients.
 
-A consequence is that the goodness of fit and overall significance statistics used in logistic regression\
-differ from those used in linear regression.
+A consequence is that the goodness of fit and overall significance statistics used in logistic regression differ from those used in linear regression.
 
-### **Assumptions of Logistic Regression**
+### **3.3.1 Assumptions of Logistic Regression**
 
 -   Logistic regression does not assume a linear relationship between the dependent and independent variables.
 
@@ -160,39 +253,43 @@ differ from those used in linear regression.
 
 -   The categories (groups) must be mutually exclusive and exhaustive.
 
--   A case can only be in one group and every case must be a member of one of the groups.
+-   A case can only be in one group, and every case must be a member of one of the groups.
 
-For logistic regression, a larger samples are needed than for linear regression because maximum likelihood coefficients are large sample estimates.
+Unlike linear regression, larger samples are needed for logistic regression because maximum likelihood coefficients are large sample estimates.
 
 ::: callout-tip
 ## Minimum of 50 cases per predictor is recommended.
 :::
 
-## Workflow Diagram :: Logistic Regression Modelling
+### 3.3.2 Workflow Diagram :: Logistic Regression Modelling
 
 ![](images/paste-C79E5F44.png){width="267"}
 
-### Univariate Analysis
+#### 3.3.2.1 Univariate Analysis
 
 Check for outliers and determine the distribution of each predictor variable.
 
-Determine the numbers of dummy variables to create for a predictor variable.
+Determine which dummy variables to create as a predictor variables.
 
 ::: column-margin
-![A margin image](images/paste-D9B80475.png){width="196"}
+![compare "No Churn" value among variables](images/paste-D9B80475.png){width="196"}
 :::
 
--   E.g. the figure above shows that when "Non-churn" cases are strongly related to "Moving" and "Check Account" under the "Complain Code" variable.
+-   E.g. the figure above shows that when "No churn" cases are strongly related to "Moving" and "Check Account" under the "Complain Code" variable.
 
-    -   Consider combining both "Moving" and "Check Account" to form a group.
+    -   Consider combining "Moving" and "Check Account" to form a group.
 
-### Bivariate Analysis
+#### 3.3.2.2 Bivariate Analysis
 
-Similar to multiple linear regression, logistic regression model is sensitive to multicollinearity.
+Similar to multiple linear regression, the logistic regression model is sensitive to multicollinearity.
 
-    -   Multicollinearity occurs when some of the predictors are highly correlated.
+-   Multicollinearity occurs when some of the predictors are highly correlated.
 
-### Model Performance Evaluation
+<br>
+
+# 4. MODEL PERFORMANCE EVALUATION
+
+## 4.1 Methods to Evaluate Logistic Regression Model
 
 There are several statistics which can be used for comparing alternative models or evaluating the performance of a logistic regression model :
 
@@ -200,11 +297,13 @@ There are several statistics which can be used for comparing alternative models 
 -   Fit statistics
 -   Assessing individual parameters
 
-#### 1. Whole Model Test
+### 4.1.1 Whole Model Test
 
 Testing :
 
-𝐻0 : The logistic model is NOT useful 𝐻1 : The logistic model is useful
+𝐻0 : The logistic model is NOT useful.
+
+𝐻1 : The logistic model is useful.
 
 ::: column-margin
 ![A margin image](images/paste-9EB562C2.png){width="290"}
@@ -224,11 +323,13 @@ The negative log-likelihood corresponds to the sums of squares, and the Chi-squa
 -   In other words, the overall model is significant at the .0001 level according to the Model chi-square statistic.
 :::
 
-#### 2. Lack fof Fit Test (Goodness of Fit)
+### 4.1.2 Lack of Fit Test (Goodness of Fit)
 
 Testing :
 
-𝐻0 : The model is adequate 𝐻1 : The model is inadequate, i.e. there is lack of fit.
+𝐻0 : The model is adequate.
+
+𝐻1 : The model is inadequate, i.e. there is lack of fit.
 
 ::: column-margin
 ![A margin image](images/paste-CC289BAF.png){width="220"}
@@ -242,7 +343,21 @@ Testing :
 The above figure shows that the Lack of Fit Chi-square is not significant (Prob \> ChiSq = 0.4223) and supports the conclusion that there is little to be gained by introducing additional variables.
 :::
 
-#### 3. Assessing Individual Parameters
+#### 4.1.2.1 Likelihood-ratio Test (LRT, Wilks Test)
+
+The **likelihood-ratio test** assesses the goodness of fit of two competing statistical models based on the ratio of their likelihoods[^5], specifically one found by maximisation over the entire parameter space and another found after imposing some constraint.
+
+[^5]: Wikipedia. (n.d.). *Likelihood-ratio test.* https://en.wikipedia.org/wiki/Likelihood-ratio_test
+
+LRT tests are computed iteratively and can be computationally intensive for some models. So, historically Wald's tests had been used more often.
+
+The Effect Likelihood Ratio Tests report above show that both predictor variables Avg Days Delinquent and Account Age are significant at p \< 0.0001 and predictor Condition of Current Handset is not significant p = 0.3181.
+
+::: callout-tip
+## **Note :** LRT are more reliable than Wald's tests, so use LRT when possible.
+:::
+
+### 4.1.3 Assessing Individual Parameters
 
 Testing :
 
@@ -252,9 +367,11 @@ Testing :
 
 Test statistics, 𝑍 = 𝑏1 / 𝑆𝐸~𝑏1~
 
--   Statistical inference for multiple logistic regression is similar to statistical inference for multiple linear regression.
+Statistical inference for multiple logistic regression is similar to statistical inference for multiple linear regression.
 
--   Calculate estimates of the model parameters and standard errors for these estimates.
+-   Calculate estimates of the model parameters and standard errors.
+
+<!-- -->
 
 -   Confidence intervals are formed in the usual way but use standard normal z∗-values rather than critical values from the t distributions.
 
@@ -264,15 +381,13 @@ Test statistics, 𝑍 = 𝑏1 / 𝑆𝐸~𝑏1~
 
     -   In this case, the P-values are obtained from the chi-square distributions with 1 degree of freedom.
 
-    -   The statistic z is sometimes called a **Wald statistic**.
-
 ![](images/paste-3A5DD912.png){width="346"}
 
-Output from some statistical software reports the significance test results in terms of chi-square statistic, i.e. square of the z statistic
+Output from some statistical software reports the significance test results in terms of chi-square statistic, i.e. square of the **z statistic / Wald statistic**.
 
 𝑋^2^ = 𝑥^2^
 
--   When the null hypothesis is true, it has a distribution that is approximately a 𝑥^2^ distribution with 1 degree of freedom, and the P-value is calculated as P(𝑥^2^ ≥ 𝑋^2^).
+-   When the null hypothesis is true, it has a distribution that is approximately a 𝑥^2^ distribution with 1 degree of freedom, and the P-value is calculated as P ( 𝑥^2^ ≥ 𝑋^2^ ).
 
 -   Because the square of a standard normal random variable has a 𝑥^2^ distribution with 1 degree of freedom, the 𝑧 statistic and the chi-square statistic give the same results for statistical inference.
 
@@ -282,19 +397,9 @@ Output from some statistical software reports the significance test results in t
 
     -   The Condition of Current Handset is not significant.
 
-#### Likelihood-ratio Test (LRT)
+## 4.2 Accuracy of Predictive Modelling
 
-LRT tests are computed iteratively and can be computationally intensive for some models, so historically Wald's tests had been used more often.
-
-The Effect Likelihood Ratio Tests report above show that both predictor variables Avg Days Delinquent and Account Age are significant at p \< 0.0001 and predictor Condition of Current Handset is not significant p = 0.3181.
-
-::: callout-tip
-## **Note :** LRT are more reliable than Wald's tests, so use LRT when possible.
-:::
-
-## Accuracy of Predictive Modelling
-
-### Contigency Table / Error Table / Confusion Matrix
+### 4.2.1 Contigency Table / Error Table / Confusion Matrix
 
 In binomial logistic regression, the classification table is a 2 x 2 table that contains the observed and predicted model results.
 
@@ -304,45 +409,45 @@ In binomial logistic regression, the classification table is a 2 x 2 table that 
 
 The contingency table has 4 data cells :
 
-1.  **Actual 0 Predicted 0** -- The number of cases that were both predicted and observed as 0.
+1.  **Actual 0 Predicted 0** -- The number of cases predicted and observed as 0.
 
     -   The records in this cell are referred to as true negatives.
 
     -   The model classification was correct for these records.
 
-2.  **Actual 0 Predicted 1** -- The number of cases that were predicted as 1 yet observed as 0.
+2.  **Actual 0 Predicted 1** -- The number of cases predicted as 1 yet observed as 0.
 
     -   The records in this cell are referred to as false positives.
 
     -   The model classification was incorrect for these records.
 
-3.  **Actual 1 Predicted 1** -- The number of cases that were both predicted and observed as 1.
+3.  **Actual 1 Predicted 1** -- The number of cases predicted and observed as 1.
 
     -   The records in this cell are referred to as true positives.
 
     -   The model classification was correct for these records.
 
-4.  **Actual 1 Predicted 0** -- The number of cases that were predicted as 0 yet observed as 1.
+4.  **Actual 1 Predicted 0** -- The number of cases predicted as 0 yet observed as 1.
 
     -   The records in this cell are referred to as false negatives.
 
     -   The model classification was incorrect for these records.
 
-The model classify each data record based on :
+The model classifies each data record based on :
 
--   The computed probability between 0 and 1.
+-   The computed probability is between 0 and 1.
 
--   The threshold / cut value = the minimal value of probability to classify as 0 or 1.
+-   The threshold / cut value = the minimal probability value to classify as 0 or 1.
 
-    -   The default "cut value" is 0.5. When a value is larger than 0.5, will be classified as 1.
+    -   The default "cut value" is 0.5. When a value is greater than 0.5, it will be classified as 1.
 
 ::: callout-warning
 ## Different fields of applications has different tolerable rates of false positives and false negatives.
 :::
 
-### Misclassification Rate :: Classification Table / Contingency Table
+### 4.2.2 Assess Model Performance :: Misclassification Rate
 
-To assess the overall performance of a logistic regression model.
+Classification Table / Contigency Table is used to assess the overall performance of a logistic regression model.
 
 ::: column-margin
 ![A margin image](images/paste-E60C7E5C.png){width="296"}
@@ -352,17 +457,37 @@ To assess the overall performance of a logistic regression model.
 
 -   According to the Misclassification Rate measure, the model predicts 77.94% of the churn cases correctly.
 
-Contingency Analysis
+#### 4.2.2.1 Contingency Analysis
 
-Overall Accuracy ::: callout-tips overall_accuracy = ( 𝑻𝑷 + 𝑻𝑵 ) / ( 𝑻𝑷 + 𝑭𝑷 + 𝑭𝑵 + 𝑻𝑵 ) ::: Refers to the correctly classified observations divided by the total number of observations. - This statistics is not a particularly useful measure because it gives equal weight to all components.
+1.  **Overall Accuracy**
 
-Sensitivity refers to the true positive rate. ::: callout-tips sensitivty = ( 𝑻𝑷 ) / ( 𝑻𝑷 + 𝑭𝑵 ) :::
+    Refers to the correctly classified observations divided by the total number of observations.
 
-Specificity refers to the true negative rate. ::: callout-tips specificity = ( 𝑻𝑵 ) / ( 𝑻𝑵 + 𝑭𝑷 ) :::
+    -   This statistics is not a particularly useful measure because it gives equal weight to all components.
 
-False Positive rate indicates the probability of predicted non-negative event. ::: callout-tips false positive = ( 𝑭𝑷 ) / ( 𝑻𝑵 + 𝑭𝑷)
+::: callout-tips
+## overall_accuracy = ( 𝑻𝑷 + 𝑻𝑵 ) / ( 𝑻𝑷 + 𝑭𝑷 + 𝑭𝑵 + 𝑻𝑵 )
+:::
 
-### Receiver Operating Characteristic (ROC) Curve
+2.  **Sensitivity** refers to the true positive rate.
+
+::: callout-tips
+## sensitivty = ( 𝑻𝑷 ) / ( 𝑻𝑷 + 𝑭𝑵 )
+:::
+
+3.  **Specificity** refers to the true negative rate.
+
+::: callout-tips
+## specificity = ( 𝑻𝑵 ) / ( 𝑻𝑵 + 𝑭𝑷 )
+:::
+
+4.  **False Positive** rate indicates the probability of predicted non-negative event.
+
+::: callout-tips
+## false positive = ( 𝑭𝑷 ) / ( 𝑻𝑵 + 𝑭𝑷)
+:::
+
+#### 4.2.2.2 Receiver Operating Characteristic (ROC) Curve
 
 ::: column-margin
 ![A margin image](images/paste-6CE1863E.png){width="174"}
@@ -370,23 +495,39 @@ False Positive rate indicates the probability of predicted non-negative event. :
 
 An ROC curve shows how rapidly the true positive and false negative transition happens, with the goal being to have diagnostics that maximize the area under the curve.
 
-Two standard definitions used in predictive modelling are as follows : • Sensitivity = the probability that a given x value (a test or measure) correctly predicts an existing condition.
+Two standard definitions used in predictive modelling :
 
-• Specificity, the probability that a test correctly predicts that a condition does not exist.
+-   **Sensitivity** = the probability that a given x value (a test or measure) correctly predicts an existing condition.
+
+-   **Specificity** = the probability that a test correctly predicts that a condition does not exist.
 
 A ROC curve is a plot of sensitivity by (1 -- specificity) for each value of x. The area under the ROC curve is a common index used to summarize the information contained in the curve.
 
-In the plot, a light yellow line is drawn at a 45 degree angle tangent to the ROC Curve. This marks a good cutoff point under the assumption that false negatives and false positives have similar costs.
+-   In the plot, a light yellow line is drawn at a 45-degree angle tangent to the ROC Curve.
 
-ROC Gives a good indication to model performance (values are between 0.5 and 1).
+-   This marks a good cutoff point under the assumption that false negatives and false positives have similar costs.
 
-This variable should be as high as possible with some restrictions. Typical values indicate the following: • 0.5 -- No distinguish ability (the model has no meaning). • 0.51 -- 0.7 -- Low distinguish ability (not a very good model yet the model can be used). • 0.71 -- 0.9 -- Very good distinguish ability. • 0.91 -- 1 -- Excellent distinguish ability.
+ROC values (between 0.5 and 1) provide a good indication of model performance :
 
-Warning: In some fields, logistic regression models can have an excellent distinguish ability, however this might indicate that the model is "too good to be true". Double and triple check your model making sure that no variables from the future are present and that the model has no other odd parameter values.
+-   0.5 -- No distinguish ability (the model has no meaning).
 
-## Geographically Weighted Multiple Logistic Regression Model
+-   0.51 -- 0.7 -- Low distinguish ability (not a very good model yet the model can be used).
 
-As an expansion to the standard logistic regression, logistic GWR incorporates a set geographical location to the models :
+-   0.71 -- 0.9 -- Very good distinguish ability.
+
+-   0.91 -- 1 -- Excellent distinguish ability.
+
+::: callout-warning
+## Warning
+
+In some fields, logistic regression models can have an excellent distinguish ability, however this might indicate that the model is "too good to be true".
+
+Review the model to ensure no variables from the future or other odd parameter values.
+:::
+
+# 5. GW MULTIPLE LOGISTIC REGRES MODEL
+
+As an expansion to the standard logistic regression, Geographically Weighted Logistic Regression (GWLR) incorporates a set geographical location to the models :
 
 ::: callout-important
 ## logit ( p~i~ ) = log ( p~i~ / 1 - p~i~ ) = 𝛽~0~( u~i~ , v~i~ ) + 𝛽~1~( u~i~ , v~i~ )𝑥~1~
@@ -394,7 +535,9 @@ As an expansion to the standard logistic regression, logistic GWR incorporates a
 where, 𝛽~0i~ and 𝛽~1i~ = local model parameters specific to location at ( u~i~ , v~i~ ) coordinate.
 :::
 
-GWLR is the geographically weighted extension to the logistic regression model and similar to ordinary regression. But with the help of a moving window or kernel function facility provided by geographically weighted methods, local regression models are computed at locations all over the study region.
+GWLR is the geographically weighted extension to the logistic regression model and similar to ordinary regression.
+
+But with the help of a moving window or kernel function facility provided by geographically weighted methods, local regression models are computed at locations all over the study region.
 
 The GWR discussed in previous lesson can be extended to GWLR with the help of a logit function as shown in the formula above.
 
@@ -412,9 +555,9 @@ The minimum bandwidth distance or size can be determined by :
 
 -   Cross-validation (CV)
 
-Similar to basic gwr method, five (5) spatial kernel[^1] namely :
+Similar to basic gwr method, five (5) spatial kernel[^6] namely :
 
-[^1]: Exploratory Spatial Data Analysis with gwpcorMapper: an Interactive Mapping Tool for Geographically Weighted Correlation and Partial Correlation - Scientific Figure on ResearchGate. Available from: https://www.researchgate.net/figure/Kernel-functions-available-in-gwpcorMapper-a-Gaussian-b-exponential-c-box-car-d_fig2_360992908 \[accessed 15 Dec, 2022\]
+[^6]: Exploratory Spatial Data Analysis with gwpcorMapper: an Interactive Mapping Tool for Geographically Weighted Correlation and Partial Correlation - Scientific Figure on ResearchGate. Available from: https://www.researchgate.net/figure/Kernel-functions-available-in-gwpcorMapper-a-Gaussian-b-exponential-c-box-car-d_fig2_360992908 \[accessed 15 Dec, 2022\]
 
 -   Gaussian,
 
@@ -426,4 +569,12 @@ Similar to basic gwr method, five (5) spatial kernel[^1] namely :
 
 -   Tri-cube smoothing methods
 
-References - Method • Kleinbaum, D.G. and Klein, M (2010) Logistic Regression: A Self‐Learning Text (3rd Edition). Springer New York. • Hosmer, D. W., JR. et. al (2013) Applied Logistic Regression (3rd Edition). John Wiley & Sons, Inc., Hoboken, New Jersey. • Atkinson PM, German SE, Sear DQ and Clark MJ (2003) "Exploring the relations between riverbank erosion and geomorphological controls using geographically weighted logistic regression". Geographical Analysis 35(1): 58--82.
+# 6. REFERENCES
+
+Reading materials suggested by Prof Kam.
+
+-   Kleinbaum, D.G. and Klein, M (2010) [Logistic Regression: A Self‐Learning Text (3rd Edition)](https://dmrocke.ucdavis.edu/Class/EPI204-Spring-2021/2010_Book_LogisticRegression.pdf). *Springer New York*.
+
+-   Hosmer, D. W., JR. et. al (2013). [Applied Logistic Regression (3rd Edition)](https://onlinelibrary.wiley.com/doi/book/10.1002/9781118548387). *John Wiley & Sons, Inc.*, Hoboken, New Jersey.
+
+-   Atkinson, P.M., German, S.E., Sear, D.Q., & Clark, M.J. (2010). Exploring the relations between riverbank erosion and geomorphological controls using geographically weighted logistic regression. *Geographical Analysis,* 35(1), 58 - 82. https://doi.org/10.1111/j.1538-4632.2003.tb01101.x
