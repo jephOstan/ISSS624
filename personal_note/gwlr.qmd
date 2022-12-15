@@ -306,7 +306,7 @@ Testing :
 𝐻1 : The logistic model is useful.
 
 ::: column-margin
-![A margin image](images/paste-9EB562C2.png){width="290"}
+![](images/paste-9EB562C2.png){width="290"}
 :::
 
 The test is analogous to the Analysis of Variance table for continuous responses.
@@ -332,7 +332,7 @@ Testing :
 𝐻1 : The model is inadequate, i.e. there is lack of fit.
 
 ::: column-margin
-![A margin image](images/paste-CC289BAF.png){width="220"}
+![](images/paste-CC289BAF.png){width="220"}
 :::
 
 ::: callout-tip
@@ -404,7 +404,7 @@ Output from some statistical software reports the significance test results in t
 In binomial logistic regression, the classification table is a 2 x 2 table that contains the observed and predicted model results.
 
 ::: column-margin
-![A margin image](images/paste-79FA28F6.png){width="232"}
+![](images/paste-79FA28F6.png){width="232"}
 :::
 
 The contingency table has 4 data cells :
@@ -450,7 +450,7 @@ The model classifies each data record based on :
 Classification Table / Contigency Table is used to assess the overall performance of a logistic regression model.
 
 ::: column-margin
-![A margin image](images/paste-E60C7E5C.png){width="296"}
+![](images/paste-E60C7E5C.png){width="296"}
 :::
 
 -   The classification table above shows that there are 346 false negative and 275 false positive. The **overall misclassification error** is 22.06%, i.e. ( 346 + 275 ) / 2815 ).
@@ -490,10 +490,10 @@ Classification Table / Contigency Table is used to assess the overall performanc
 #### 4.2.2.2 Receiver Operating Characteristic (ROC) Curve
 
 ::: column-margin
-![A margin image](images/paste-6CE1863E.png){width="174"}
+![](images/paste-6CE1863E.png){width="174"}
 :::
 
-An ROC curve shows how rapidly the true positive and false negative transition happens, with the goal being to have diagnostics that maximize the area under the curve.
+An ROC curve shows how rapidly the true positive and false negative transition happens, with the goal being to have diagnostics that maximise the area under the curve.
 
 Two standard definitions used in predictive modelling :
 

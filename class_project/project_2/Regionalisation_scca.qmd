@@ -83,15 +83,15 @@ Following are the packages require for this exercise :
 
             \-- [*problems( )*](https://www.rdocumentation.org/packages/readr/versions/1.3.1/topics/problems) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable)
 
-            \-- [*write_rds( )*](https://readr.tidyverse.org/reference/read_rds.html) *-* [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#read-rds-file), 3.2.2.3
+            \-- [*write_rds( )*](https://readr.tidyverse.org/reference/read_rds.html) *-* [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord), 3.2.2.3
 
-            \-- [*read_rds( )*](https://readr.tidyverse.org/reference/read_rds.html)- [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#read-rds-file)
+            \-- [*read_rds( )*](https://readr.tidyverse.org/reference/read_rds.html)- [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord)
 
         -   dplyr
 
             \-- [*rename( )*](https://dplyr.tidyverse.org/reference/rename.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), 3.2.2.1
 
-            \-- *filter( )* - 3.2.2.1
+            \-- [*filter( )*](https://dplyr.tidyverse.org/reference/filter.html) - 3.2.2.1
 
             \-- *left_join( )* -
 
@@ -403,6 +403,8 @@ freq(duplicated(bdy_nga$shapeName))
 
 [***add_count( )*** - dplyr -]{style="color:#d46e15"} to count observations by group
 
+[***filter( )*** - dplyr -]{style="color:#d46e15"} to retain shapeName that has count not equal to 1.
+
 ```{r}
 wp_duplShapeName <- bdy_nga %>%
   add_count(bdy_nga$shapeName) %>%
@@ -463,7 +465,7 @@ tmap_mode("plot")
 The State info to be combined with the duplicated "shapeName". This will make all the shapeName unique.
 
 | lga      | row_id | headquarter | state    | iso3166code | state_dd_coordinates                                                      |
-|----------|--------|-------------|----------|-------------|---------------------------------------------------------------------------|
+|---------|---------|---------|---------|---------|------------------------------|
 | Bassa    | 94     | Oguma       | Kogi     | NG.KO.BA    | [7.75 6.75](https://latitude.to/map/ng/nigeria/regions/kogi-state/)       |
 | Bassa    | 95     | Bassa       | Plateau  | NG.PL.BA    | [9.16667 9.75](https://latitude.to/map/ng/nigeria/regions/plateau-state/) |
 | Ifelodun | 304    | Share       | Kwara    | NG.KW.IF    | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)        |
