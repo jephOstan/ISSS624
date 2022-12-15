@@ -1,8 +1,10 @@
 ---
-title: "PN#Spatially Constrained Cluster Analysis"
+title: "Spatially Constrained Cluster Analysis"
 editor: visual
 date: 2 Dec 2022
 ---
+
+#PERSONAL NOTES
 
 ## Typology of Cluster Analysis Technique
 

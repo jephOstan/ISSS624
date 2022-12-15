@@ -1,10 +1,10 @@
 ---
-title: "PN#Spatial Autocorrelation & Spatial Dependency"
+title: "Spatial Autocorrelation & Spatial Dependency"
 editor: visual
 date: 24 Nov 2022
 ---
 
-PERSONAL NOTES
+#PERSONAL NOTES
 
 # SPATIAL RELATIONSHIPS
 
@@ -65,7 +65,7 @@ The variable can assume values either :
 -   checkerboard spatial distribution = low spatial autocorrelation
 
 | trait                 | Positive Spatial Autocorrelation                                  | Negative Spatial Autocorrelation                          |
-|-----------------------|-------------------------------------------------------------------|-----------------------------------------------------------|
+|----------------|------------------------------|--------------------------|
 | clustering            | similar values tend to be in similar locations, cluster pattern   | dispersed, regular pattern (\*\* != random pattern)       |
 | neighbours similarity | high similarity than under spatial randomness.                    | low similarity than under spatial randomness.             |
 | compatibility         | compatible with diffusion, but not necessary caused by diffusion. | compatible to competition, but not necessary competition. |
@@ -123,7 +123,7 @@ Measures of global high / low clustering.
     \>\> e.g. growth rate that consists +ve & -ve. The value will be off if involve -ve value.
 
 | interpretation | cannot reject H0                                                                                              | may reject H0                                                                                                                                                | may reject H0                                                                                                                                               |
-|----------------|:--------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|---------------|:--------------|:---------------------|:---------------------|
 | p-value        | not significant                                                                                               | statistically significant                                                                                                                                    | statistically significant                                                                                                                                   |
 | z-score        | \-                                                                                                            | positive                                                                                                                                                     | negative                                                                                                                                                    |
 | remarks        | Observed spatial pattern of values could be one of many possible versions of **complete spatial randomness**. | **Spatial distribution of high values** in the dataset is more spatially clustered than would be expected if underlying spatial processes were truly random. | **Spatial distribution of low values** in the dataset is more spatially clustered than would be expected if underlying spatial processes were truly random. |
