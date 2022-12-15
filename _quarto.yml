@@ -9,12 +9,14 @@ website:
         menu: 
           - text: Acronym & Terminology
             href: personal_note/Acronym_Terminology.qmd
-          - text: PN#Common Errors and Basic Concepts
+          - text: Common Errors and Basic Concepts
             href: personal_note/Personal_notes.qmd
-          - text: PN#Spatial Autocorrelation & Spatial Dependency  
+          - text: Spatial Autocorrelation & Spatial Dependency  
             href: personal_note/SpatialAutocorrelationSpatialDependency.qmd
-          - text: PN#Spatially Constrained Cluster Analysis 
+          - text: Spatially Constrained Cluster Analysis 
             href: personal_note/SpatialConstrainedClusterAnalysis.qmd
+          - text: Geographically Weighted Logistic Regres
+            href: personal_note/gwlr.qmd
             
       - text: Hands-on Exercises
         menu: 

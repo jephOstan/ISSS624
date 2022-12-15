@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2022-12-15">
 
-<title>ISSS624 -</title>
+<title>ISSS624 - Geographically Weighted Logistic Regression (GWLR)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +24,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -60,7 +61,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -70,7 +71,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">ISSS624</span>
     </a>
   </div>
@@ -83,23 +84,23 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-references--notes" role="button" data-bs-toggle="dropdown" aria-expanded="false">References &amp; Notes</a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-references--notes">    
         <li>
-    <a class="dropdown-item" href="./personal_note/Acronym_Terminology.html">
+    <a class="dropdown-item" href="../personal_note/Acronym_Terminology.html">
  <span class="dropdown-text">Acronym &amp; Terminology</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./personal_note/Personal_notes.html">
+    <a class="dropdown-item" href="../personal_note/Personal_notes.html">
  <span class="dropdown-text">Common Errors and Basic Concepts</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./personal_note/SpatialAutocorrelationSpatialDependency.html">
+    <a class="dropdown-item" href="../personal_note/SpatialAutocorrelationSpatialDependency.html">
  <span class="dropdown-text">Spatial Autocorrelation &amp; Spatial Dependency</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./personal_note/SpatialConstrainedClusterAnalysis.html">
+    <a class="dropdown-item" href="../personal_note/SpatialConstrainedClusterAnalysis.html">
  <span class="dropdown-text">Spatially Constrained Cluster Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./personal_note/gwlr.html">
+    <a class="dropdown-item" href="../personal_note/gwlr.html">
  <span class="dropdown-text">Geographically Weighted Logistic Regres</span></a>
   </li>  
     </ul>
@@ -108,23 +109,23 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercises" role="button" data-bs-toggle="dropdown" aria-expanded="false">Hands-on Exercises</a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">    
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex1-1.html">
+    <a class="dropdown-item" href="../Hands-on_Ex1-1.html">
  <span class="dropdown-text">Geospatial Data Wrangling with R [1]</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_EX1-2.html">
+    <a class="dropdown-item" href="../Hands-on_EX1-2.html">
  <span class="dropdown-text">Choropleth Mapping with R [2]</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex2-4.html">
+    <a class="dropdown-item" href="../Hands-on_Ex2-4.html">
  <span class="dropdown-text">Global &amp; Local Measures of Spatial Autocorrelation [4]</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex3-5.html">
+    <a class="dropdown-item" href="../Hands-on_Ex3-5.html">
  <span class="dropdown-text">Spatially Constrained Clustering Techniques [5]</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex4-6.html">
+    <a class="dropdown-item" href="../Hands-on_Ex4-6.html">
  <span class="dropdown-text">Geographically Weighted Regression [6]</span></a>
   </li>  
     </ul>
@@ -133,19 +134,19 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercises" role="button" data-bs-toggle="dropdown" aria-expanded="false">In-class Exercises</a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercises">    
         <li>
-    <a class="dropdown-item" href="./in-class_ex/in-class_ex1/In-class_Ex1.html">
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex1/In-class_Ex1.html">
  <span class="dropdown-text">Spatial Weights &amp; Applications [3]</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./in-class_ex/in-class_ex2/In-class_Ex2.html">
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex2/In-class_Ex2.html">
  <span class="dropdown-text">In-class Exercise 2 - Case Study 1.1 Spatial Autocorrelation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./in-class_ex/in-class_ex3/In-class_Ex3.html">
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex3/In-class_Ex3.html">
  <span class="dropdown-text">In-class Exercise 3 - Case Study 1.2 Clustering Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./in-class_ex/in-class_ex4/In-class_Ex4.html">
+    <a class="dropdown-item" href="../in-class_ex/in-class_ex4/In-class_Ex4.html">
  <span class="dropdown-text">In-class Exercise 4 - Case Study 2.1 Geographically Weighted Regression</span></a>
   </li>  
     </ul>
@@ -154,11 +155,11 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-class-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false">Class Projects</a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-class-projects">    
         <li>
-    <a class="dropdown-item" href="./class_project/project_1/spatial_weights.html">
+    <a class="dropdown-item" href="../class_project/project_1/spatial_weights.html">
  <span class="dropdown-text">Spatial Weights &amp; Applications [1]</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./class_project/project_2/Regionalisation_scca.html">
+    <a class="dropdown-item" href="../class_project/project_2/Regionalisation_scca.html">
  <span class="dropdown-text">Regionalisation with Spatially Constrained Cluster Analysis [2]</span></a>
   </li>  
     </ul>
@@ -166,10 +167,10 @@ ul.task-list li input[type="checkbox"] {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page">Home</a>
+    <a class="nav-link" href="../index.html">Home</a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html">About</a>
+    <a class="nav-link" href="../about.html">About</a>
   </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
@@ -182,110 +183,70 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#geospatial-analysis" id="toc-geospatial-analysis" class="nav-link active" data-scroll-target="#geospatial-analysis"><strong>GEOSPATIAL ANALYSIS</strong></a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Geographically Weighted Logistic Regression (GWLR)</h1>
+</div>
 
 
-<section id="geospatial-analysis" class="level1">
-<h1><strong>GEOSPATIAL ANALYSIS</strong></h1>
-<p><font size="6pt">with R Markdown, R Studio and Quarto</font></p>
-<div class="callout-caution callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 15, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<p>Key focuses :</p>
+<ol type="1">
+<li>Understand the differences between <strong>binary</strong> and <strong>continuous</strong> outcomes.</li>
+<li>Understand the basic concepts and methods of <strong>logistic regression models</strong>.</li>
+<li>Interpret the model and analysis results accurately.</li>
+<li>Compare and evaluate predictive models generated using logistic regression.<br>
+</li>
+</ol>
+<p>Logistic regression model can be used as :</p>
+<ul>
+<li><p>explanatory model</p></li>
+<li><p>predictive model</p></li>
+</ul>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Content Disclaimer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>This micro-site is for academic purposes only. Any views or opinions, or comments represented in this site is personal and belongs solely to the site owner and do not represent those people, institutions or organisations that the owner may or may not be associated professionally or within a personal capacity unless explicitly stated.</p>
-<p>All content on this site is for informational purposes only. This site’s owner makes no representation of the accuracy or completeness of any display information or any link on this site. The owner will not be liable for any errors, omissions or availability of any information. The owner will not be liable for any losses, injuries, or damages from the display or use of this information.</p>
+Example 1 :
 </div>
 </div>
+<div class="callout-body-container callout-body" style="{style">
+<p>Whether a customer churns, (y = 1) or not churns (y = 0) after signed up a mobile service contract.</p>
+<ul>
+<li><p>probability (p) depends on x.</p></li>
+<li><p>x is the explanatory variable (either categorical (discrete) or quantitative), such as :</p>
+<ul>
+<li><p>account age</p></li>
+<li><p>current billing amount</p></li>
+<li><p>average days delinquent</p></li>
+</ul></li>
+</ul>
 </div>
-<p><span style="color:#a39f9d">module</span> : <a href="https://isss624-ay2022-23nov.netlify.app/" title="syllabus for this module"><strong>ISSS624-AY2022023Nov Applied Geospatial Analytics</strong></a></p>
-<p><span style="color:#a39f9d">instructor</span> : <a href="https://www.smu.edu.sg/faculty/profile/9618/KAM-Tin-Seong"><strong>Dr.&nbsp;Kam Tin Seong</strong></a>, Associate Professor of Information Systems (Practice)</p>
-<p><span style="color:#a39f9d">institute</span> : <a href="https://scis.smu.edu.sg/master-it-business/analytics-track/curriculum" title="MITB_analyticsTrack"><strong>MITB-Analytics Track</strong></a> , Singapore Management University (SMU)</p>
-<p><span style="color:#a39f9d">timeline</span> : November 19, 2022 to December 17, 2022</p>
-<p><br></p>
-<table class="table">
-<colgroup>
-<col style="width: 21%">
-<col style="width: 19%">
-<col style="width: 23%">
-<col style="width: 34%">
-</colgroup>
-<thead>
-<tr class="header">
-<th><span style="color:#a39f9d"><strong>date</strong></span></th>
-<th><span style="color:#a39f9d">lesson</span></th>
-<th><span style="color:#a39f9d">lesson cover</span></th>
-<th><span style="color:#a39f9d">topic</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Nov19, 2022</td>
-<td>Lesson 1</td>
-<td>Hands-on Ex1</td>
-<td>Geospatial Data Wrangling with R [1]</td>
-</tr>
-<tr class="even">
-<td>Nov19, 2022</td>
-<td>Lesson 1</td>
-<td>Hands-on Ex1</td>
-<td>Choropleth Mapping with R [2]</td>
-</tr>
-<tr class="odd">
-<td>Nov19, 2022</td>
-<td>Lesson 1</td>
-<td>In-class Ex1</td>
-<td>Spatial Weights and Applications [3]</td>
-</tr>
-<tr class="even">
-<td>Nov24, 2022</td>
-<td>Lesson 2</td>
-<td>Hands-on Ex2</td>
-<td>Global &amp; Local Measures of Spatial Autocorrelation [4]</td>
-</tr>
-<tr class="odd">
-<td>Dec2, 2022</td>
-<td>Lesson 3</td>
-<td>Hands-on Ex3</td>
-<td>Spatially Constrained Cluster Analysis [5]</td>
-</tr>
-<tr class="even">
-<td>Dec10, 2022</td>
-<td>Lesson 4</td>
-<td><p>Hands-on Ex4</p>
-<p>In-class Ex4</p></td>
-<td>Geographically Weighted Regression [6]</td>
-</tr>
-<tr class="odd">
-<td>Dec17, 2022</td>
-<td>Lesson 5</td>
-<td><p>Hands-on Ex5</p>
-<p>In-class Ex5</p></td>
-<td><p>Geographically Weighted</p>
-<p>Logistc Regression</p></td>
-</tr>
-</tbody>
-</table>
+</div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

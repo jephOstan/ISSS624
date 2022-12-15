@@ -1,0 +1,34 @@
+---
+title: "Geographically Weighted Logistic Regression (GWLR)"
+editor: visual
+date: 15 Dec 2022
+---
+
+Key focuses :
+
+1.  Understand the differences between **binary** and **continuous** outcomes.
+2.  Understand the basic concepts and methods of **logistic regression models**.
+3.  Interpret the model and analysis results accurately.
+4.  Compare and evaluate predictive models generated using logistic regression.\
+
+Logistic regression model can be used as :
+
+-   explanatory model
+
+-   predictive model
+
+::: {.callout-tip style="{style" appearance="simple"}
+## Example 1 :
+
+Whether a customer churns, (y = 1) or not churns (y = 0) after signed up a mobile service contract.
+
+-   probability (p) depends on x.
+
+-   x is the explanatory variable (either categorical (discrete) or quantitative), such as :
+
+    -   account age
+
+    -   current billing amount
+
+    -   average days delinquent
+:::
