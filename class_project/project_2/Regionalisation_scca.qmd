@@ -52,11 +52,11 @@ Three (3) Projected Coordinate Systems of Nigeria, EPSG : [26391](https://epsg.i
 
 -   plot two (2) main types of maps below :
 
-1.  **Thematic Mapping**
+    **Thematic Mapping**
 
     Show the derived water-point measures by appropriate statistical graphics and choropleth mapping technique.
 
-2.  **Analytical Mapping**
+    **Analytical Mapping**
 
     Plot delineated functional regions using non-spatially constrained and spatially constrained clustering algorithms.
 
@@ -64,73 +64,97 @@ Three (3) Projected Coordinate Systems of Nigeria, EPSG : [26391](https://epsg.i
 
 # 2. R PACKAGE REQUIRED
 
-Following are the packages require for this exercise :
+The following are the packages required for this exercise :
 
 ::: {.callout-caution collapse="true"}
-## importing and Processing Geospatial Data
+## Load one or more packages
 
-sf package : - *st_as_sfc( )* - 3.3.1
+-   pacman package :
 
--   *st_sf( )* - 3.3.2
-
--   *st_read( ) -* 3.4
-
--   *st_join( ) -* 3.5
+    -   [*p_load( )*](https://www.rdocumentation.org/packages/pacman/versions/0.5.1/topics/p_load) - [2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#load-r-packages-into-r-environment)
 :::
 
 ::: {.callout-caution collapse="true"}
-## importing and processing non-spatial data
+## Import and process Geospatial data
 
-tidyverse package :
+-   sf package :
 
-      -   readr
+    -   *st_as_sfc( )* - 3.3.1
 
-            \-- [*read_csv( )*](https://readr.tidyverse.org/reference/read_delim.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), 3.2.2.1
+    -   *st_sf( )* - 3.3.2
 
-            \-- [*problems( )*](https://www.rdocumentation.org/packages/readr/versions/1.3.1/topics/problems) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable)
+    -   *st_read( )* - 3.4
 
-            \-- [*write_rds( )*](https://readr.tidyverse.org/reference/read_rds.html) *-* [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord), 3.2.2.3
-
-            \-- [*read_rds( )*](https://readr.tidyverse.org/reference/read_rds.html)- [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord)
-
-        -   dplyr
-
-            \-- [*rename( )*](https://dplyr.tidyverse.org/reference/rename.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), 3.2.2.1
-
-            \-- [*filter( )*](https://dplyr.tidyverse.org/reference/filter.html) - 3.3.1.3, 3.4.1.1
-
-            \-- *left_join( )* -
-
-            \-- *add_count( ) -* 3.3.1.3
-
-            \-- *select( ) -* 3.4
-
-            \-- *count( ) -*
-
-        -   tidyr
-
-            \-- *replace_na( )* - 3.
+    -   *st_join( )* - 3.5
 :::
 
--   plot map for visualisation
+::: {.callout-caution collapse="true"}
+## Import and Process Aspatial data
 
-    -   tmap
+-   tidyverse :
+    -   readr package
 
-        -   [*tmap_mode( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tmap_mode) -
-        -   [*tm_shape( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_shape) *-*
-        -   [*tm_polygons( )*](https://rdrr.io/cran/tmap/man/tm_polygons.html) *-*
-        -   [*tm_view( )*](https://rdrr.io/cran/tmap/man/tm_view.html) *-*
-        -   [*tm_fill( )*](https://search.r-project.org/CRAN/refmans/tmap/html/tm_polygons.html) *-*
-        -   *tm_borders( ) -*
-        -   [*tm_style( )*](https://rdrr.io/cran/tmap/man/tmap_style.html) *-*
-        -   [*tm_layout( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_layout) *-*
-        -   *qtm( )* -
+        -   [*read_csv( )*](https://readr.tidyverse.org/reference/read_delim.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), 3.2.2.1
 
--   visualise correlation matrix :
+        -   [*problems( )*](https://www.rdocumentation.org/packages/readr/versions/1.3.1/topics/problems) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable)
 
-    -   corrplot package :
+        -   [*write_rds( )*](https://readr.tidyverse.org/reference/read_rds.html) *-* [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord), 3.2.2.3
 
-        -   *corrplot.mixed( )* -
+        -   [*read_rds( )*](https://readr.tidyverse.org/reference/read_rds.html)- [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord)
+
+    -   dplyr
+
+        -   [*rename( )*](https://dplyr.tidyverse.org/reference/rename.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), 3.2.2.1
+
+        -   [*filter( )*](https://dplyr.tidyverse.org/reference/filter.html) - 3.3.1.3, 3.4.1.1
+
+        -   *left_join( )* -
+
+        -   *add_count( )* - 3.3.1.3
+
+        -   *select( )* - 3.4
+
+        -   *count( )* -
+
+    -   tidyr
+
+        -   *replace_na( )* - 3.
+:::
+
+::: {.callout-caution collapse="true"}
+## Plot map for visualisation
+
+-   tmap :
+
+-   [*tmap_mode( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tmap_mode) -
+
+-   [*tm_shape( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_shape) *-*
+
+-   [*tm_polygons( )*](https://rdrr.io/cran/tmap/man/tm_polygons.html) *-*
+
+-   [*tm_view( )*](https://rdrr.io/cran/tmap/man/tm_view.html) *-*
+
+-   [*tm_fill( )*](https://search.r-project.org/CRAN/refmans/tmap/html/tm_polygons.html) *-*
+
+-   *tm_borders( ) -*
+
+-   [*tm_style( )*](https://rdrr.io/cran/tmap/man/tmap_style.html) *-*
+
+-   [*tm_layout( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_layout) *-*
+
+-   *qtm( )* -
+:::
+
+::: {.callout-caution collapse="true"}
+## Visualise correlation matrix :
+
+-   corrplot package :
+
+-   *corrplot.mixed( )* -
+:::
+
+::: {.callout-caution collapse="true"}
+## Others
 
 -   questionr
 
@@ -149,11 +173,15 @@ tidyverse package :
 -   base
 
     -   [*summary( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary) - 3.2.1.2
+
     -   [*duplicated( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/duplicated) - 3.4.3.3
+:::
 
 ## 2.1 Load R Packages into R Environment
 
-Use the code chunk below.
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
+
+[***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages. This function will attempt to install the package from CRAN or pacman repository list if its found not installed.
 
 ```{r}
 pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally)
@@ -170,6 +198,12 @@ pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tma
     1.  Download the Nigeria data set in shapefile format via [Access WPdx+ Global Data Repository](https://data.waterpointdata.org/dataset/Water-Point-Data-Exchange-Plus-WPDx-/eqje-vguj/data) from [WPdx Global Data Repositories](https://www.waterpointdata.org/access-data/).
     2.  Rename the title of the data set to "***geo_export***".
 
+::: callout-note
+The file size of the downloaded data is about 422 MB due to water points data from multiple countries.
+
+To avoid any error of pushing files larger than 100 MB to Git cached in the Git Push function, filtered the water points for Nigeria and removed unnecessary variables. As a result, the file size is reduced to about 23 MB.
+:::
+
 -   **Geospatial Data**
 
     1.  Download the Nigeria geoBoundaries data set at ADM2 level from [geoBoundaries.org](https://www.geoboundaries.org/index.html#getdata) or the [Humanitarian Data Exchange portal](https://data.humdata.org/).
@@ -179,15 +213,17 @@ pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tma
 
 ### 3.2.1 Import Coordinate-related Variable
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+::: {.callout-caution collapse="true"}
+## [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
-[***read_csv( )*** - readr -]{style="color:#d46e15"} to import and save the csv file as a data frame, with title *wp_coord*.
+[***read_csv( )*** - readr -]{style="color:#d46e15"} to import and save the comma separated value (CSV) file as a data frame, with title "*wp_coord*".
 
 -   [**c*ol_select( )*** - readr -]{style="color:#d46e15"} to include only the selected variables into *wp_cood* data frame.
 
 [***rename( )*** - dplyr -]{style="color:#d46e15"} to remove "\#" from the variables.
 
 [***problems( )*** - readr -]{style="color:#d46e15"} to reveal any parsing errors when importing the CSV file.
+:::
 
 ```{r}
 wp_coord <- read_csv("/jephOstan/ISSS624/class_project/project_2/data/aspatial/WPdx_NGAv1.1.csv",
@@ -200,21 +236,24 @@ wp_coord <- read_csv("/jephOstan/ISSS624/class_project/project_2/data/aspatial/W
          lon_deg = "#lon_deg")
 
 problems(wp_coord)
+
 ```
 
 Remarks :
 
-Ensure there is no parsing error before saving the data frame into an RDS format.
+[Upload and create new data frames according to the context of the variables. Therewith, these data frames can be used as and when the requirements fit the context thereof.]{style="color:#d69c3c"}
 
 #### 3.2.1.1 save and read RDS file :: *wp_coord*
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+::: {.callout-caution collapse="true"}
+## [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***write_rds( )*** - readr -]{style="color:#d46e15"} to save *wp_coord* data table into an RDS format.
 
 -   note : compress the file with "xz".
 
 [***read_rds( )*** - readr -]{style="color:#d46e15"} to read *wp_coord* RDS file into *wp_coord*.
+:::
 
 ```{r}
 write_rds(wp_coord,"/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_coord.rds",compress = "xz")
@@ -224,7 +263,7 @@ wp_coord <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wp
 
 #### 3.2.1.2 review data frame :: *wp_coord*
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***summary( )*** - base -]{style="color:#d46e15"} to reveal any missing / "NA" observations.
 
@@ -322,7 +361,7 @@ summary(wp_adm$staleness_score > 89)
 
 ### 3.2.4 Create Master File
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***left_join( )*** - dplyr -]{style="color:#d46e15"} to combine *wp_coord, wp_cond* and *wp_adm.*
 
@@ -344,7 +383,7 @@ wp <- left_join((
 
 #### 3.2.5.1 derive new field :: "geometry"
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***st_as_sfc( )*** - sf -]{style="color:#d46e15"} to derive a new field "geometry".
 
@@ -354,7 +393,7 @@ wp$geometry = st_as_sfc(wp$`New Georeferenced Column`)
 
 #### 3.2.5.2 convert to SF Data Frame
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***st_sf( )*** - sf -]{style="color:#d46e15"} to convert the tibble data frame into sf data frame with crs first set to WGS 84 (EPSG : 4326).
 
@@ -367,7 +406,7 @@ st_crs(wp_sf)
 
 #### 3.2.5.3 retrieve geometry summary :: *wp_sf*
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***st_geometry( )*** - sf -]{style="color:#d46e15"} to get the geometry summary.
 
@@ -377,7 +416,7 @@ st_geometry(wp_sf)
 
 ## 3.3 Import Boundary Data of Nigeria LGA
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***st_read( )*** - sf -]{style="color:#d46e15"} to read simple features.
 
@@ -402,7 +441,7 @@ freq.na(bdy_nga$shapeName)
 
 #### 3.3.1.2 check for duplication :: "shapeName"
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***duplicated( )*** - base -]{style="color:#d46e15"} to determine duplicate elements.
 
@@ -412,7 +451,7 @@ freq(duplicated(bdy_nga$shapeName))
 
 #### 3.3.1.3 list the duplicated value :: "shapeName"
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***add_count( )*** - dplyr -]{style="color:#d46e15"} to count observations by group
 
@@ -429,7 +468,7 @@ wp_duplShapeName
 
 #### 3.3.1.4 verify findings in section 3.3.1.3
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***tmap_mode( )*** - tmap -]{style="color:#d46e15"} to set tmap mode to static plotting or interactive.
 
@@ -478,7 +517,7 @@ tmap_mode("plot")
 The State info to be combined with the duplicated "shapeName". This will make all the shapeName unique.
 
 | lga      | row_id | headquarter | state    | iso3166code | state_dd_coordinates                                                      |
-|----------|--------|-------------|----------|-------------|---------------------------------------------------------------------------|
+|------------|------------|------------|------------|------------|------------|
 | Bassa    | 94     | Oguma       | Kogi     | NG.KO.BA    | [7.75 6.75](https://latitude.to/map/ng/nigeria/regions/kogi-state/)       |
 | Bassa    | 95     | Bassa       | Plateau  | NG.PL.BA    | [9.16667 9.75](https://latitude.to/map/ng/nigeria/regions/plateau-state/) |
 | Ifelodun | 304    | Share       | Kwara    | NG.KW.IF    | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)        |
@@ -531,7 +570,7 @@ This step combine both attribute and boundary of the water points into a simple 
 
 #### 3.4.2.1 join Objects :: *wp_sf* and *bdy_nga*
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***st_join( )*** - sf -]{style="color:#d46e15"} to join *sf*-class objects based on geometry, namely, *wp_sf* and *bdy_nga*.
 
@@ -1022,7 +1061,7 @@ summary(wp_nga)
 
 #### 3.4.5.12 visualise distribution :: "status_clean"
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***qtm( )*** - tmap -]{style="color:#d46e15"} to plot a thematic map quickly.
 
@@ -1314,7 +1353,7 @@ wp_nga <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_n
 
 #### 3.4.5.20 transform to Projected Coordinate System
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***st_crs( )*** - sf -]{style="color:#d46e15"} to inspect the coordinate reference system.
 
@@ -1326,7 +1365,7 @@ Remarks :
 
 The EPSG for *wp_nga* is 4326, which is WGS 84. To compute the proximity distance matrix for clustering analysis, this coordinate reference system needs to transform into EPSG: 26391.
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***st_set_crs( )*** - sf -]{style="color:#d46e15"} to update the coordinate reference system.
 
@@ -1436,7 +1475,7 @@ head(cluster_vars,5)
 
 ## 4.2 Visualise Correlation Matrix
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***corrplot.mixed( )*** - corrplot -]{style="color:#d46e15"} to use mixed methods to visualise a correlation matrix.
 
@@ -1698,7 +1737,7 @@ ggarrange(uc1000, uc1000_std, uc1000_z,
 
 ### 5.1.2 Compute Proximity Matrix
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***dist( )*** - stats -]{style="color:#d46e15"} to compute the proximity distance matrix. Among **euclidean, maximum, manhattan, canberra, binary and minkowski**, *euclidean* is used to compute *proxmat_euc.*
 
@@ -1708,7 +1747,7 @@ proxmat_euc <- dist(cluster_varsTrim, method = 'euclidean')
 
 ### 5.1.3 Compute Hierarchical Clustering
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***hclust( )*** - stats -]{style="color:#d46e15"} to compute cluster with agglomeration method.
 
@@ -1724,7 +1763,7 @@ ggdendrogram(hieClust_warD,
 
 ### 5.1.4 Determine Optimal Clustering Algorithm
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***agnes( )*** - cluster -]{style="color:#d46e15"} to get agglomerative coefficient of 4 clustering structure, namely "average", "single", "complete" and "ward".
 
@@ -1758,7 +1797,7 @@ To determine the optimal clusters to retain, following commons methods are teste
 
 #### 5.1.5.1 compute Gap Statistic method
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***clusGap( )*** - cluster -]{style="color:#d46e15"} to compute the gap statistic.
 
@@ -1775,7 +1814,7 @@ print(gap_stat, method = "firstmax")
 
 #### \-- visualise *gap_stat*
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***fviz_nbclust( )*** - factoextra -]{style="color:#d46e15"} to compute and visualise the Optimal Number of clusters.
 
@@ -1810,7 +1849,7 @@ Given the Elbow method, Silhouette method and Gap Statistic method, the 5-cluste
 
 #### 5.1.5.4 interpret with Dendrogram
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***rect.hclust( )*** - stats -]{style="color:#d46e15"} to draw the dendrogram with a border around the selected clusters.
 
@@ -1827,7 +1866,7 @@ The data is loaded into a data frame, but it has to be a data matrix to plot the
 
 #### 5.1.6.1 transform data frame into matrix
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***data.matrix( )*** - base -]{style="color:#d46e15"} to transform *cluster_varsTrim* data frame into a data matrix, and named it as *nga_clustMat*.
 
@@ -1837,7 +1876,7 @@ nga_clustMat <- data.matrix(cluster_varsTrim)
 
 #### 5.1.6.2 plot interactive cluster heatmap
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***heatmaply( )*** - heatmaply -]{style="color:#d46e15"} to build an interactive cluster heatmap.
 
@@ -1864,7 +1903,7 @@ Based on the plot above, 5 clusters to be retained for further analysis.
 
 #### 5.1.6.3 map the formed cluster
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***cutree( )*** - base -]{style="color:#d46e15"} to derive a 5-cluster model, and named the output as *groups*.
 
@@ -1895,7 +1934,7 @@ SKATER function only support sp objects in SpatialPolygonDataFrame. Hence, the *
 
 ### 5.2.1 Convert SF to SP Data Frame
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***as_Spatial( )*** - sf -]{style="color:#d46e15"} to convert *wp_ngaTrans* into *nga_sp* in a SP data frame.
 
@@ -1905,7 +1944,7 @@ nga.sp <- as_Spatial(wp_ngaTrans)
 
 ### 5.2.2 Compute Neighbour List
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***poly2nb( )*** - spdep -]{style="color:#d46e15"} to compute the neighbours list from polygon list.
 
@@ -1933,7 +1972,7 @@ summary(nga.nb1)
 
 #### 5.2.2.2 plot Neighbour List by Centroid Node
 
-[Usage of the code chunk below]{style="color:#a39f9d"} : plot the boundary first before the neighbour list object to avoid any region from being clipped away.
+[Usage of the code chunk below :]{style="color:#5e5c5c"} plot the boundary first before the neighbour list object to avoid any region from being clipped away.
 
 ```{r}
 plot(nga.sp1, 
@@ -1948,7 +1987,7 @@ plot(nga.nb1,
 
 #### 5.2.3.1 calculate edge costs
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***nbcosts( )*** - spdep -]{style="color:#d46e15"} to compute the cost of each edge which is the distance between nodes.
 
@@ -1969,7 +2008,7 @@ summary(nga.w)
 
 #### 5.2.3.3 compute minimum spanning tree
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***nbcosts( )*** - spdep -]{style="color:#d46e15"} to compute the minimum spanning tree.
 
@@ -2005,7 +2044,7 @@ plot.mst(nga_minSpanT,
 
 ### 5.2.4 Compute Spatially Constrained Cluster
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***skater( )*** - spdep -]{style="color:#d46e15"} to compute the spatially constrained cluster.
 
@@ -2064,7 +2103,7 @@ tmap_arrange(hieClust_map, ngaClust_map,
 
 ### 5.3.1 Perform Ward-like Hierarchical Clustering
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***hclustgeo( )*** - ClustGeo -]{style="color:#d46e15"} to perform a typical Ward-like hierarchical clustering.
 
@@ -2097,7 +2136,7 @@ qtm(nga_ngeo_clust.sf, "cluster")
 
 ### 5.3.2 Perform Spatially Constrained Hierarchical Clustering
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***st_distance( )*** - sf -]{style="color:#d46e15"} to derive the spatial distance matrix before perform spatially constrained hierarchical clustering.
 
@@ -2172,7 +2211,7 @@ The boxplot reveals Cluster 5 displays the highest mean of functional water poin
 
 ### 5.4.2 Visualise Multivariate
 
-[Usage of the code chunk below]{style="color:#a39f9d"} :
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***ggparcoord( )*** - GGally -]{style="color:#d46e15"} to reveal clustering variables by cluster.
 

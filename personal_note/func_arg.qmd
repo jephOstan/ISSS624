@@ -1,0 +1,147 @@
+---
+title: "Functions & Arguments"
+editor: visual
+date : 16 Dec 2022
+---
+
+::: {.callout-caution collapse="true"}
+## ggplot2 :: [Bar Charts](https://ggplot2.tidyverse.org/reference/geom_bar.html)
+
+2 types of bar charts :
+
+-   `geom_bar()`
+
+    -   `geom_bar()` uses `stat_count()` by default: it counts the number of cases at each x position.
+
+-   `geom_col()`. `geom_bar()` makes the height of the bar proportional to the number of cases in each group (or if the `weight` aesthetic is supplied, the sum of the weights)
+
+    -   `geom_col()` for the heights of the bars to represent values in the data, uses [`stat_identity()`](https://ggplot2.tidyverse.org/reference/stat_identity.html): it leaves the data as is.
+
+::: {.callout-caution collapse="true"}
+## arguments :: [geom_bar( )](https://ggplot2.tidyverse.org/reference/geom_bar.html)
+
+**mapping** = NULL,
+
+**data** = NULL,
+
+**stat** = "count",
+
+computed variables can be either "count" or "prop"
+
+**position** = "stack",
+
+...,
+
+-   Often aesthetics arguments, e.g. colour = "red" or size = 3
+
+**just** = 0.5,
+
+-   Adjustment for column placement.
+
+-   Default = 0.5 = columns to be centered about axis breaks.
+
+-   Set to 0 or 1 to place columns to the left / right of axis breaks.
+
+**width** = NULL,
+
+-   Bar width.
+
+-   Default = 90% of the resolution( ) of the data.
+
+-   For discrete variable, the resolution is 1.
+
+**na.rm** = FALSE,
+
+-   Default = FALSE = missing values are removed with a warning.
+
+-   TRUE = missing values are silently removed.
+
+**orientation** = NA,
+
+**show.legend** = NA,
+
+-   Default = NA = includes if any aesthetics are mapped.
+
+-   FALSE = never includes, and TRUE always includes.
+
+**inherit.aes** = TRUE
+:::
+
+::: callout-note
+## Example : flip the bar chart orientation by mapping variable to y
+
+ggplot(mpg) + geom_bar(aes(y = class))
+
+![](images/paste-CDBE21E2.png){width="323"}
+:::
+
+::: callout-note
+## Example : auto stacked
+
+g \<- ggplot(mpg, aes(class)) g + geom_bar(aes(fill = drv))
+
+![](images/paste-BBF9D2AC.png){width="323"}
+:::
+
+::: callout-note
+## Example : auto stacked horizontally
+
+ggplot(mpg, aes( y = class)) + geom_bar(aes( fill = drv), position = position_stack(reverse = TRUE)) + theme(legend.position = "top")
+
+![](images/paste-B6574168.png){width="323"}
+:::
+
+::: {.callout-caution collapse="true"}
+## arguments :: [geom_col](https://ggplot2.tidyverse.org/reference/geom_bar.html)
+
+mapping = NULL,
+
+data = NULL,
+
+position = "stack",
+
+...,
+
+just = 0.5,
+
+width = NULL,
+
+na.rm = FALSE,
+
+show.legend = NA,
+
+inherit.aes = TRUE
+:::
+
+::: {.callout-caution collapse="true"}
+## arguments :: [stat_identity( )](https://ggplot2.tidyverse.org/reference/stat_identity.html)
+
+stat_identity(
+
+mapping = NULL,
+
+data = NULL,
+
+geom = "point",
+
+position = "identity",
+
+...,
+
+show.legend = NA,
+
+inherit.aes = TRUE
+:::
+
+::: callout-note
+## Example for stat_identity( )
+
+p \<- ggplot(mtcars,
+
+aes(wt, mpg))
+
+p + stat_identity( )
+
+![](images/paste-6D08A934.png){width="323"}
+:::
+:::

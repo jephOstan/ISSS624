@@ -17,6 +17,8 @@ website:
             href: personal_note/SpatialConstrainedClusterAnalysis.qmd
           - text: Geographically Weighted Logistic Regres
             href: personal_note/gwlr.qmd
+          - text: Functions & Arguments
+            href: personal_note/func_arg.qmd            
             
       - text: Hands-on Exercises
         menu: 
