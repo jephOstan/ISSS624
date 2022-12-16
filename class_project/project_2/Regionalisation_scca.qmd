@@ -182,7 +182,7 @@ The following are the packages required for this exercise :
 :::
 
 ::: {.callout-caution collapse="true"}
-## Visualise correlation matrix :
+## Visualise correlation matrix
 
 -   corrplot package :
 
