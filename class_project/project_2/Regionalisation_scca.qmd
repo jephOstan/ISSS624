@@ -79,46 +79,58 @@ The following are the packages required for this exercise :
 
 -   sf package :
 
-    -   *st_as_sfc( )* - 3.3.1
+    -   [*st_as_sfc( )*](https://www.rdocumentation.org/packages/sf/versions/1.0-9/topics/st_as_sfc) - [3.2.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#derive-new-field-geometry)
 
-    -   *st_sf( )* - 3.3.2
+    -   [*st_sf( )*](https://www.rdocumentation.org/packages/sf/versions/0.1-1/topics/ST_sf) - [3.2.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#convert-to-sf-data-frame)
 
-    -   *st_read( )* - 3.4
+    -   [*st_crs( )*](https://www.rdocumentation.org/packages/sf/versions/1.0-9/topics/st_crs)- [3.2.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#convert-to-sf-data-frame)
 
-    -   *st_join( )* - 3.5
+    -   [*st_geometry( )*](https://www.rdocumentation.org/packages/sf/versions/1.0-9/topics/st_geometry)- [3.2.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#retrieve-geometry-summary-wp_sf), [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#inspect-joined-file-wp_joined)
+
+    -   [*st_read( )*](https://www.rdocumentation.org/packages/sf/versions/0.2-2/topics/st_read) - [3.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-boundary-data-of-nigeria-lga)
+
+    -   [*st_join( )*](https://www.rdocumentation.org/packages/sf/versions/0.5-5/topics/st_join) - [3.4.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#join-objects-wp_sf-and-bdy_nga)
+
+    -   *st_set_crs( )* - [3.4.5.20](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#transform-to-projected-coordinate-system)
+
+    -   [*st_set_geometry( )*](https://r-spatial.github.io/sf/reference/st_geometry.html) *-* [4.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#create-data-table-for-correlation-matrix-analysis)
+
+-   stars package :
+
+    -   [*st_intersects( )*](https://www.rdocumentation.org/packages/stars/versions/0.5-0/topics/st_intersects.stars)- [3.4.5.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#add-attribute-to-new-data-table)
 :::
 
 ::: {.callout-caution collapse="true"}
 ## Import and Process Aspatial data
 
 -   tidyverse :
-    -   readr package
+    -   readr package :
 
-        -   [*read_csv( )*](https://readr.tidyverse.org/reference/read_delim.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), 3.2.2.1
+        -   [*read_csv( )*](https://readr.tidyverse.org/reference/read_delim.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), [3.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-status-and-condition-related-variable), [3.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-lga-and-measure-related-variable), 3.2.2.1
 
-        -   [*problems( )*](https://www.rdocumentation.org/packages/readr/versions/1.3.1/topics/problems) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable)
+        -   [*problems( )*](https://www.rdocumentation.org/packages/readr/versions/1.3.1/topics/problems) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), [3.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-status-and-condition-related-variable), [3.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-lga-and-measure-related-variable), [3.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-boundary-data-of-nigeria-lga)
 
-        -   [*write_rds( )*](https://readr.tidyverse.org/reference/read_rds.html) *-* [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord), 3.2.2.3
+        -   [*write_rds( )*](https://readr.tidyverse.org/reference/read_rds.html) *-* [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord), [3.2.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_cond), [3.2.3.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_adm), [3.4.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_joined), [3.4.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wpt_functional)
 
-        -   [*read_rds( )*](https://readr.tidyverse.org/reference/read_rds.html)- [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord)
+        -   [*read_rds( )*](https://readr.tidyverse.org/reference/read_rds.html)- [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord), [3.2.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_cond), [3.2.3.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_adm), [3.4.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_joined), [3.4.4.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#read-rds-file-wp_joined1), [3.4.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wpt_functional)
 
-    -   dplyr
+    -   dplyr :
 
-        -   [*rename( )*](https://dplyr.tidyverse.org/reference/rename.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), 3.2.2.1
+        -   [*rename( )*](https://dplyr.tidyverse.org/reference/rename.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), [3.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-status-and-condition-related-variable), [3.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-lga-and-measure-related-variable)
 
-        -   [*filter( )*](https://dplyr.tidyverse.org/reference/filter.html) - 3.3.1.3, 3.4.1.1
+        -   [*filter( )*](https://dplyr.tidyverse.org/reference/filter.html) - [3.3.1.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#list-the-duplicated-value-shapename), [3.4.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#validate-edited-value-shapename), [3.4.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#extract-functional-water-point)
 
-        -   *left_join( )* -
+        -   [*left_join( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/join) - [3.2.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#create-master-file),
 
-        -   *add_count( )* - 3.3.1.3
+        -   [*select( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/select) - [3.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-boundary-data-of-nigeria-lga), [3.3.1.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#list-the-duplicated-value-shapename), [3.4.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#validate-edited-value-shapename)
 
-        -   *select( )* - 3.4
+        -   [*add_count( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/tally) - [3.3.1.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#list-the-duplicated-value-shapename), [3.4.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#validate-edited-value-shapename)
 
-        -   *count( )* -
+        -   [*mutate( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.5.0/topics/mutate) - [3.4.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-na-with-unknown), [3.4.4.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#combine-value-status_clean)
 
-    -   tidyr
+    -   tidyr :
 
-        -   *replace_na( )* - 3.
+        -   [*replace_na( )*](https://www.rdocumentation.org/packages/tidyr/versions/0.8.3/topics/replace_na) - [3.4.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-na-with-unknown), [3.4.5.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-nan-with-0)
 :::
 
 ::: {.callout-caution collapse="true"}
@@ -126,23 +138,47 @@ The following are the packages required for this exercise :
 
 -   tmap :
 
--   [*tmap_mode( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tmap_mode) -
+-   [*tmap_mode( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tmap_mode) - [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
 
--   [*tm_shape( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_shape) *-*
+-   [*tm_shape( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_shape) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
 
--   [*tm_polygons( )*](https://rdrr.io/cran/tmap/man/tm_polygons.html) *-*
+-   [*tm_polygons( )*](https://rdrr.io/cran/tmap/man/tm_polygons.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
 
--   [*tm_view( )*](https://rdrr.io/cran/tmap/man/tm_view.html) *-*
+-   [*tm_view( )*](https://rdrr.io/cran/tmap/man/tm_view.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
 
--   [*tm_fill( )*](https://search.r-project.org/CRAN/refmans/tmap/html/tm_polygons.html) *-*
+-   [*tm_fill( )*](https://search.r-project.org/CRAN/refmans/tmap/html/tm_polygons.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
 
--   *tm_borders( ) -*
+-   [*tm_borders( )*](https://www.rdocumentation.org/packages/tmap/versions/0.7/topics/tm_borders) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
 
--   [*tm_style( )*](https://rdrr.io/cran/tmap/man/tmap_style.html) *-*
+-   [*tmap_style( )*](https://rdrr.io/cran/tmap/man/tmap_style.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
 
--   [*tm_layout( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_layout) *-*
+-   [*tm_layout( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_layout) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
 
--   *qtm( )* -
+-   *qtm( )* - [3.4.5.12](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-distribution-status_clean)
+
+-   *tmap_arrange( )* - [3.4.5.12](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-distribution-status_clean)
+:::
+
+::: {.callout-caution collapse="true"}
+## Plot graph and chart
+
+-   ggplot2 package :
+
+    -   [*ggplot( )*](https://www.rdocumentation.org/packages/ggplot2/versions/3.4.0/topics/ggplot) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
+
+    -   [*geom_bar( )*](https://www.rdocumentation.org/packages/ggplot2/versions/1.0.1/topics/geom_bar) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
+
+    -   [*geom_text( )*](https://www.rdocumentation.org/packages/ggplot2/versions/0.9.1/topics/geom_text) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
+
+    -   [*scale_x\_discrete( )*](https://ggplot2.tidyverse.org/reference/scale_discrete.html) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
+
+    -   [*geom_boxplot( )*](https://www.rdocumentation.org/packages/ggplot2/versions/1.0.1/topics/geom_boxplot)- [3.5.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#plot-boxplot-pct_functional)
+
+    -   [*geom_histogram( )*](https://www.rdocumentation.org/packages/ggplot2/versions/0.9.1/topics/geom_histogram) - [3.5.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#plot-histogram-for-status_clean)
+
+-   egg package :
+
+    -   [*ggarrange( )*](https://www.rdocumentation.org/packages/egg/versions/0.4.5/topics/ggarrange) - [3.5.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#plot-histogram-for-status_clean)
 :::
 
 ::: {.callout-caution collapse="true"}
@@ -150,31 +186,48 @@ The following are the packages required for this exercise :
 
 -   corrplot package :
 
--   *corrplot.mixed( )* -
+    -   [*corrplot.mixed( )*](https://www.rdocumentation.org/packages/corrplot/versions/0.92/topics/corrplot.mixed) - [4.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-correlation-matrix-1)
 :::
 
 ::: {.callout-caution collapse="true"}
-## Others
+## Get descriptive stats
 
--   questionr
+-   questionr :
 
-    -   *freq( ) -* 3.6.3
+    -   [*freq.na( )*](https://www.rdocumentation.org/packages/questionr/versions/0.7.7/topics/freq.na)- [3.3.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#check-for-missing-data)
+    -   [*freq( )*](https://www.rdocumentation.org/packages/questionr/versions/0.7.7/topics/freq) *-* [3.3.1.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#check-for-duplication-shapename), [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#determine-reference-point-shapename-or-clean_adm2)
 
--   factoextra
+-   factoextra :
 
     -   [*fviz_nbclust( )*](https://www.rdocumentation.org/packages/factoextra/versions/1.0.7/topics/fviz_nbclust) -
 
--   stats
+-   stats :
 
     -   [*dist( )*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/dist) - 5.1.2
 
     -   [*as.dist( )*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/dist) -
+:::
 
--   base
+::: {.callout-caution collapse="true"}
+## Miscellaneous Generic Functions
 
-    -   [*summary( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary) - 3.2.1.2
+-   janitor package :
 
-    -   [*duplicated( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/duplicated) - 3.4.3.3
+    -   [*get_dupes( )*](https://www.rdocumentation.org/packages/janitor/versions/2.1.0/topics/get_dupes) *-* [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#assess-uniqueness-of-each-water-point)
+
+-   [plyr package](https://www.rdocumentation.org/packages/plyr/versions/1.8.8) :
+
+    -   *count( )* - [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#reveal-value-usage_capacity-by-status_clean)
+
+-   [base package](https://www.rdocumentation.org/packages/base/versions/3.6.2) :
+
+    -   [*summary( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary) - [3.2.1.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#review-data-frame-wp_coord), [3.2.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#review-data-frame-wp_cond), [3.2.3.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#review-data-frame-wp_adm), [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#reveal-value-crucialness_score), [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#reveal-value-crucialness_score-1)
+
+    -   [*duplicated( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/duplicated) - [3.3.1.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#check-for-duplication-shapename)
+
+    -   [*length( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/length)- [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#inspect-variable-and-value)
+
+    -   [*sum( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sum) *-* [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#determine-the-total-population-within-1-km-by-crucialness_score)
 :::
 
 ## 2.1 Load R Packages into R Environment
@@ -184,7 +237,7 @@ The following are the packages required for this exercise :
 [***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages. This function will attempt to install the package from CRAN or pacman repository list if its found not installed.
 
 ```{r}
-pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally)
+pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally)
 ```
 
 <br>
@@ -366,12 +419,13 @@ summary(wp_adm$staleness_score > 89)
 [***left_join( )*** - dplyr -]{style="color:#d46e15"} to combine *wp_coord, wp_cond* and *wp_adm.*
 
 ```{r}
-wp <- left_join((
-  left_join(
-    wp_coord, 
-    wp_cond, 
-    by = c("row_id")
-    )),
+wp <- left_join(
+  
+  (left_join
+   (wp_coord,wp_cond,
+     by = c("row_id")
+     )
+   ),
   wp_adm, by = c("row_id"))
 ```
 
@@ -385,7 +439,7 @@ wp <- left_join((
 
 [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
-[***st_as_sfc( )*** - sf -]{style="color:#d46e15"} to derive a new field "geometry".
+[***st_as_sfc( )*** - sf -]{style="color:#d46e15"} to convert foreign geometry object \`New Georeferenced Column\` to an sfc object
 
 ```{r}
 wp$geometry = st_as_sfc(wp$`New Georeferenced Column`)
@@ -434,6 +488,10 @@ problems(bdy_nga)
 ### 3.3.1 Review Imported File
 
 #### 3.3.1.1 check for missing data
+
+## [Usage of the code chunk below :]{style="color:#5e5c5c"}
+
+[***freq.na( )*** - questionr -]{style="color:#d46e15"} to generate frequency table of missing value.
 
 ```{r}
 freq.na(bdy_nga$shapeName)
@@ -1504,15 +1562,13 @@ Following are the pairs with strong correlation :
 |          -0.90           | pct_mechPump |  pct_uc300  |
 |          -0.90           |  pct_uc300   | pct_uc1000  |
 
-```{r}
-
+```{}
 ```
 
 ### 4.2.1 Replace Row ID with "shapeName"
 
 ```{r}
 row.names(cluster_vars) <- cluster_vars$shapeName
-cluster_vars
 ```
 
 ### 4.2.2 Trim High Correlation Variable and "shapeName"
