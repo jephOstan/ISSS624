@@ -34,7 +34,11 @@ Some of the specific tasks for this study are :
 
 -   import the shapefile into R with the appropriate *sf* method, and save it in a simple feature data frame format;
 
-    -   note : three (3) Projected Coordinate Systems of Nigeria are : EPSG: 26391, 26392, and 26303.
+::: callout-note
+## note
+
+Three (3) Projected Coordinate Systems of Nigeria, EPSG : [26391](https://epsg.io/26391), 26392, and 26303.
+:::
 
 -   derive the proportion of functional and non-functional water points at LGA level (i.e. ADM2) by appropriate tidyr and dplyr methods;
 
@@ -62,22 +66,24 @@ Some of the specific tasks for this study are :
 
 Following are the packages require for this exercise :
 
--   importing and Processing Geospatial Data
+::: {.callout-caution collapse="true"}
+## importing and Processing Geospatial Data
 
-    -   sf
-        -   *st_as_sfc( )* - 3.3.1
+sf package : - *st_as_sfc( )* - 3.3.1
 
-        -   *st_sf( )* - 3.3.2
+-   *st_sf( )* - 3.3.2
 
-        -   *st_read( ) -* 3.4
+-   *st_read( ) -* 3.4
 
-        -   *st_join( ) -* 3.5
+-   *st_join( ) -* 3.5
+:::
 
--   importing and processing non-spatial data
+::: {.callout-caution collapse="true"}
+## importing and processing non-spatial data
 
-    -   tidyverse
+tidyverse package :
 
-        -   readr
+      -   readr
 
             \-- [*read_csv( )*](https://readr.tidyverse.org/reference/read_delim.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), 3.2.2.1
 
@@ -91,7 +97,7 @@ Following are the packages require for this exercise :
 
             \-- [*rename( )*](https://dplyr.tidyverse.org/reference/rename.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), 3.2.2.1
 
-            \-- [*filter( )*](https://dplyr.tidyverse.org/reference/filter.html) - 3.2.2.1
+            \-- [*filter( )*](https://dplyr.tidyverse.org/reference/filter.html) - 3.3.1.3, 3.4.1.1
 
             \-- *left_join( )* -
 
@@ -104,6 +110,7 @@ Following are the packages require for this exercise :
         -   tidyr
 
             \-- *replace_na( )* - 3.
+:::
 
 -   plot map for visualisation
 
@@ -118,6 +125,12 @@ Following are the packages require for this exercise :
         -   [*tm_style( )*](https://rdrr.io/cran/tmap/man/tmap_style.html) *-*
         -   [*tm_layout( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_layout) *-*
         -   *qtm( )* -
+
+-   visualise correlation matrix :
+
+    -   corrplot package :
+
+        -   *corrplot.mixed( )* -
 
 -   questionr
 
@@ -465,7 +478,7 @@ tmap_mode("plot")
 The State info to be combined with the duplicated "shapeName". This will make all the shapeName unique.
 
 | lga      | row_id | headquarter | state    | iso3166code | state_dd_coordinates                                                      |
-|---------|---------|---------|---------|---------|------------------------------|
+|----------|--------|-------------|----------|-------------|---------------------------------------------------------------------------|
 | Bassa    | 94     | Oguma       | Kogi     | NG.KO.BA    | [7.75 6.75](https://latitude.to/map/ng/nigeria/regions/kogi-state/)       |
 | Bassa    | 95     | Bassa       | Plateau  | NG.PL.BA    | [9.16667 9.75](https://latitude.to/map/ng/nigeria/regions/plateau-state/) |
 | Ifelodun | 304    | Share       | Kwara    | NG.KW.IF    | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)        |
@@ -1423,6 +1436,10 @@ head(cluster_vars,5)
 
 ## 4.2 Visualise Correlation Matrix
 
+[Usage of the code chunk below]{style="color:#a39f9d"} :
+
+[***corrplot.mixed( )*** - corrplot -]{style="color:#d46e15"} to use mixed methods to visualise a correlation matrix.
+
 This plot allows to identify the pattern and the relationship in the matrix.
 
 ```{r}
@@ -1447,6 +1464,10 @@ Following are the pairs with strong correlation :
 |          -0.91           |  pct_uc1000  | pct_ucN1000 |
 |          -0.90           | pct_mechPump |  pct_uc300  |
 |          -0.90           |  pct_uc300   | pct_uc1000  |
+
+```{r}
+
+```
 
 ### 4.2.1 Replace Row ID with "shapeName"
 
