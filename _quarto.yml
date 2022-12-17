@@ -42,7 +42,9 @@ website:
           - text: In-class Exercise 3 - Case Study 1.2 Clustering Analysis
             href: in-class_ex/in-class_ex3/In-class_Ex3.qmd
           - text: In-class Exercise 4 - Case Study 2.1 Geographically Weighted Regression
-            href: in-class_ex/in-class_ex4/In-class_Ex4.qmd            
+            href: in-class_ex/in-class_ex4/In-class_Ex4.qmd
+          - text: In-class Exercise 5 - Case Study 2.2 GWLR
+            href: in-class_ex/in-class_ex4/In-class_Ex5.qmd  
             
       - text: Class Projects
         menu: 
