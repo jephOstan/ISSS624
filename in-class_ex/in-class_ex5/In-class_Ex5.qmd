@@ -12,179 +12,17 @@ This study focuses on GWLR analysis based on Nigeria's water points attributes.
 
 ## 1.1 Objectives
 
-To build an explanatory model to discover factor affecting water point status in Osun State, Nigeria :
+To build an explanatory model to discover factor affecting water point status in Osun State, Nigeria.
 
-Study area : Osun State, Nigeria
+## 1.2 Study Area
+
+Osun State, Nigeria
 
 <br>
 
 # 2. R PACKAGE REQUIRED
 
 The following are the packages required for this exercise :
-
-::: {.callout-caution collapse="true"}
-## Load one or more packages
-
--   pacman package :
-
-    -   [*p_load( )*](https://www.rdocumentation.org/packages/pacman/versions/0.5.1/topics/p_load) - [2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#load-r-packages-into-r-environment)
-:::
-
-::: {.callout-caution collapse="true"}
-## Import and process Geospatial data
-
--   sf package :
-
-    -   [*st_as_sfc( )*](https://www.rdocumentation.org/packages/sf/versions/1.0-9/topics/st_as_sfc) - [3.2.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#derive-new-field-geometry)
-
-    -   [*st_sf( )*](https://www.rdocumentation.org/packages/sf/versions/0.1-1/topics/ST_sf) - [3.2.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#convert-to-sf-data-frame)
-
-    -   [*st_crs( )*](https://www.rdocumentation.org/packages/sf/versions/1.0-9/topics/st_crs)- [3.2.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#convert-to-sf-data-frame)
-
-    -   [*st_geometry( )*](https://www.rdocumentation.org/packages/sf/versions/1.0-9/topics/st_geometry)- [3.2.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#retrieve-geometry-summary-wp_sf), [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#inspect-joined-file-wp_joined)
-
-    -   [*st_read( )*](https://www.rdocumentation.org/packages/sf/versions/0.2-2/topics/st_read) - [3.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-boundary-data-of-nigeria-lga)
-
-    -   [*st_join( )*](https://www.rdocumentation.org/packages/sf/versions/0.5-5/topics/st_join) - [3.4.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#join-objects-wp_sf-and-bdy_nga)
-
-    -   *st_set_crs( )* - [3.4.5.20](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#transform-to-projected-coordinate-system)
-
-    -   [*st_set_geometry( )*](https://r-spatial.github.io/sf/reference/st_geometry.html) *-* [4.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#create-data-table-for-correlation-matrix-analysis)
-
--   stars package :
-
-    -   [*st_intersects( )*](https://www.rdocumentation.org/packages/stars/versions/0.5-0/topics/st_intersects.stars)- [3.4.5.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#add-attribute-to-new-data-table)
-:::
-
-::: {.callout-caution collapse="true"}
-## Import and Process Aspatial data
-
--   tidyverse :
-    -   readr package :
-
-        -   [*read_csv( )*](https://readr.tidyverse.org/reference/read_delim.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), [3.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-status-and-condition-related-variable), [3.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-lga-and-measure-related-variable), 3.2.2.1
-
-        -   [*problems( )*](https://www.rdocumentation.org/packages/readr/versions/1.3.1/topics/problems) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), [3.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-status-and-condition-related-variable), [3.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-lga-and-measure-related-variable), [3.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-boundary-data-of-nigeria-lga)
-
-        -   [*write_rds( )*](https://readr.tidyverse.org/reference/read_rds.html) *-* [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord), [3.2.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_cond), [3.2.3.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_adm), [3.4.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_joined), [3.4.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wpt_functional)
-
-        -   [*read_rds( )*](https://readr.tidyverse.org/reference/read_rds.html)- [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord), [3.2.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_cond), [3.2.3.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_adm), [3.4.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_joined), [3.4.4.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#read-rds-file-wp_joined1), [3.4.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wpt_functional)
-
-    -   dplyr :
-
-        -   [*rename( )*](https://dplyr.tidyverse.org/reference/rename.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), [3.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-status-and-condition-related-variable), [3.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-lga-and-measure-related-variable)
-
-        -   [*filter( )*](https://dplyr.tidyverse.org/reference/filter.html) - [3.3.1.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#list-the-duplicated-value-shapename), [3.4.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#validate-edited-value-shapename), [3.4.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#extract-functional-water-point)
-
-        -   [*left_join( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/join) - [3.2.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#create-master-file),
-
-        -   [*select( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/select) - [3.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-boundary-data-of-nigeria-lga), [3.3.1.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#list-the-duplicated-value-shapename), [3.4.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#validate-edited-value-shapename)
-
-        -   [*add_count( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/tally) - [3.3.1.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#list-the-duplicated-value-shapename), [3.4.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#validate-edited-value-shapename)
-
-        -   [*mutate( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.5.0/topics/mutate) - [3.4.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-na-with-unknown), [3.4.4.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#combine-value-status_clean)
-
-    -   tidyr :
-
-        -   [*replace_na( )*](https://www.rdocumentation.org/packages/tidyr/versions/0.8.3/topics/replace_na) - [3.4.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-na-with-unknown), [3.4.5.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-nan-with-0)
-:::
-
-::: {.callout-caution collapse="true"}
-## Plot map for visualisation
-
--   tmap :
-
--   [*tmap_mode( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tmap_mode) - [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
-
--   [*tm_shape( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_shape) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
-
--   [*tm_polygons( )*](https://rdrr.io/cran/tmap/man/tm_polygons.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
-
--   [*tm_view( )*](https://rdrr.io/cran/tmap/man/tm_view.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
-
--   [*tm_fill( )*](https://search.r-project.org/CRAN/refmans/tmap/html/tm_polygons.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
-
--   [*tm_borders( )*](https://www.rdocumentation.org/packages/tmap/versions/0.7/topics/tm_borders) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
-
--   [*tmap_style( )*](https://rdrr.io/cran/tmap/man/tmap_style.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
-
--   [*tm_layout( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_layout) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
-
--   *qtm( )* - [3.4.5.12](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-distribution-status_clean)
-
--   *tmap_arrange( )* - [3.4.5.12](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-distribution-status_clean)
-:::
-
-::: {.callout-caution collapse="true"}
-## Plot graph and chart
-
--   ggplot2 package :
-
-    -   [*ggplot( )*](https://www.rdocumentation.org/packages/ggplot2/versions/3.4.0/topics/ggplot) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
-
-    -   [*geom_bar( )*](https://www.rdocumentation.org/packages/ggplot2/versions/1.0.1/topics/geom_bar) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
-
-    -   [*geom_text( )*](https://www.rdocumentation.org/packages/ggplot2/versions/0.9.1/topics/geom_text) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
-
-    -   [*scale_x\_discrete( )*](https://ggplot2.tidyverse.org/reference/scale_discrete.html) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
-
-    -   [*geom_boxplot( )*](https://www.rdocumentation.org/packages/ggplot2/versions/1.0.1/topics/geom_boxplot)- [3.5.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#plot-boxplot-pct_functional)
-
-    -   [*geom_histogram( )*](https://www.rdocumentation.org/packages/ggplot2/versions/0.9.1/topics/geom_histogram) - [3.5.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#plot-histogram-for-status_clean)
-
--   egg package :
-
-    -   [*ggarrange( )*](https://www.rdocumentation.org/packages/egg/versions/0.4.5/topics/ggarrange) - [3.5.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#plot-histogram-for-status_clean)
-:::
-
-::: {.callout-caution collapse="true"}
-## Visualise correlation matrix
-
--   corrplot package :
-
-    -   [*corrplot.mixed( )*](https://www.rdocumentation.org/packages/corrplot/versions/0.92/topics/corrplot.mixed) - [4.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-correlation-matrix-1)
-:::
-
-::: {.callout-caution collapse="true"}
-## Get descriptive stats
-
--   questionr :
-
-    -   [*freq.na( )*](https://www.rdocumentation.org/packages/questionr/versions/0.7.7/topics/freq.na)- [3.3.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#check-for-missing-data)
-    -   [*freq( )*](https://www.rdocumentation.org/packages/questionr/versions/0.7.7/topics/freq) *-* [3.3.1.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#check-for-duplication-shapename), [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#determine-reference-point-shapename-or-clean_adm2)
-
--   factoextra :
-
-    -   [*fviz_nbclust( )*](https://www.rdocumentation.org/packages/factoextra/versions/1.0.7/topics/fviz_nbclust) -
-
--   stats :
-
-    -   [*dist( )*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/dist) - 5.1.2
-
-    -   [*as.dist( )*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/dist) -
-:::
-
-::: {.callout-caution collapse="true"}
-## Miscellaneous Generic Functions
-
--   janitor package :
-
-    -   [*get_dupes( )*](https://www.rdocumentation.org/packages/janitor/versions/2.1.0/topics/get_dupes) *-* [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#assess-uniqueness-of-each-water-point)
-
--   [plyr package](https://www.rdocumentation.org/packages/plyr/versions/1.8.8) :
-
-    -   *count( )* - [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#reveal-value-usage_capacity-by-status_clean)
-
--   [base package](https://www.rdocumentation.org/packages/base/versions/3.6.2) :
-
-    -   [*summary( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary) - [3.2.1.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#review-data-frame-wp_coord), [3.2.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#review-data-frame-wp_cond), [3.2.3.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#review-data-frame-wp_adm), [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#reveal-value-crucialness_score), [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#reveal-value-crucialness_score-1)
-
-    -   [*duplicated( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/duplicated) - [3.3.1.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#check-for-duplication-shapename)
-
-    -   [*length( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/length)- [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#inspect-variable-and-value)
-
-    -   [*sum( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sum) *-* [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#determine-the-total-population-within-1-km-by-crucialness_score)
-:::
 
 ## 2.1 Load R Packages into R Environment
 
@@ -193,7 +31,7 @@ The following are the packages required for this exercise :
 [***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages. This function will attempt to install the package from CRAN or pacman repository list if its found not installed.
 
 ```{r}
-pacman::p_load(sf, tidyverse, funModeling, blorr, corrplot, ggpubr, spdep, GWmodel, tmap, skimr, caret, questionr, berryFunctions)
+pacman::p_load(sf, tidyverse, funModeling, blorr, corrplot, ggpubr, spdep, GWmodel, tmap, skimr, caret, berryFunctions, h20)
 ```
 
 <br>
@@ -228,14 +66,6 @@ bdy_osun <- read_rds("data/geodata/Osun.rds")
 skim(bdy_osun)
 ```
 
-```{r}
-freq(duplicated(bdy_osun$ADM2_EN))
-```
-
-```{r}
-freq(bdy_osun$ADM1_EN)
-```
-
 ### 3.2.2 Import Attribute RDS
 
 ```{r}
@@ -248,9 +78,30 @@ wp_osun <- read_rds("data/geodata/Osun_wp_sf.rds")
 skim(wp_osun)
 ```
 
-### 3.2.3 Extract Functional Water Point
+## 3.3 Exploratory Data Analysis (EDA)
 
-EDA
+### 3.3.1 Plot Bar Chart
+
+#### 3.3.1.1 visualise "status"
+
+```{r}
+wp_osun %>%
+  freq(input = "status")
+```
+
+#### 3.3.1.2 visualise "status" by "water_tech_category"
+
+```{r}
+cross_plot(data = wp_osun, input = "water_tech_category", target = "status")
+```
+
+#### 3.3.1.3 visualise "status" by "usage_capacity"
+
+```{r}
+cross_plot(data = wp_osun, input = "usage_capacity", target = "status")
+```
+
+### 3.3.2 Visualise Distribution of "status" Variable
 
 ```{r}
 tmap_mode("view")
@@ -259,7 +110,7 @@ tm_shape(bdy_osun) +
   tm_polygons(alpha = 0.4) +
   
 tm_shape(wp_osun) +
-  tm_dots(col = "status_clean",
+  tm_dots(col = "status",
           alpha = 0.6) +
   tm_view(set.zoom.limits = c(8.5,12))
 ```
@@ -267,6 +118,10 @@ tm_shape(wp_osun) +
 ```{r}
 tmap_mode("plot")
 ```
+
+## 3.4 Data Wrangling
+
+### 3.4.1 Edit Key Variables
 
 ```{r}
 wp_osun.sf <- wp_osun %>%
@@ -285,11 +140,11 @@ wp_osun.sf <- wp_osun %>%
   mutate(usage_capacity = as.factor(usage_capacity))
 ```
 
-## 4. CORRELATION ANALYSIS
+Remarks :
 
-### 4.1 Create Data Table for Correlation Matrix Analysis
+Convert "usage_capacity" from numeric to categorical variable via as.factor( ) function.
 
-#### 4.1.1 Get Column Index for the Key Variable
+### 3.4.2 Get Column Index
 
 ```{r}
 match(c("distance_to_primary_road",
@@ -307,7 +162,7 @@ match(c("distance_to_primary_road",
       names(wp_osun.sf))
 ```
 
-#### 4.1.2 Create Data Table for Correlation Analysis
+### 3.4.3 Create Correlation Analysis Data Table
 
 ```{r}
 wp_osun.sf_clean <- wp_osun.sf %>%
@@ -315,7 +170,11 @@ wp_osun.sf_clean <- wp_osun.sf %>%
   st_set_geometry(NULL)
 ```
 
-### 4.2 Visualise Correlation Matrix
+<br>
+
+# 4. CORRELATION ANALYSIS
+
+### 4.1 Visualise Correlation Matrix
 
 ```{r}
 cluster_vars.cor = cor(wp_osun.sf_clean[,2:7])
@@ -327,6 +186,14 @@ corrplot.mixed(cluster_vars.cor,
               diag = "l",
               tl.col = "black")
 ```
+
+Remarks :
+
+The correlation matrix above indicated there is no highly correlated variable pairs.
+
+# 5. LOGISTIC REGRESSION MODEL
+
+## 5.1 Build Logistic Regression Model
 
 ```{r}
 model <- glm(status ~
@@ -344,27 +211,25 @@ model <- glm(status ~
              family = binomial(link = 'logit'))
 ```
 
-### Create Model Overview
+### 5.1.1 Create Model Overview :: *model*
 
 ```{r}
 blr_regress(model)
 ```
 
-### create response profile
-
-extract maximum likelihood estimates.
-
-estimate concordant
+### 5.1.2 Generate Confusion Matrix :: *model*
 
 ```{r}
 blr_confusion_matrix(model, cutoff = 0.5)
 ```
 
-### Build Geographical Weight
+Remarks :
 
-spatial point data frame
+For a logistic regression model, the specificity rate is only 0.6154.
 
-wp_osun_sf_clean is the cleaned version without missing value.
+# **6. GEOGRAPHICALLY WEIGHTED LOGISTIC REGRESSION (GWLR) MODEL**
+
+## 6.1 Convert Simple Feature to SpatialPointsDataFrame
 
 ```{r}
 wp_osun.sp <- wp_osun.sf %>%
@@ -383,6 +248,10 @@ wp_osun.sp <- wp_osun.sf %>%
 
 wp_osun.sp
 ```
+
+## 6.2 Fixed Bandwidth GWR Model
+
+### 6.2.1 Compute Fixed Bandwidth
 
 ```{r}
 #| eval: false
@@ -409,6 +278,12 @@ bw.fixed <- bw.ggwr(status ~ distance_to_primary_road +
 bw.fixed
 ```
 
+Remarks :
+
+Recommended bandwidth is 2,599.672 metres.
+
+### 6.2.2 Perform Fixed Bandwidth GWR Model
+
 ```{r}
 gwlr.fixed <- ggwr.basic(status ~
                            distance_to_primary_road + 
@@ -429,11 +304,23 @@ gwlr.fixed <- ggwr.basic(status ~
                     longlat = FALSE)
 ```
 
+Remarks :
+
+Calibrate the model with the recommended bandwidth, bw = 2,599.672.
+
+```{r}
+gwlr.fixed
+```
+
 ```{r}
 gwr.fixed <- as.data.frame(gwlr.fixed$SDF)
 ```
 
-Set the yhat (threshold value) to 0.5 into 1 and else 0. The result of the logic comparison operation will be saved into a field called most.
+### 6.2.3 Set Threshold Value
+
+-   Set this exercise's threshold value, otherwise known as "yhat" to 0.5.
+
+-   The value will be assigned to 1 when greater than 0.5, else 0, and saved under the "most" variable.
 
 ```{r}
 gwr.fixed <- gwr.fixed %>% 
@@ -442,9 +329,13 @@ gwr.fixed <- gwr.fixed %>%
   ))
 ```
 
+#### 6.2.3.1 visualise "most"
+
 ```{r}
 freq(gwr.fixed$most)
 ```
+
+### 6.2.4 Generate Confusion Matrix
 
 ```{r}
 gwr.fixed$y <- as.factor(gwr.fixed$y)
@@ -453,18 +344,22 @@ CM <- confusionMatrix(data = gwr.fixed$most, reference = gwr.fixed$y)
 CM
 ```
 
+### 6.2.5 Visualise GWLR
+
+#### 6.2.5.1 extract administrative variables
+
 ```{r}
 wp_osun.sf_selected <- wp_osun.sf %>% 
   select(c(ADM2_EN, ADM2_PCODE, ADM1_EN, ADM1_PCODE, status))
 ```
 
+#### 6.2.5.2 combine *wp_osun.sf_selected* and *gwr.fixed*
+
 ```{r}
 gwr_sf.fixed <- cbind(wp_osun.sf_selected, gwr.fixed)
 ```
 
-#### Visualise Coefficient Estimates
-
-Create interactive point symbol map.
+#### 6.2.5.3 visualise coefficient estimates
 
 ```{r}
 tmap_mode("view")
@@ -475,7 +370,7 @@ tm_shape(gwr_sf.fixed) +
   tm_dots(col = "yhat",
           border.col = "gray60",
           border.lwd = 1) +
-  tm_view(set.zoom.limits = c(8,14))
+  tm_view(set.zoom.limits = c(8.5,14))
 prob_T
 ```
 
@@ -483,18 +378,167 @@ prob_T
 tmap_mode("plot")
 ```
 
+<br>
+
+# 7 MODEL CALIBRATION
+
+## 7.1 Calibrate Logistic Regression Model
+
+Remove the insignificant variables "distance_to_primary_road" and "distance_to_secondary_road" that identified under section 5.2.
+
+```{r}
+model_calibr <- glm(status ~  distance_to_tertiary_road+
+                 distance_to_city+
+                 distance_to_town+
+                 water_point_population+
+                 local_population_1km+
+                 usage_capacity+
+                 is_urban+
+                 water_source_clean,
+             data = wp_osun.sf,
+             family = binomial(link = "logit"))
+```
+
+## 7.2 Create Model Overview :: *model_calibr*
+
+```{r}
+blr_regress(model_calibr)
+```
+
+## 7.3 Generate Confusion Matrix :: *model_calibr*
+
+```{r}
+blr_confusion_matrix(model_calibr, cutoff = 0.5)
+```
+
+Remarks :
+
+The specificity rate, 0.6149 is slightly lower than the original logistic regression model, which is 0.6154.
+
+```{r}
+wp_osun.sp2 <- wp_osun.sf %>%
+  select(c(status,
+           distance_to_tertiary_road,
+           distance_to_city,
+           distance_to_town,
+           water_point_population,
+           local_population_1km,
+           usage_capacity,
+           is_urban,
+           water_source_clean)) %>%
+  as_Spatial()
+
+wp_osun.sp2
+```
+
+## 7.4 Fixed Bandwidth GWR Model :: *model_calibr*
+
+```{r}
+#| eval: false
+bw.fixed_calibr <- bw.ggwr(status ~ distance_to_tertiary_road+
+                 distance_to_city+
+                 distance_to_town+
+                 water_point_population+
+                 local_population_1km+
+                 usage_capacity+
+                 is_urban+
+                 water_source_clean,
+             data = wp_osun.sp2,
+             family = 'binomial',
+             approach = 'AIC',
+             kernel = 'gaussian',
+             adaptive = FALSE,
+             longlat = FALSE)
+```
+
+```{r}
+#| eval: false
+bw.fixed_calibr
+```
+
+Remark :
+
+The recommended bandwidth is 2,377.371 metres.
+
+### 7.4.1 Compute Fixed Bandwidth
+
+```{r}
+gwlr.fixed_calibr <- ggwr.basic(status ~ distance_to_tertiary_road +
+                                  distance_to_city +
+                                  distance_to_town +
+                                  water_point_population +
+                                  local_population_1km +
+                                  usage_capacity +
+                                  is_urban +
+                                  water_source_clean,
+                                data = wp_osun.sp2,
+                                bw = 2377.371,
+                                family = 'binomial',
+                                kernel = 'gaussian',
+                                adaptive = FALSE,
+                                longlat = FALSE)
+```
+
+```{r}
+gwlr.fixed_calibr
+```
+
+### 7.4.2 Convert Data Frame
+
+```{r}
+gwr.fixed_calibr <- as.data.frame(gwlr.fixed_calibr$SDF)
+```
+
+### 7.4.3 Set Threshold Value
+
+```{r}
+gwr.fixed_calibr <- gwr.fixed_calibr %>%
+  mutate(most = ifelse(
+    gwr.fixed_calibr$yhat >= 0.5, T, F))
+```
+
+### 7.4.4 Generate Confusion Matrix
+
+```{r}
+gwr.fixed_calibr$y <- as.factor(gwr.fixed_calibr$y)
+gwr.fixed_calibr$most <- as.factor(gwr.fixed_calibr$most)
+CM <- confusionMatrix(data = gwr.fixed_calibr$most, 
+                      reference = gwr.fixed_calibr$y)
+CM
+```
+
+## 7.5 Visualise GWLR
+
+```{r}
+wp_osun.sf_selected_calibr <- wp_osun.sf %>%
+  select(c(ADM2_EN, ADM2_PCODE, ADM1_EN, ADM1_PCODE, status))
+```
+
+```{r}
+gwr_sf.fixed_calibr <- cbind(wp_osun.sf_selected_calibr, gwr.fixed_calibr)
+```
+
+## 7.6 Visualise Functional & Non-Functional Water Point
+
 ```{r}
 tmap_mode("view")
-
-tertiary_TV <- tm_shape(bdy_osun) + 
-  tm_polygons(alpha = 0.1) + 
-  tm_shape(gwr_sf.fixed) + 
-  tm_dots(col = "distance_to_tertiary_road_TV", 
+prob_TCalibr <- tm_shape(bdy_osun) + 
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed_calibr) + 
+  tm_dots(col = "yhat",
           border.col = "gray60",
           border.lwd = 1) +
-  tm_view(set.zoom.limits = c(8,14))
+  tm_view(set.zoom.limits = c(9,14))
+
+prob_TCalibr
 ```
 
 ```{r}
 tmap_mode("plot")
 ```
+
+<br>
+
+# 8 REFERENCE
+
+Chua A. (2022). In-class Ex5: Modelling the Spatial Variation of the Explanatory Factors of Water Point Status using Geographically Weighted Logistic Regression. https://isss624-amelia.netlify.app/exercises/in-class_ex5/in-class_ex5
