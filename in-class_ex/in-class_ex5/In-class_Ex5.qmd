@@ -31,7 +31,7 @@ The following are the packages required for this exercise :
 [***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages. This function will attempt to install the package from CRAN or pacman repository list if its found not installed.
 
 ```{r}
-pacman::p_load(sf, tidyverse, funModeling, blorr, corrplot, ggpubr, spdep, GWmodel, tmap, skimr, caret, berryFunctions, h20)
+pacman::p_load(sf, tidyverse, funModeling, blorr, corrplot, ggpubr, spdep, GWmodel, tmap, skimr, caret, berryFunctions)
 ```
 
 <br>
