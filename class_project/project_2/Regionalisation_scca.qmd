@@ -2,6 +2,8 @@
 title: "Regionalisation with Spatially Constrained Cluster Analysis"
 editor: visual
 date: 5 Dec 2022
+reference-location: margin
+citation-location: margin
 ---
 
 case study : ***Regionalisation by Multivariate Water Point Attributes with Non-spatially Constrained and Spatially Constrained Clustering Methods.***
@@ -28,14 +30,56 @@ Regionalise Nigeria by using the following measures :
 
     -   rural or urban.
 
-## 1.2 Scope of Works
+## 1.2 Study Area
+
+::: {.callout-caution collapse="true"}
+[**water points in Federal Republic of Nigeria**]{style="color:#3b3128"}
+
+Alpha-3 Code : **NGA**
+
+Population : **225 million** (1st in Africa, 6th globally)
+
+Local Government Areas (LGA) : 774
+
+Water Point Observations : 95,008
+
+Environmental Aspects :
+
+**Geography** :
+
+-   Southwest - "rugged" highland.
+
+-   Southeast - hills and mountains, which form the Mambilla Plateau, the highest plateau in Nigeria.
+
+**Hydrology** :
+
+-   Two (2) main catchment areas - Chad Basin & Niger catchment area.
+
+-   Surface area of lake Chad is shrinking recent decades due to irrigation activities.[^1]
+
+-   Untreated wastes dump in places resulted in waterways and groundwater pollution.[^2]
+
+**Vegetation Coverage** :
+
+-   Lost nearly 80% of primary forest by 2012.[^3]
+
+-   States with dense forests concentrated : Bayelsa, Cross River, Edo, Ekiti, Ondo, Osun, Rivers, and Taraba.
+:::
+
+[^1]: Wikipedia. *Nigeria.* https://en.wikipedia.org/wiki/Nigeria
+
+[^2]: Ogbonna, D.N., Ekweozor, I.K.E., Igwe, F.U. (2002). "Waste Management: A Tool for Environmental Protection in Nigeria". *Ambio: A Journal of the Human Environment*. **31** (1): 55--57. [doi](https://en.wikipedia.org/wiki/Doi_(identifier) "Doi (identifier)"):[10.1639/0044-7447(2002)031\[0055:wmatfe\]2.0.co;2](https://doi.org/10.1639%2F0044-7447%282002%29031%5B0055%3Awmatfe%5D2.0.co%3B2).
+
+[^3]: https://rainforests.mongabay.com/20nigeria.htm
+
+## 1.3 Scope of Works
 
 Some of the specific tasks for this study are :
 
 -   import the shapefile into R with the appropriate *sf* method, and save it in a simple feature data frame format;
 
 ::: callout-note
-## note
+**note**
 
 Three (3) Projected Coordinate Systems of Nigeria, EPSG : [26391](https://epsg.io/26391), 26392, and 26303.
 :::
@@ -67,7 +111,7 @@ Three (3) Projected Coordinate Systems of Nigeria, EPSG : [26391](https://epsg.i
 The following are the packages required for this exercise :
 
 ::: {.callout-caution collapse="true"}
-## Load one or more packages
+**Load one or more packages**
 
 -   pacman package :
 
@@ -75,7 +119,7 @@ The following are the packages required for this exercise :
 :::
 
 ::: {.callout-caution collapse="true"}
-## Import and process Geospatial data
+**Import and process Geospatial data**
 
 -   sf package :
 
@@ -101,7 +145,7 @@ The following are the packages required for this exercise :
 :::
 
 ::: {.callout-caution collapse="true"}
-## Import and Process Aspatial data
+**Import and Process Aspatial data**
 
 -   tidyverse :
     -   readr package :
@@ -134,7 +178,7 @@ The following are the packages required for this exercise :
 :::
 
 ::: {.callout-caution collapse="true"}
-## Plot map for visualisation
+**Plot map for visualisation**
 
 -   tmap :
 
@@ -160,7 +204,7 @@ The following are the packages required for this exercise :
 :::
 
 ::: {.callout-caution collapse="true"}
-## Plot graph and chart
+**Plot graph and chart**
 
 -   ggplot2 package :
 
@@ -182,7 +226,7 @@ The following are the packages required for this exercise :
 :::
 
 ::: {.callout-caution collapse="true"}
-## Visualise correlation matrix
+**Visualise correlation matrix**
 
 -   corrplot package :
 
@@ -190,7 +234,7 @@ The following are the packages required for this exercise :
 :::
 
 ::: {.callout-caution collapse="true"}
-## Get descriptive stats
+**Get descriptive stats**
 
 -   questionr :
 
@@ -209,7 +253,7 @@ The following are the packages required for this exercise :
 :::
 
 ::: {.callout-caution collapse="true"}
-## Miscellaneous Generic Functions
+**Miscellaneous Generic Functions**
 
 -   janitor package :
 
@@ -267,7 +311,7 @@ To avoid any error of pushing files larger than 100 MB to Git cached in the Git 
 ### 3.2.1 Import Coordinate-related Variable
 
 ::: {.callout-caution collapse="true"}
-## [Usage of the code chunk below :]{style="color:#5e5c5c"}
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***read_csv( )*** - readr -]{style="color:#d46e15"} to import and save the comma separated value (CSV) file as a data frame, with title "*wp_coord*".
 
@@ -299,7 +343,7 @@ Remarks :
 #### 3.2.1.1 save and read RDS file :: *wp_coord*
 
 ::: {.callout-caution collapse="true"}
-## [Usage of the code chunk below :]{style="color:#5e5c5c"}
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***write_rds( )*** - readr -]{style="color:#d46e15"} to save *wp_coord* data table into an RDS format.
 
@@ -489,7 +533,7 @@ problems(bdy_nga)
 
 #### 3.3.1.1 check for missing data
 
-## [Usage of the code chunk below :]{style="color:#5e5c5c"}
+[Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***freq.na( )*** - questionr -]{style="color:#d46e15"} to generate frequency table of missing value.
 
@@ -575,7 +619,7 @@ tmap_mode("plot")
 The State info to be combined with the duplicated "shapeName". This will make all the shapeName unique.
 
 | lga      | row_id | headquarter | state    | iso3166code | state_dd_coordinates                                                      |
-|----------|--------|-------------|----------|-------------|---------------------------------------------------------------------------|
+|-----------|-----------|-----------|-----------|-----------|--------------------|
 | Bassa    | 94     | Oguma       | Kogi     | NG.KO.BA    | [7.75 6.75](https://latitude.to/map/ng/nigeria/regions/kogi-state/)       |
 | Bassa    | 95     | Bassa       | Plateau  | NG.PL.BA    | [9.16667 9.75](https://latitude.to/map/ng/nigeria/regions/plateau-state/) |
 | Ifelodun | 304    | Share       | Kwara    | NG.KW.IF    | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)        |
@@ -626,14 +670,17 @@ wp_duplShapeName1
 
 This step combine both attribute and boundary of the water points into a simple feature object.
 
-#### 3.4.2.1 join Objects :: *wp_sf* and *bdy_nga*
+#### 3.4.2.1 join objects :: *wp_sf* and *bdy_nga*
 
 [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***st_join( )*** - sf -]{style="color:#d46e15"} to join *sf*-class objects based on geometry, namely, *wp_sf* and *bdy_nga*.
 
 ```{r}
-wp_joined <- st_join(wp_sf, bdy_nga)
+wp_joined <- st_join(x = wp_sf,
+                     y = bdy_nga,
+                     join = st_intersects,
+                     left = TRUE)
 ```
 
 #### 3.4.2.2 save and read RDS File :: *wp_joined*
@@ -646,6 +693,8 @@ wp_joined <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/w
 
 #### 3.4.2.3 inspect joined file :: *wp_joined*
 
+#### \-- retrieve geometry summary
+
 ```{r}
 st_geometry(wp_joined)
 ```
@@ -655,15 +704,41 @@ st_geometry(wp_joined)
 ```{r}
 wp_refLga <- (wp_joined$shapeName == wp_joined$clean_adm2)
 freq(wp_refLga)
+
 ```
 
 Remarks :
 
-There are 29,713 of "FALSE", which is more than 30% of local government areas' name mismatched between "shapeName" and "clean_adm2".
+-   There are 29,713 "FALSE", which is more than 30% of LGA names mismatched between "shapeName" and "clean_adm2".
 
--   [Unlike the Water Point Data Exchange data that involved multitple parties, the geoBoundaries data is sourced from "geoBoundaries: A global database of political administrative boundaries." Plos one 15, no. 4 (2020): e0231866,]{style="color:#d69c3c"}
+    -   [Unlike the Water Point Data Exchange data that involved multiple parties, the geoBoundaries data is sourced from "geoBoundaries: A global database of political administrative boundaries." Plos one 15, no. 4 (2020): e0231866,]{style="color:#d69c3c"}
 
-    -   [Hence, the "shapeName" to be used throughout this study.]{style="color:#d69c3c"}
+        -   [Hence, the "shapeName" to be used throughout this study.]{style="color:#d69c3c"}
+
+-   The 29 NA's are 29 water points located beyond the LGA boundary, as shown in the plot below.
+
+```{r}
+tmap_mode("view")
+
+tm_shape(bdy_nga) +
+  tm_polygons() +
+  tm_view(set.zoom.limits = c(5.5, 12))+
+  
+tm_shape(filter(wp_joined, is.na(wp_refLga))) +
+  tm_dots(size=0.1,
+          col="red")
+
+```
+
+```{r}
+tmap_mode("plot")
+```
+
+Remove
+
+```{r}
+wp_joined2 <- wp_joined %>% filter(shapeName == clean_adm2 | shapeName != clean_adm2)
+```
 
 #### \-- assess uniqueness of each Water Point
 
@@ -1193,8 +1268,6 @@ summary(wp_nga)
 #### 3.4.5.14 visualise *wp_nga* distribution :: "water_tech_category"
 
 ```{r}
-tmap_mode("view")
-
 handPump <- tm_shape(bdy_nga)+
   tm_polygons(alpha = 0.1) +
 tm_shape(wp_nga) +  
@@ -1223,10 +1296,6 @@ tmap_arrange(handPump, mechPump, tapStand,
              asp=1, 
              ncol=2,
              sync = TRUE)
-```
-
-```{r}
-tmap_mode("plot")
 ```
 
 #### 3.4.5.15 extract "usage_capacity" to *wp_nga*
@@ -1301,8 +1370,6 @@ summary(wp_nga)
 #### 3.4.5.16 visualise *wp_nga* distribution :: "usage_capacity"
 
 ```{r}
-tmap_mode("view")
-
 uc300 <- tm_shape(bdy_nga)+
   tm_polygons(alpha = 0.1) +
 tm_shape(wp_nga) +  
@@ -1331,10 +1398,6 @@ tmap_arrange(uc300, uc1000, uc250,
              asp=1, 
              ncol=2,
              sync = TRUE)
-```
-
-```{r}
-tmap_mode("plot")
 ```
 
 #### 3.4.5.17 extract "is_urban" to *wp_nga*
@@ -1372,8 +1435,6 @@ summary(wp_nga)
 #### 3.4.5.18 visualise *wp_nga* distribution :: "is_urban"
 
 ```{r}
-tmap_mode("view")
-
 urban1 <- tm_shape(bdy_nga)+
   tm_polygons(alpha = 0.1) +
 tm_shape(wp_nga) +  
@@ -1396,13 +1457,9 @@ tmap_arrange(urban1, urban0,
              sync = TRUE)
 ```
 
-```{r}
-tmap_mode("plot")
-```
-
 <br>
 
-### 3.4.5.19 save and read RDS File :: *wp_nga*
+#### 3.4.5.19 save and read RDS File :: *wp_nga*
 
 ```{r}
 write_rds(wp_nga,"/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_nga.rds")
