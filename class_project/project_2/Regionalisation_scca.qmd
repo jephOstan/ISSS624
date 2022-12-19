@@ -12,11 +12,10 @@ case study : ***Regionalisation by Multivariate Water Point Attributes with Non-
 
 Regionalisation with Spatially Constrained clustering analysis requires similar observations to be grouped according to their statistical attributes and spatial location.
 
-This study focuses on regionalising analysis based on Nigeria's water points attributes.
-
 ## 1.1 Objectives
 
-Regionalise Nigeria by using the following measures :
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Regionalise Nigeria based on water points' attribute**]{style="color:#93c54b"}
 
 -   Total number of water points by status, i.e. functional, non-functional, and unknown;
 
@@ -29,41 +28,42 @@ Regionalise Nigeria by using the following measures :
     -   usage capacity (1000, 300, 250, 50);
 
     -   rural or urban.
+:::
 
-## 1.2 Study Area
+## 1.2 Study Area Introduction
 
-::: {.callout-caution collapse="true"}
-[**water points in Federal Republic of Nigeria**]{style="color:#3b3128"}
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Water points in Federal Republic of Nigeria**]{style="color:#93c54b"}
 
 Alpha-3 Code : **NGA**
 
 Population : **225 million** (1st in Africa, 6th globally)
 
-Local Government Areas (LGA) : 774
+Local Government Areas (LGA) : **774**
 
-Water Point Observations : 95,008
+Water Point Observations : **95,008**
 
 Environmental Aspects :
 
-**Geography** :
+-   **Geography** :
 
--   Southwest - "rugged" highland.
+    -   Southwest - "rugged" highland.
 
--   Southeast - hills and mountains, which form the Mambilla Plateau, the highest plateau in Nigeria.
+    -   Southeast - hills and mountains, which form the Mambilla Plateau, the highest plateau in Nigeria.
 
-**Hydrology** :
+-   **Hydrology** :
 
--   Two (2) main catchment areas - Chad Basin & Niger catchment area.
+    -   Two (2) main catchment areas - Chad Basin & Niger catchment area.
 
--   Surface area of lake Chad is shrinking recent decades due to irrigation activities.[^1]
+    -   Surface area of lake Chad is shrinking recent decades due to irrigation activities.[^1]
 
--   Untreated wastes dump in places resulted in waterways and groundwater pollution.[^2]
+    -   Untreated wastes dump in places resulted in waterways and groundwater pollution.[^2]
 
-**Vegetation Coverage** :
+-   **Vegetation Coverage** :
 
--   Lost nearly 80% of primary forest by 2012.[^3]
+    -   Lost nearly 80% of primary forest by 2012.[^3]
 
--   States with dense forests concentrated : Bayelsa, Cross River, Edo, Ekiti, Ondo, Osun, Rivers, and Taraba.
+    -   States with dense forests concentrated : Bayelsa, Cross River, Edo, Ekiti, Ondo, Osun, Rivers, and Taraba.
 :::
 
 [^1]: Wikipedia. *Nigeria.* https://en.wikipedia.org/wiki/Nigeria
@@ -74,7 +74,8 @@ Environmental Aspects :
 
 ## 1.3 Scope of Works
 
-Some of the specific tasks for this study are :
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+### [**Specific tasks required for this study :**]{style="color:#93c54b"}
 
 -   import the shapefile into R with the appropriate *sf* method, and save it in a simple feature data frame format;
 
@@ -103,23 +104,22 @@ Three (3) Projected Coordinate Systems of Nigeria, EPSG : [26391](https://epsg.i
     **Analytical Mapping**
 
     Plot delineated functional regions using non-spatially constrained and spatially constrained clustering algorithms.
-
-<br>
+:::
 
 # 2. R PACKAGE REQUIRED
 
 The following are the packages required for this exercise :
 
-::: {.callout-caution collapse="true"}
-**Load one or more packages**
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Load one or more packages**]{style="color:#93c54b"}
 
 -   pacman package :
 
     -   [*p_load( )*](https://www.rdocumentation.org/packages/pacman/versions/0.5.1/topics/p_load) - [2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#load-r-packages-into-r-environment)
 :::
 
-::: {.callout-caution collapse="true"}
-**Import and process Geospatial data**
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Import and process Geospatial data**]{style="color:#93c54b"}
 
 -   sf package :
 
@@ -144,8 +144,8 @@ The following are the packages required for this exercise :
     -   [*st_intersects( )*](https://www.rdocumentation.org/packages/stars/versions/0.5-0/topics/st_intersects.stars)- [3.4.5.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#add-attribute-to-new-data-table)
 :::
 
-::: {.callout-caution collapse="true"}
-**Import and Process Aspatial data**
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Import and Process Aspatial data**]{style="color:#93c54b"}
 
 -   tidyverse :
     -   readr package :
@@ -177,8 +177,8 @@ The following are the packages required for this exercise :
         -   [*replace_na( )*](https://www.rdocumentation.org/packages/tidyr/versions/0.8.3/topics/replace_na) - [3.4.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-na-with-unknown), [3.4.5.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-nan-with-0)
 :::
 
-::: {.callout-caution collapse="true"}
-**Plot map for visualisation**
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Plot map for visualisation**]{style="color:#93c54b"}
 
 -   tmap :
 
@@ -203,8 +203,8 @@ The following are the packages required for this exercise :
 -   *tmap_arrange( )* - [3.4.5.12](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-distribution-status_clean)
 :::
 
-::: {.callout-caution collapse="true"}
-**Plot graph and chart**
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Plot graph and chart**]{style="color:#93c54b"}
 
 -   ggplot2 package :
 
@@ -225,16 +225,16 @@ The following are the packages required for this exercise :
     -   [*ggarrange( )*](https://www.rdocumentation.org/packages/egg/versions/0.4.5/topics/ggarrange) - [3.5.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#plot-histogram-for-status_clean)
 :::
 
-::: {.callout-caution collapse="true"}
-**Visualise correlation matrix**
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Visualise correlation matrix**]{style="color:#93c54b"}
 
 -   corrplot package :
 
     -   [*corrplot.mixed( )*](https://www.rdocumentation.org/packages/corrplot/versions/0.92/topics/corrplot.mixed) - [4.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-correlation-matrix-1)
 :::
 
-::: {.callout-caution collapse="true"}
-**Get descriptive stats**
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Get descriptive stats**]{style="color:#93c54b"}
 
 -   questionr :
 
@@ -245,6 +245,10 @@ The following are the packages required for this exercise :
 
     -   [*fviz_nbclust( )*](https://www.rdocumentation.org/packages/factoextra/versions/1.0.7/topics/fviz_nbclust) -
 
+-   skimr package :
+
+    -   [*skim( )*](https://www.rdocumentation.org/packages/skimr/versions/2.1.4/topics/skim) -
+
 -   stats :
 
     -   [*dist( )*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/dist) - 5.1.2
@@ -252,8 +256,8 @@ The following are the packages required for this exercise :
     -   [*as.dist( )*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/dist) -
 :::
 
-::: {.callout-caution collapse="true"}
-**Miscellaneous Generic Functions**
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Miscellaneous Generic Functions**]{style="color:#93c54b"}
 
 -   janitor package :
 
@@ -274,14 +278,14 @@ The following are the packages required for this exercise :
     -   [*sum( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sum) *-* [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#determine-the-total-population-within-1-km-by-crucialness_score)
 :::
 
-## 2.1 Load R Packages into R Environment
+## 2.1 Load R Packages
 
 [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages. This function will attempt to install the package from CRAN or pacman repository list if its found not installed.
 
 ```{r}
-pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally)
+pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr)
 ```
 
 <br>
@@ -298,19 +302,35 @@ pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tma
 ::: callout-note
 The file size of the downloaded data is about 422 MB due to water points data from multiple countries.
 
-To avoid any error of pushing files larger than 100 MB to Git cached in the Git Push function, filtered the water points for Nigeria and removed unnecessary variables. As a result, the file size is reduced to about 23 MB.
+-   Such file size may require extra effort and time to manage the code chunks and files in the R environment before pushing them to GitHub.
+
+Hence, to avoid any error in pushing files larger than 100 MB to Git, filtered Nigeria water points and removed unnecessary variables before uploading into the R environment.
+
+Therewith, the CSV file size should be lesser than 100 MB.
 :::
 
 -   **Geospatial Data**
 
-    1.  Download the Nigeria geoBoundaries data set at ADM2 level from [geoBoundaries.org](https://www.geoboundaries.org/index.html#getdata) or the [Humanitarian Data Exchange portal](https://data.humdata.org/).
+    1.  Download the Nigeria geoBoundaries data set at ADM2 level[^4] from [geoBoundaries.org](https://www.geoboundaries.org/index.html#getdata) or the [Humanitarian Data Exchange portal](https://data.humdata.org/).
     2.  Rename the title of the data set to "***nga_admbnda_adm2_osgof_20190417***"
 
-## 3.2 Import Aspatial Data
+[^4]: Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866. https://doi.org/10.1371/journal.pone.0231866
+
+## 3.2 Import Attribute Data
+
+Four (4) data frames to be created for different context, i.e.
+
+-   *wp_coord* = coordinated related variables.
+
+-   *wp_cond* = status and conditions related variables.
+
+-   *wp_adm* = administrative and measurements related variables.
+
+-   *wp* = master file that combine all three (3) data frames above.
 
 ### 3.2.1 Import Coordinate-related Variable
 
-::: {.callout-caution collapse="true"}
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***read_csv( )*** - readr -]{style="color:#d46e15"} to import and save the comma separated value (CSV) file as a data frame, with title "*wp_coord*".
@@ -323,7 +343,7 @@ To avoid any error of pushing files larger than 100 MB to Git cached in the Git 
 :::
 
 ```{r}
-wp_coord <- read_csv("/jephOstan/ISSS624/class_project/project_2/data/aspatial/WPdx_NGAv1.1.csv",
+wp_coord <- read_csv("data/aspatial/WPdx_NGAv1.2.1.csv",
                        col_select = c(`row_id`,
                                       `#lat_deg`,
                                       `#lon_deg`,
@@ -342,7 +362,7 @@ Remarks :
 
 #### 3.2.1.1 save and read RDS file :: *wp_coord*
 
-::: {.callout-caution collapse="true"}
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
 [***write_rds( )*** - readr -]{style="color:#d46e15"} to save *wp_coord* data table into an RDS format.
@@ -353,25 +373,25 @@ Remarks :
 :::
 
 ```{r}
-write_rds(wp_coord,"/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_coord.rds",compress = "xz")
+write_rds(wp_coord,"data/geodata/wp_coord.rds",compress = "xz")
 
-wp_coord <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_coord.rds")
+wp_coord <- read_rds("data/geodata/wp_coord.rds")
 ```
 
 #### 3.2.1.2 review data frame :: *wp_coord*
 
 [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
-[***summary( )*** - base -]{style="color:#d46e15"} to reveal any missing / "NA" observations.
+[***skim( )*** - skimr -]{style="color:#d46e15"} to get a broad overview of *wp_coord* data frame.
 
 ```{r}
-summary(wp_coord)
+skim(wp_coord)
 ```
 
 ### 3.2.2 Import Status and Condition-related Variable
 
 ```{r}
-wp_cond <- read_csv("/jephOstan/ISSS624/class_project/project_2/data/aspatial/WPdx_NGAv1.1.csv", 
+wp_cond <- read_csv("data/aspatial/WPdx_NGAv1.2.1.csv", 
                      col_select = c(`row_id`,
                                     `#water_source`,
                                     `#water_source_clean`,
@@ -394,21 +414,21 @@ problems(wp_cond)
 #### 3.2.2.1 save and read RDS file :: *wp_cond*
 
 ```{r}
-write_rds(wp_cond,"/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_cond.rds",compress = "xz")
+write_rds(wp_cond,"data/geodata/wp_cond.rds",compress = "xz")
 
-wp_cond <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_cond.rds")
+wp_cond <- read_rds("data/geodata/wp_cond.rds")
 ```
 
 #### 3.2.2.2 review data frame :: *wp_cond*
 
 ```{r}
-summary(wp_cond)
+skim(wp_cond)
 ```
 
-### 3.2.3 Import LGA and Measure-related Variable
+### 3.2.3 Import Admistrative and Measure-related Variable
 
 ```{r}
-wp_adm <- read_csv("/jephOstan/ISSS624/class_project/project_2/data/aspatial/WPdx_NGAv1.1.csv", 
+wp_adm <- read_csv("data/aspatial/WPdx_NGAv1.2.1.csv", 
                     col_select = c(`row_id`,
                                    `#clean_adm1`,
                                    `#clean_adm2`,
@@ -429,15 +449,15 @@ problems(wp_adm)
 #### 3.2.3.1 save and read RDS file :: *wp_adm*
 
 ```{r}
-write_rds(wp_adm,"/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_adm.rds",compress = "xz")
+write_rds(wp_adm,"data/geodata/wp_adm.rds",compress = "xz")
 
-wp_adm <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_adm.rds")
+wp_adm <- read_rds("data/geodata/wp_adm.rds")
 ```
 
 #### 3.2.3.2 review data frame :: *wp_adm*
 
 ```{r}
-summary(wp_adm)
+skim(wp_adm)
 ```
 
 Remarks :
@@ -502,17 +522,7 @@ wp_sf<- st_sf(wp, crs = 4326)
 st_crs(wp_sf)
 ```
 
-#### 3.2.5.3 retrieve geometry summary :: *wp_sf*
-
-[Usage of the code chunk below :]{style="color:#5e5c5c"}
-
-[***st_geometry( )*** - sf -]{style="color:#d46e15"} to get the geometry summary.
-
-```{r}
-st_geometry(wp_sf)
-```
-
-## 3.3 Import Boundary Data of Nigeria LGA
+## 3.3 Import Boundary Data
 
 [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
@@ -521,7 +531,7 @@ st_geometry(wp_sf)
 [***select( )*** - dplyr -]{style="color:#d46e15"} to select "shapeName" variable.
 
 ```{r}
-bdy_nga <- st_read(dsn = "/jephOstan/ISSS624/class_project/project_2/data/geospatial",
+bdy_nga <- st_read(dsn = "data/geospatial",
                layer = "geoBoundaries-NGA-ADM2",
                crs = 4326) %>%
   select(shapeName)
@@ -531,27 +541,21 @@ problems(bdy_nga)
 
 ### 3.3.1 Review Imported File
 
-#### 3.3.1.1 check for missing data
-
-[Usage of the code chunk below :]{style="color:#5e5c5c"}
-
-[***freq.na( )*** - questionr -]{style="color:#d46e15"} to generate frequency table of missing value.
+#### 3.3.1.1 check for missing and duplicated data
 
 ```{r}
-freq.na(bdy_nga$shapeName)
+skim(bdy_nga)
 ```
 
-#### 3.3.1.2 check for duplication :: "shapeName"
+Remarks :
 
-[Usage of the code chunk below :]{style="color:#5e5c5c"}
+-   There is no missing data.
 
-[***duplicated( )*** - base -]{style="color:#d46e15"} to determine duplicate elements.
+-   There 774 unique "geometry" but only 768 unique "shapeName"
 
-```{r}
-freq(duplicated(bdy_nga$shapeName))
-```
+    -   That's mean there are 6 values of "shapeName" duplicated among the identified unique shapeNames.
 
-#### 3.3.1.3 list the duplicated value :: "shapeName"
+#### 3.3.1.2 list the unique "shapeName" associated with duplication
 
 [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
@@ -560,15 +564,15 @@ freq(duplicated(bdy_nga$shapeName))
 [***filter( )*** - dplyr -]{style="color:#d46e15"} to retain shapeName that has count not equal to 1.
 
 ```{r}
-wp_duplShapeName <- bdy_nga %>%
+dupl_shapeName <- bdy_nga %>%
   add_count(bdy_nga$shapeName) %>%
   filter(n!=1) %>%
   select(-n)
 
-wp_duplShapeName
+freq(dupl_shapeName$shapeName)
 ```
 
-#### 3.3.1.4 verify findings in section 3.3.1.3
+#### 3.3.1.3 verify findings in section 3.3.1.2
 
 [Usage of the code chunk below :]{style="color:#5e5c5c"}
 
@@ -595,7 +599,7 @@ tm_shape(bdy_nga)+
   tm_polygons()+
   tm_view(set.zoom.limits = c(6,8))+
 
-tm_shape(wp_duplShapeName)+
+tm_shape(dupl_shapeName)+
   tm_fill("shapeName",
           n = 6,
           style = "jenks")+
@@ -608,30 +612,36 @@ tm_shape(wp_duplShapeName)+
 
 Remarks :
 
-The plot above indicates those duplicated water points are from different Nigeria states.
+The plot above indicates those duplicated water points are not within the same location.
 
 ```{r}
 tmap_mode("plot")
 ```
 
-#### 3.3.1.5 acquire State info for duplicated value
+#### 3.3.1.4 acquire State info for duplicated value
 
 The State info to be combined with the duplicated "shapeName". This will make all the shapeName unique.
 
-| lga      | row_id | headquarter | state    | iso3166code | state_dd_coordinates                                                      |
-|-----------|-----------|-----------|-----------|-----------|--------------------|
-| Bassa    | 94     | Oguma       | Kogi     | NG.KO.BA    | [7.75 6.75](https://latitude.to/map/ng/nigeria/regions/kogi-state/)       |
-| Bassa    | 95     | Bassa       | Plateau  | NG.PL.BA    | [9.16667 9.75](https://latitude.to/map/ng/nigeria/regions/plateau-state/) |
-| Ifelodun | 304    | Share       | Kwara    | NG.KW.IF    | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)        |
-| Ifelodun | 305    | Ikirun      | Osun     | NG.OS.ID    | [7.5 4.5](https://latitude.to/map/ng/nigeria/regions/osun-state/)         |
-| Irepodun | 355    | Omu Aran    | Kwara    | NG.KW.IR    | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)        |
-| Irepodun | 356    | Ilobu       | Osun     | NG.OS.IP    | [7.5 4.5](https://latitude.to/map/ng/nigeria/regions/osun-state/)         |
-| Nasarawa | 519    | Bompai      | Kano     | NG.KN.NA    | [11.5 8.5](https://latitude.to/map/ng/nigeria/regions/kano-state/)        |
-| Nasarawa | 520    | Nasarawa    | Nasarawa | NG.NA.NA    | 8.53 7.7                                                                  |
-| Obi      | 546    | Obi         | Nasarawa | NG.NA.OB    | 8.53 7.7                                                                  |
-| Obi      | 547    | Obarike-Ito | Benue    | NG.BE.OB    | [7.33333 8.75](https://latitude.to/map/ng/nigeria/regions/benue-state/)   |
-| Surelere | 693    | Surelere    | Lagos    | NG.LA.SU    | 6.5 3.35                                                                  |
-| Surelere | 694    | Iresa-Adu   | Oyo      | NG.OY.SU    | 8.07 4.41                                                                 |
+```{r}
+dupl_shapeName %>%
+  mutate(st_centroid(dupl_shapeName$geometry, of_largest_polygon = FALSE))
+```
+
+| lga      | row_id                                                             | headquarter | state    | iso3166code | dupl_shapeName_coord | lga_office_coord                                                                                                                                                                                                                                                                                                          |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| Bassa    | 94                                                                 | Oguma       | Kogi     | NG.KO.BA    | 7.791971, 7.031827   | [7.80932, 6.74853](https://goo.gl/maps/WDitgPiphRDGX52d9)                                                                                                                                                                                                                                                                 |
+| Bassa    | 95                                                                 | Bassa       | Plateau  | NG.PL.BA    | 10.08015, 8.782946   | [10.11143, 8.71559](https://goo.gl/maps/eNj4Aqan83aiM7AK8)                                                                                                                                                                                                                                                                |
+| Ifelodun | 304                                                                | Share       | Kwara    | NG.KW.IF    | 8.544311, 5.052235   | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)                                                                                                                                                                                                                                                        |
+| Ifelodun | 305                                                                | Ikirun      | Osun     | NG.OS.ID    | 7.920948, 4.636735   | [7.5 4.5](https://latitude.to/map/ng/nigeria/regions/osun-state/)                                                                                                                                                                                                                                                         |
+| Irepodun | 355                                                                | Omu Aran    | Kwara    | NG.KW.IR    | 8.169349, 4.926215   | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)                                                                                                                                                                                                                                                        |
+| Irepodun | 356                                                                | Ilobu       | Osun     | NG.OS.IP    | 7.84861, 4.498797    | [7.5 4.5](https://latitude.to/map/ng/nigeria/regions/osun-state/)                                                                                                                                                                                                                                                         |
+| Nasarawa | 519                                                                | Bompai      | Kano     | NG.KN.NA    | 12.00446,            |                                                                                                                                                                                                                                                                                                                           |
+| 8.578262 | [11.5 8.5](https://latitude.to/map/ng/nigeria/regions/kano-state/) |             |          |             |                      |                                                                                                                                                                                                                                                                                                                           |
+| Nasarawa | 520                                                                | Nasarawa    | Nasarawa | NG.NA.NA    | 8.304034, 7.760272   | [8.53477, 7.70153](https://goo.gl/maps/gZptpjpGGAPkPhFp7)                                                                                                                                                                                                                                                                 |
+| Obi      | 546                                                                | Obarike-Ito | Benue    | NG.BE.OB    | 7.022495, 8.281026   | [7.01129, 8.33118](https://www.google.com/maps/place/Obi+L+G+A+Office+Benue+State+Nigeria/@7.0173612,8.317536,15z/data=!4m5!3m4!1s0x105b02a2fcb55b01:0x534d97153bbf03f6!8m2!3d7.0101782!4d8.3282674)                                                                                                                      |
+| Obi      | 547                                                                | Obi         | Nasarawa | NG.NA.OB    | 8.35534, 8.734777    | [8.37944, 8.78561](https://www.google.com/maps/place/Local+Govt+Secretariat/@8.3740903,8.7748577,14.55z/data=!4m5!3m4!1s0x1050e131ff5c6639:0x76010b5a66e763d7!8m2!3d8.3781745!4d8.782189)                                                                                                                                 |
+| Surelere | 693                                                                | Surelere    | Lagos    | NG.LA.SU    | 6.493217, 3.346919   | [6.50048, 3.35488](https://www.google.com/maps/place/Local+Government+Office/@6.4997824,3.3523702,17z/data=!3m1!4b1!4m5!3m4!1s0x103b8c1437be057d:0xc427d7c19d4332af!8m2!3d6.4997848!4d3.3545626)                                                                                                                          |
+| Surelere | 694                                                                | Iresa-Adu   | Oyo      | NG.OY.SU    | 8.088897, 4.393574   | [8.08459, 4.38538](https://www.google.com/maps/place/Iresa+Adu+Local+government+house/@8.0860984,4.3846214,15.95z/data=!4m13!1m7!3m6!1s0x103775694baada77:0xcb78cc728922fde9!2s210104,+Aba+Ladunni,+Oyo,+Nigeria!3b1!8m2!3d8.0885998!4d4.3928622!3m4!1s0x103775d913035017:0xe95c9c72c52ac566!8m2!3d8.0844129!4d4.3838421) |
 
 <br>
 
@@ -639,8 +649,15 @@ The State info to be combined with the duplicated "shapeName". This will make al
 
 ### 3.4.1 Edit Duplicated Value :: "shapeName"
 
+Two (2) Main Steps involved :
+
+1.  Combine "shapeName" with the State name to make each of them unique.
+2.  Replace the "shapeName" value according to each row index.[^5]
+
+[^5]: Ong Z.R.J. (2022). Geospatial Analytics for Social Good - Understanding Nigeria Water functional and non-functional water point rate. https://jordan-isss624-geospatial.netlify.app/posts/geo/geospatial_exercise/#checking-of-duplicated-area-name
+
 ```{r}
-bdy_nga$shapeName[c(94,95,304,305,355,356,519,546,547,693,694)] <- 
+bdy_nga$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)] <- 
   c("Bassa Kogi",
     "Bassa Plateau",
     "Ifelodun Kwara",
@@ -653,22 +670,24 @@ bdy_nga$shapeName[c(94,95,304,305,355,356,519,546,547,693,694)] <-
     "Obi Benue",
     "Surulere Lagos",
     "Surulere Oyo")
+
+bdy_nga$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)]
 ```
 
 #### 3.4.1.1 validate edited value :: "shapeName"
 
 ```{r}
-wp_duplShapeName1 <- bdy_nga %>%
+dupl_shapeName_val <- bdy_nga %>%
   add_count(bdy_nga$shapeName) %>%
   filter(n!=1) %>%
   select(-n)
 
-wp_duplShapeName1
+dupl_shapeName_val
 ```
 
 ### 3.4.2 Perform Point-in-Polygon Overlay
 
-This step combine both attribute and boundary of the water points into a simple feature object.
+Combine both attribute and boundary of the water points into a simple feature object.
 
 #### 3.4.2.1 join objects :: *wp_sf* and *bdy_nga*
 
@@ -686,9 +705,9 @@ wp_joined <- st_join(x = wp_sf,
 #### 3.4.2.2 save and read RDS File :: *wp_joined*
 
 ```{r}
-write_rds(wp_joined,"/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_joined.rds",compress = "xz")
+write_rds(wp_joined,"data/geodata/wp_joined.rds",compress = "xz")
 
-wp_joined <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_joined.rds")
+wp_joined <- read_rds("data/geodata/wp_joined.rds")
 ```
 
 #### 3.4.2.3 inspect joined file :: *wp_joined*
@@ -699,48 +718,7 @@ wp_joined <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/w
 st_geometry(wp_joined)
 ```
 
-#### \-- determine reference point :: "shapeName" or "clean_adm2"
-
-```{r}
-wp_refLga <- (wp_joined$shapeName == wp_joined$clean_adm2)
-freq(wp_refLga)
-
-```
-
-Remarks :
-
--   There are 29,713 "FALSE", which is more than 30% of LGA names mismatched between "shapeName" and "clean_adm2".
-
-    -   [Unlike the Water Point Data Exchange data that involved multiple parties, the geoBoundaries data is sourced from "geoBoundaries: A global database of political administrative boundaries." Plos one 15, no. 4 (2020): e0231866,]{style="color:#d69c3c"}
-
-        -   [Hence, the "shapeName" to be used throughout this study.]{style="color:#d69c3c"}
-
--   The 29 NA's are 29 water points located beyond the LGA boundary, as shown in the plot below.
-
-```{r}
-tmap_mode("view")
-
-tm_shape(bdy_nga) +
-  tm_polygons() +
-  tm_view(set.zoom.limits = c(5.5, 12))+
-  
-tm_shape(filter(wp_joined, is.na(wp_refLga))) +
-  tm_dots(size=0.1,
-          col="red")
-
-```
-
-```{r}
-tmap_mode("plot")
-```
-
-Remove
-
-```{r}
-wp_joined2 <- wp_joined %>% filter(shapeName == clean_adm2 | shapeName != clean_adm2)
-```
-
-#### \-- assess uniqueness of each Water Point
+#### \-- assess uniqueness of Water Point
 
 ```{r}
 wp_joined %>% janitor::get_dupes(shapeName,lat_lon_deg)
@@ -750,44 +728,65 @@ Remarks :
 
 Each water point observation is unique as there are no duplicate combination of "shapeName" together with "lat_lon_deg".
 
-#### \-- reveal value :: "status_clean"
+#### \-- determine reference point :: "shapeName" or "clean_adm2"
 
 ```{r}
-freq(wp_joined$status_clean)
+wp_reference <- (wp_joined$shapeName == wp_joined$clean_adm2)
+freq(wp_reference)
+
 ```
 
-#### \-- reveal value :: "crucialness_score"
+Remarks :
+
+-   There are 29,713 "FALSE", which is more than 30% of LGA names mismatched between "shapeName" and "clean_adm2".
+
+    -   [Since the geoBoundaries data is collected from government-published and reliable internet sources.]{style="color:#d69c3c"}[^6]
+
+        -   [Hence, the "shapeName" variable to be used throughout this study.]{style="color:#d69c3c"}
+
+-   The 29 NA's are 29 water points located beyond the LGA boundary, as shown in the plot below.
+
+[^6]: Daniel et. al (2020) geoBoundaries: A global database of political administrative boundaries. *PlosOne*. <https://doi.org/10.1371/journal.pone.0231866>
 
 ```{r}
-summary(wp_joined$crucialness_score)
-```
+tmap_mode("view")
 
-#### \-- reveal value :: "is_urban"
+tm_shape(bdy_nga) +
+  tm_polygons() +
+  tm_view(set.zoom.limits = c(5.5, 12))+
+  
+tm_shape(filter(wp_joined, is.na(wp_reference))) +
+  tm_dots(size=0.1,
+          col="red")
+
+```
 
 ```{r}
-freq(wp_joined$is_urban)
+tmap_mode("plot")
 ```
 
-#### \-- reveal value :: "water_tech_category"
+### 3.4.3 Remove Water Point Outside LGA Boundary
 
 ```{r}
-freq(wp_joined$water_tech_category)
+wp_joined1 <- wp_joined %>% filter(shapeName == clean_adm2 | shapeName != clean_adm2)
 ```
 
-#### \-- reveal value :: "usage_capacity"
+### 3.4.4 Replace "NA" with "Unknown"
+
+#### 3.4.4.1 identify variable with missing value
 
 ```{r}
-freq(wp_joined$usage_capacity)
+skim(wp_joined1)
 ```
 
-### 3.4.3 Replace "NA" with "Unknown"
+#### 3.4.4.2 replace "NA" with "Unknown"
 
 [***mutate( )*** - dplyr -]{style="color:#d46e15"} to run *replace_na( )* function.
 
 -   [***replace_na( )*** - tidyr -]{style="color:#d46e15"} to replace NAs with "unknown".
 
 ```{r}
-wp_joined1 <- wp_joined %>%
+wp_joined1 <- wp_joined1 %>%
   mutate(status_clean = replace_na(status_clean, "Unknown")) %>%
   mutate(water_tech_category = replace_na(water_tech_category, "Unknown")) %>%
   mutate(status = replace_na(status, "Unknown")) %>%
@@ -797,28 +796,30 @@ wp_joined1 <- wp_joined %>%
   mutate(pressure_score = replace_na(pressure_score, 0))
 ```
 
-### 3.4.4 Standardise Value
-
-#### 3.4.4.1 combine value :: "status_clean"
-
 ```{r}
-#| eval: false
-wp_joined1 <- wp_joined1 %>%
-  mutate(status_clean = str_replace(status_clean,"Non functional due to dry season"  ,"Non-Functional due to dry season")) %>%
-  mutate(status_clean = str_replace(status_clean,"Abandoned/Decommissioned/Decommissioned","Abandoned/Decommissioned"))
+unique(wp_joined1$status_clean)
 ```
 
-#### 3.4.4.2 review "status_clean"
+### 3.4.5 Standardise Value
+
+#### 3.4.5.1 combine value :: "status_clean"
 
 ```{r}
-#| eval: false
-freq(wp_joined1$status_clean)
+wp_joined1$status_clean[wp_joined1$status_clean == "Non functional due to dry season"] <- "Non-Functional due to dry season"
+
+wp_joined1$status_clean[wp_joined1$status_clean == "Abandoned"] <- "Abandoned/Decommissioned"
+```
+
+#### 3.4.5.2 review "status_clean"
+
+```{r}
+unique(wp_joined1$status_clean)
 ```
 
 #### 3.4.4.3 read RDS file :: *wp_joined1*
 
 ```{r}
-wp_joined1 <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_joined1.rds")
+wp_joined1 <- read_rds("data/geodata/wp_joined1.rds")
 ```
 
 ### 3.4.5 Extract Water Point for New Table :: *wp_nga*
@@ -836,9 +837,9 @@ wpt_functional <- wp_joined1 %>%
 #### \-- save and read RDS file :: *wpt_functional*
 
 ```{r}
-write_rds(wpt_functional,"/jephOstan/ISSS624/class_project/project_2/data/geodata/wpt_functional.rds",compress = "xz")
+write_rds(wpt_functional,"data/geodata/wpt_functional.rds",compress = "xz")
 
-wpt_functional <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wpt_functional.rds")
+wpt_functional <- read_rds("data/geodata/wpt_functional.rds")
 ```
 
 #### 3.4.5.2 inspect variable and value
@@ -1003,9 +1004,9 @@ wpt_nonFunctional <- wp_joined1 %>%
 #### \-- save and read RDS file :: *wpt_nonFuntional*
 
 ```{r}
-write_rds(wpt_nonFunctional,"/jephOstan/ISSS624/class_project/project_2/data/geodata/wpt_nonFunctional.rds",compress = "xz")
+write_rds(wpt_nonFunctional,"data/geodata/wpt_nonFunctional.rds",compress = "xz")
 
-wpt_nonFunctional <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wpt_nonFunctional.rds")
+wpt_nonFunctional <- read_rds("data/geodata/wpt_nonFunctional.rds")
 ```
 
 #### 3.4.5.6 inspect variable and value
@@ -1148,9 +1149,9 @@ wpt_unknown <- wp_joined1 %>%
 #### \-- save and read RDS file :: *wpt_unknown*
 
 ```{r}
-write_rds(wpt_unknown,"/jephOstan/ISSS624/class_project/project_2/data/geodata/wpt_unknown.rds")
+write_rds(wpt_unknown,"data/geodata/wpt_unknown.rds")
 
-wpt_unknown <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wpt_unknown.rds")
+wpt_unknown <- read_rds("data/geodata/wpt_unknown.rds")
 ```
 
 #### 3.4.5.10 inspect variable and value
@@ -1462,8 +1463,8 @@ tmap_arrange(urban1, urban0,
 #### 3.4.5.19 save and read RDS File :: *wp_nga*
 
 ```{r}
-write_rds(wp_nga,"/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_nga.rds")
-wp_nga <- read_rds("/jephOstan/ISSS624/class_project/project_2/data/geodata/wp_nga.rds")
+write_rds(wp_nga,"data/geodata/wp_nga.rds")
+wp_nga <- read_rds("data/geodata/wp_nga.rds")
 ```
 
 #### 3.4.5.20 transform to Projected Coordinate System

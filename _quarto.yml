@@ -2,6 +2,7 @@ project:
   type: website
 
 website:
+  google-analytics: "G-VVFCV6MNHG"
   title: "ISSS624"
   navbar:
     left: 

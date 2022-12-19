@@ -185,7 +185,6 @@ Unlike linear regression, larger samples are needed for logistic regression beca
 ## Minimum of 50 observations / cases per indepdent variables / predictors is recommended.
 :::
 
-
 ::: callout-tip
 ## Logistic Regression Solution :: Log Odds
 
@@ -261,7 +260,6 @@ note :
 Instead of using a least-squared deviations criterion for the best fit, it uses a maximum likelihood method, which maximizes the probability of getting the observed results given the fitted regression coefficients.
 
 A consequence is that the goodness of fit and overall significance statistics used in logistic regression differ from those used in linear regression.
-
 
 ### 3.3.1 Workflow Diagram :: Logistic Regression Modelling
 
