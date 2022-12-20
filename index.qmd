@@ -1,5 +1,7 @@
 ---
 title: ""
+website: 
+    google-analytics: "G-VVFCV6MNHG"
 ---
 
 # **GEOSPATIAL ANALYSIS**
