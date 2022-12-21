@@ -4,6 +4,7 @@ editor: visual
 date: 5 Dec 2022
 reference-location: margin
 citation-location: margin
+code-copy: true
 website: 
     google-analytics: "G-VVFCV6MNHG"
     margin-footer: 
@@ -293,7 +294,7 @@ The following are the packages required for this exercise :
 [***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages. This function will attempt to install the package from CRAN or pacman repository list if its found not installed.
 
 ```{r}
-pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr)
+pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr)
 ```
 :::
 
@@ -377,7 +378,7 @@ Remarks :
 
 [***write_rds( )*** - readr -]{style="color:#d46e15"} to save *wp_coord* data table into an RDS format.
 
-**note : reduce the file size with this function -> compress = "xz".**
+**note : reduce the file size with this function -\> compress = "xz".**
 
 [***read_rds( )*** - readr -]{style="color:#d46e15"} to read *wp_coord* RDS file into *wp_coord*.
 :::
@@ -499,22 +500,6 @@ wp_adm <- read_rds("data/geodata/wp_adm.rds")
 ```{r}
 skim(wp_adm)
 ```
-
-Remarks :
-
--   "staleness_score" indicates the depreciation of the data's relevance.
-
--   The observation updated within 1 year has a "staleness_score" of approximately \~ 89.13 or higher.
-
--   Water points data collection is usually done [quarterly or annually](https://www.ircwash.org/blog/giving-data-soul-case-study-use-water-point-data-uganda#:~:text=Water%20point%20data%20is%20largely,and%20water%20point%20asset%20mapping.).
-
-    -   [Based on the code chunk below, only 11 out of 95008 water points are updated within 1 year (between June 2021 to Aug 2022), meaning the rest, which is almost entire observations (the latest updated date was in Apr 2020), are outdated.]{style="color:#d69c3c"}
-
-    -   [These outdated observations will need to be updated for the local governments or entities to allocate resources effectively in managing or upgrading these water points.]{style="color:#d69c3c"}
-
-```{r}
-summary(wp_adm$staleness_score > 89)
-```
 :::
 
 ### 3.2.4 Create Master File
@@ -551,6 +536,7 @@ wp <- left_join(
 
 [***st_as_sfc( )*** - sf -]{style="color:#d46e15"} to convert foreign geometry object \`New Georeferenced Column\` to an sfc object
 :::
+
 ```{r}
 wp$geometry = st_as_sfc(wp$`New Georeferenced Column`)
 ```
@@ -559,11 +545,13 @@ wp$geometry = st_as_sfc(wp$`New Georeferenced Column`)
 #### 3.2.5.2 convert to SF Data Frame
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***st_sf( )*** - sf -]{style="color:#d46e15"} to convert the tibble data frame into sf data frame with crs first set to WGS 84 (EPSG : 4326).
 
 [***st_crs( )*** - sf -]{style="color:#d46e15"} to retrieve coordinate reference system from the object.
+:::
 
 ```{r}
 wp_sf<- st_sf(wp, crs = 4326)
@@ -573,11 +561,13 @@ st_crs(wp_sf)
 
 ## 3.3 Import Boundary Data
 
-::: {.callout-warning appearance="simple" icon="false"} [Usage of the code chunk below :]{style="color:#a39f9d"}
+::: {.callout-warning appearance="simple" icon="false"} ::: {.callout-alert appearance="simple" icon="false"}
+
+[Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***st_read( )*** - sf -]{style="color:#d46e15"} to read simple features.
 
-[***select( )*** - dplyr -]{style="color:#d46e15"} to select "shapeName" variable.
+[***select( )*** - dplyr -]{style="color:#d46e15"} to select "shapeName" variable. :::
 
 ```{r}
 #| eval: false
@@ -621,14 +611,16 @@ Remarks :
     -   That's mean there are 6 values of "shapeName" duplicated among the identified unique shapeNames.
 :::
 
-#### 3.3.1.2 list the unique "shapeName" associated with duplication
+#### 3.3.2.2 list the unique "shapeName" associated with duplication
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***add_count( )*** - dplyr -]{style="color:#d46e15"} to count observations by group
 
 [***filter( )*** - dplyr -]{style="color:#d46e15"} to retain shapeName that has count not equal to 1.
+:::
 
 ```{r}
 dupl_shapeName <- bdy_nga %>%
@@ -640,9 +632,10 @@ freq(dupl_shapeName$shapeName)
 ```
 :::
 
-#### 3.3.1.3 verify findings in section 3.3.1.2
+#### 3.3.2.3 verify findings in section 3.3.1.2
 
 ::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***tmap_mode( )*** - tmap -]{style="color:#d46e15"} to set tmap mode to static plotting or interactive.
@@ -660,6 +653,7 @@ freq(dupl_shapeName$shapeName)
 [***tmap_style( )*** - tmap -]{style="color:#d46e15"} to set the tmap style.
 
 [***tm_layout( )*** - tmap -]{style="color:#d46e15"} to set the layout of cartographic map.
+:::
 
 ```{r}
 tmap_mode("view")
@@ -686,7 +680,7 @@ Remarks :
 The plot above indicates those duplicated water points are not within the same location.
 :::
 
-#### 3.3.1.4 acquire State info for duplicated value
+#### 3.3.2.4 acquire State info for duplicated value
 
 ::: {.callout-warning appearance="simple" icon="false"}
 The State info to be combined with the duplicated "shapeName". This will make all the shapeName unique.
@@ -743,13 +737,9 @@ bdy_nga$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)] <-
 
 bdy_nga$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)]
 ```
-:::
-
-[^5]: Ong Z.R.J. (2022). Geospatial Analytics for Social Good - Understanding Nigeria Water functional and non-functional water point rate. https://jordan-isss624-geospatial.netlify.app/posts/geo/geospatial_exercise/#checking-of-duplicated-area-name
 
 #### 3.4.1.1 validate edited value :: "shapeName"
 
-::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 dupl_shapeName_val <- bdy_nga %>%
   add_count(bdy_nga$shapeName) %>%
@@ -760,16 +750,20 @@ dupl_shapeName_val
 ```
 :::
 
+[^5]: Ong Z.R.J. (2022). Geospatial Analytics for Social Good - Understanding Nigeria Water functional and non-functional water point rate. https://jordan-isss624-geospatial.netlify.app/posts/geo/geospatial_exercise/#checking-of-duplicated-area-name
+
 ### 3.4.2 Perform Point-in-Polygon Overlay
 
+::: {.callout-warning appearance="simple" icon="false"}
 Combine both attribute and boundary of the water points into a simple feature object.
 
-#### 3.4.2.1 join objects :: *wp_sf*,*bdy_nga*
+#### 3.4.2.1 join objects :: *wp_sf*, *bdy_nga*
 
-::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***st_join( )*** - sf -]{style="color:#d46e15"} to join *sf*-class objects based on geometry, namely, *wp_sf* and *bdy_nga*.
+:::
 
 ```{r}
 #| eval: false
@@ -790,37 +784,26 @@ write_rds(wp_joined,"data/geodata/wp_joined.rds",compress = "xz")
 #| code-fold: false
 wp_joined <- read_rds("data/geodata/wp_joined.rds")
 ```
-:::
 
 #### 3.4.2.2 inspect joined file :: *wp_joined*
 
-#### \-- retrieve geometry summary
-
-::: {.callout-warning appearance="simple" icon="false"}
-```{r}
-st_geometry(wp_joined)
-```
-:::
-
 #### \-- assess uniqueness of Water Point
 
-::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
+#| code-fold: false
 wp_joined %>% janitor::get_dupes(shapeName,lat_lon_deg)
 ```
 
 Remarks :
 
 Each water point observation is unique as there are no duplicate combination of "shapeName" together with "lat_lon_deg".
-:::
 
 #### \-- determine reference point :: "shapeName" or "clean_adm2"
 
-::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 wp_reference <- (wp_joined$shapeName == wp_joined$clean_adm2)
-freq(wp_reference)
 
+freq(wp_reference)
 ```
 
 Remarks :
@@ -832,10 +815,6 @@ Remarks :
         -   [Hence, the "shapeName" variable to be used throughout this study.]{style="color:#d69c3c"}
 
 -   The 29 NA's are 29 water points located beyond the LGA boundary, as shown in the plot below.
-:::
-
-
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
 
 ```{r}
 tmap_mode("view")
@@ -844,13 +823,11 @@ tm_shape(bdy_nga) +
   tm_polygons() +
   tm_view(set.zoom.limits = c(5.5, 12))+
   
-tm_shape(filter(wp_joined, is.na(wp_reference))) +
+tm_shape(filter(wp_joined, 
+                is.na(wp_reference))) +
   tm_dots(size=0.1,
           col="red")
 
-```
-
-```{r}
 tmap_mode("plot")
 ```
 :::
@@ -861,68 +838,61 @@ tmap_mode("plot")
 
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
-wp_joined1 <- wp_joined %>% filter(shapeName == clean_adm2 | shapeName != clean_adm2)
+#| code-fold: false
+wp_joined1 <- wp_joined %>% 
+  filter(
+    shapeName == clean_adm2 | shapeName != clean_adm2)
 ```
 :::
 
-### 3.4.4 Replace "NA" with "Unknown"
-
-#### 3.4.4.1 identify variable with missing value
-
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
-```{r}
-skim(wp_joined1)
-```
-:::
-
-#### 3.4.4.2 replace "NA" with "Unknown"
+### 3.4.4 Combine Unique Value
 
 ::: {.callout-warning appearance="simple" icon="false"}
-[***mutate( )*** - dplyr -]{style="color:#d46e15"} to run *replace_na( )* function.
+There are 9 unique values for "status_clean". However, four (4) of them share the same context :
 
--   [***replace_na( )*** - tidyr -]{style="color:#d46e15"} to replace NAs with "unknown".
+-   "Non functional due to dry season"
 
-```{r}
-wp_joined1 <- wp_joined1 %>%
-  mutate(status_clean = replace_na(status_clean, "Unknown")) %>%
-  mutate(water_tech_category = replace_na(water_tech_category, "Unknown")) %>%
-  mutate(status = replace_na(status, "Unknown")) %>%
-  mutate(water_point_population = replace_na(water_point_population, 0)) %>%
-  mutate(local_population_1km = replace_na(local_population_1km, 0)) %>%
-  mutate(crucialness_score = replace_na(crucialness_score, 0)) %>%
-  mutate(pressure_score = replace_na(pressure_score, 0))
-```
-:::
+-   "Non-Functional due to dry season"
 
-### 3.4.5 Standardise Value
+-   "Abandoned"
 
-::: {.callout-warning appearance="simple" icon="false"}
-#### 3.4.5.1 combine value :: "status_clean"
+-   "Abandoned/Decommissioned"
+
+Hence, the same context values need to combine into one unique value.
 
 ```{r}
+#| code-fold: false
 wp_joined1$status_clean[wp_joined1$status_clean == "Non functional due to dry season"] <- "Non-Functional due to dry season"
 
 wp_joined1$status_clean[wp_joined1$status_clean == "Abandoned"] <- "Abandoned/Decommissioned"
 ```
 
-#### 3.4.5.2 review "status_clean"
+#### 3.4.4.1 review combined output
 
 ```{r}
 unique(wp_joined1$status_clean)
 ```
 
-#### 3.4.4.3 read RDS file :: *wp_joined1*
+#### 3.4.4.2 save and read RDS file :: *wp_joined1*
+
+Save the updated values into wp_joined1 RDS file.
 
 ```{r}
+#| eval: false
+write_rds(wp_joined1,"data/geodata/wp_joined1.rds",compress = "xz")
+```
+
+```{r}
+#| code-fold: false
 wp_joined1 <- read_rds("data/geodata/wp_joined1.rds")
 ```
 :::
 
-### 3.4.5 Extract Water Point for New Table :: *wp_nga*
+## 3.5 Extract Water Point by Attribute
+
+### 3.5.1 Extract Functional Water Point :: *wpt_functional*
 
 ::: {.callout-warning appearance="simple" icon="false"}
-#### 3.4.5.1 extract functional water point
-
 ```{r}
 #| eval: false
 wpt_functional <- wp_joined1 %>%
@@ -932,7 +902,7 @@ wpt_functional <- wp_joined1 %>%
              "Functional but needs repair"))
 ```
 
-#### \-- save and read RDS file :: *wpt_functional*
+#### 3.5.1.1 save and read RDS file :: *wpt_functional*
 
 ```{r}
 #| eval: false
@@ -943,142 +913,9 @@ write_rds(wpt_functional,"data/geodata/wpt_functional.rds",compress = "xz")
 #| code-fold: false
 wpt_functional <- read_rds("data/geodata/wpt_functional.rds")
 ```
-:::
 
-#### 3.4.5.2 inspect variable and value
+#### 3.5.1.2 compute data table for clustering analysis
 
-::: {.callout-warning appearance="simple" icon="false"}
-#### \-- reveal value :: "status_clean"
-
-```{r}
-freq(wpt_functional$status_clean)
-
-length(wpt_functional$row_id)
-length(wpt_functional$row_id)/length(wp_joined1$row_id)*100
-```
-
-Remarks :
-
-The total functional water points is 52,148 which is about 54.89% of total water points.
-
-#### \-- reveal value :: "usage_capacity"
-
-```{r}
-freq(wpt_functional$usage_capacity)
-```
-
-#### \-- reveal value "usage_capacity" by "status_clean"
-
-```{r}
-wpt_functional %>% count(status_clean, usage_capacity, sort = TRUE)
-
-```
-
-#### \-- reveal value :: "crucialness_score"
-
-```{r}
-summary(wpt_functional$crucialness_score == 1)
-```
-
-#### \-- determine the total population within 1 km by "crucialness_score"
-
-```{r}
-freq(wpt_functional$crucialness_score == 1)
-sum(wpt_functional[wpt_functional$crucialness_score == 1,]$local_population_1km)
-```
-
-Remarks :
-
-Given the "crucialness_score" is a ratio of current water point users to the total population within 1 km radius thereof :
-
--   [Currently, 5,142 water points serve the population within a 1 km radius at its capacity limit.]{style="color:#d69c3c"}
-
-    -   [The usage capacity may need to be increased to sustain or improve the growth or development rate within 1km of these water points.]{style="color:#d69c3c"}
-
-    -   [Should the population within 1 km therefrom grow above 11,252,574, there may be multiple repercussions in resources management, urbanisation progress, local food and beverage consumption, local commodity prices, or worst case scenario would be the stability of civil society.]{style="color:#d69c3c"}
-
-```{r}
-summary(wpt_functional$pressure_score > 1)
-
-length(wpt_functional$pressure_score)
-
-24679/52148*100 #percentage of functional water points over their usage limit
-```
-
-Remarks :
-
-Given the "pressure_score" is the ratio of the current water point users to the usage capacity thereof :
-
--   [24,679, or 47.32% of functional water points, are currently over their limit of usage capacity.]{style="color:#d69c3c"}
-:::
-
-#### 3.4.5.3 Exploratory Data Analysis (EDA) :: *wpt_functional*
-
-::: {.callout-warning appearance="simple" icon="false"}
-#### \-- plot "status_clean"
-
-```{r}
-ggplot(data = wpt_functional,
-       aes(fct_infreq(status_clean), fill=status_clean))+ 
-  geom_bar()+
-  geom_text(
-     aes(label=after_stat(count)),
-     stat='count',
-     nudge_x=-0.25,
-     vjust=-0.2)+
-  geom_text(
-     aes(label= scales::percent(signif(after_stat(count/sum(count))))),
-     stat='count',
-     nudge_x=0.25,
-     vjust=-0.2)+
-  scale_x_discrete(guide = guide_axis(n.dodge = 2))+
-  guides(fill=guide_legend (title = 'Status'))
-```
-
-#### \-- plot "water_tech_category"
-
-```{r}
-ggplot(data=wpt_functional, 
-       aes(x=fct_infreq(
-         water_tech_category)))+
-  geom_bar(aes(
-    fill = water_tech_category), 
-    width = 0.8)+
-  geom_text(aes(
-    label = ..count..),
-    stat = "count", 
-    vjust=-0.2, 
-    size = 3.5, 
-    color = "black")+
-  scale_x_discrete(guide = guide_axis(n.dodge = 2))+
-  guides(fill=guide_legend (title = 'Water Tech Deployed'))
-```
-
-#### \-- plot "water_source_clean"
-
-```{r}
-ggplot(data=wpt_functional, 
-       aes(x=fct_infreq(
-         water_source_clean)))+
-  geom_bar(aes(
-    fill = water_source_clean), 
-    width = 0.8)+
-  geom_text(aes(
-    label = ..count..),
-    stat = "count", 
-    vjust=-0.2, 
-    size = 3.5, 
-    color = "black")+
-  scale_x_discrete(guide = guide_axis(
-    n.dodge = 2))+
-  guides(fill=guide_legend (
-    title = 'Source of Water Supply'))
-```
-:::
-
-#### 3.4.5.4 add attribute to new data table
-
-::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 wp_nga <- bdy_nga %>%
   mutate(`total_wp` = lengths(
@@ -1089,20 +926,11 @@ wp_nga <- bdy_nga %>%
   
   mutate(`pct_functional` = (`wp_functional`/`total_wp`*100))
 ```
-
-#### \-- replace "NaN" with 0
-
-```{r}
-wp_nga <- wp_nga %>%
-  mutate(`pct_functional` = replace_na(pct_functional, 0))
-
-summary(wp_nga)
-```
 :::
 
-#### 3.4.5.5 extract non-functional water point
+### 3.5.2 Extract Non-Functional Water Point :: *wpt_nonFunctional*
 
-::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
 ```{r}
 #| eval: false
 wpt_nonFunctional <- wp_joined1 %>%
@@ -1112,7 +940,7 @@ wpt_nonFunctional <- wp_joined1 %>%
              "Non-Functional due to dry season"))
 ```
 
-#### \-- save and read RDS file :: *wpt_nonFuntional*
+#### 3.5.2.1 save and read RDS file :: *wpt_nonFuntional*
 
 ```{r}
 #| eval: false
@@ -1123,154 +951,27 @@ write_rds(wpt_nonFunctional,"data/geodata/wpt_nonFunctional.rds",compress = "xz"
 #| code-fold: false
 wpt_nonFunctional <- read_rds("data/geodata/wpt_nonFunctional.rds")
 ```
-:::
 
-#### 3.4.5.6 inspect variable and value
+#### 3.5.2.2 compute additional variables into *wp_nga*
 
-::: {.callout-warning appearance="simple" icon="false"}
-\-- reveal value :: "status_clean"
-
-```{r}
-freq(wpt_nonFunctional$status_clean)
-
-length(wpt_nonFunctional$row_id)
-length(wpt_nonFunctional$row_id)/length(wp_joined1$row_id)*100
-```
-
-Remarks :
-
-There are 32,204, which is about 33.9% out of total water points.
-
-#### \-- reveal value :: "usage_capacity"
-
-```{r}
-freq(wpt_nonFunctional$usage_capacity)
-```
-
-#### \-- reveal value "usage_capacity" by "status_clean"
-
-```{r}
-wpt_nonFunctional %>% count(status_clean, usage_capacity, sort = TRUE)
-```
-
-#### \-- reveal "crucialness_score"
-
-```{r}
-sum(wpt_nonFunctional$local_population_1km)
-sum(wpt_nonFunctional$water_point_population)
-```
-
-Remarks :
-
-Given the "crucialness_score" is a ratio of current water point users to the total population within a 1 km radius thereof , in the context of non-functional :
-
--   [Currently, out of 95,013,340 residents within a 1 km radius, there are 46,710,127 of them is affected by these non-functional water point.]{style="color:#d69c3c"}
-:::
-
-#### 3.4.5.7 EDA :: *wpt_nonFunctional*
-
-::: {.callout-warning appearance="simple" icon="false"}
-#### \-- plot "status_clean"
-
-```{r}
-ggplot(data = wpt_nonFunctional,
-       aes(fct_infreq(status_clean), 
-           fill=status_clean))+ 
-  geom_bar()+
-  geom_text(
-     aes(label=after_stat(count)),
-     stat='count',
-     nudge_x=-0.25,
-     vjust=-0.2)+
-  geom_text(
-     aes(label= scales::percent(
-       signif(
-         after_stat(
-           count/sum(count)
-           )))),
-     stat='count',
-     nudge_x=0.25,
-     vjust=-0.2)+
-  scale_x_discrete(
-    guide = guide_axis(
-      n.dodge = 2))+
-  guides(fill=guide_legend (
-    title = 'Status'))
-```
-
-#### \-- plot "water_tech_category"
-
-```{r}
-ggplot(data=wpt_nonFunctional, 
-       aes(fct_infreq(
-         water_tech_category)))+
-  geom_bar(aes(
-    fill = water_tech_category), 
-    width = 0.8)+
-  geom_text(aes(
-    label = ..count..),
-    stat = "count",
-    vjust=-0.2,
-    size = 3.5,
-    color = "black")+
-  scale_x_discrete(guide = guide_axis(
-    n.dodge = 2))+
-  guides(fill=guide_legend (
-    title = 'Water Tech Deployed'))
-```
-
-#### \-- plot "water_source_clean"
-
-```{r}
-ggplot(data=wpt_nonFunctional, 
-       aes(fct_infreq(
-         water_source_clean)))+
-  geom_bar(aes(
-    fill = water_source_clean),
-    width = 0.8)+
-  geom_text(aes(
-    label = ..count..),
-    stat = "count",
-    vjust=-0.2,
-    size = 3.5,
-    color = "black")+
-  scale_x_discrete(guide = guide_axis(
-    n.dodge = 2))+
-  guides(fill=guide_legend (
-    title = 'Source of Water Supply'))
-```
-:::
-
-#### 3.4.5.8 add *wpt_nonFunctional* to *wp_nga*
-
-::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 wp_nga <- wp_nga %>%
   mutate(`wp_nonFunctional` = lengths(
     st_intersects(bdy_nga, wpt_nonFunctional))) %>%
   mutate(`pct_nonFunctional` = (`wp_nonFunctional`/`total_wp`*100))
 ```
-
-#### \-- replace "NaN" with 0
-
-```{r}
-wp_nga <- wp_nga %>%
-  mutate(`pct_nonFunctional` = replace_na(pct_nonFunctional, 0))
-
-summary(wp_nga)
-```
 :::
 
-#### 3.4.5.9 extract unknown water point
+### 3.5.3 Extract Unknown Water Point
 
-::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
 ```{r}
 #| eval: false
 wpt_unknown <- wp_joined1 %>%
   filter(status_clean == "Unknown")
 ```
 
-#### \-- save and read RDS file :: *wpt_unknown*
+#### 3.5.3.1 save and read RDS file :: *wpt_unknown*
 
 ```{r}
 #| eval: false
@@ -1281,82 +982,22 @@ write_rds(wpt_unknown,"data/geodata/wpt_unknown.rds")
 #| code-fold: false
 wpt_unknown <- read_rds("data/geodata/wpt_unknown.rds")
 ```
-:::
 
-#### 3.4.5.10 inspect variable and value
+#### 3.5.3.2 compute additional variables into *wp_nga*
 
-#### \-- reveal value :: "status_clean"
-
-::: {.callout-warning appearance="simple" icon="false"}
-```{r}
-length(wpt_unknown$row_id)
-
-length(wpt_unknown$row_id)/length(wp_joined1$row_id)*100
-```
-
-Remarks :
-
-There are 10,656 water points with unknown status, about 11.22% of total water points.
-
-#### \-- determine affected population
-
-```{r}
-sum(wpt_unknown$water_point_population)
-sum(wpt_unknown$local_population_1km)
-```
-:::
-
-#### 3.4.5.11 add *wpt_unknown* to *wp_nga*
-
-::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 wp_nga <- wp_nga %>%
   mutate(`wp_unknown` = lengths(
     st_intersects(bdy_nga, wpt_unknown))) %>%
   mutate(`pct_unknown` = (`wp_unknown`/`total_wp`*100))
 ```
-
-#### \-- replace "NaN" with 0
-
-```{r}
-wp_nga <- wp_nga %>%
-  mutate(`pct_unknown` = replace_na(pct_unknown, 0))
-
-summary(wp_nga)
-```
 :::
 
-#### 3.4.5.12 visualise distribution :: "status_clean"
-
-::: {.callout-warning appearance="simple" icon="false"}
-[Usage of the code chunk below :]{style="color:#a39f9d"}
-
-[***qtm( )*** - tmap -]{style="color:#d46e15"} to plot a thematic map quickly.
-
-[***tmap_arrange( )*** - tmap -]{style="color:#d46e15"} to arrange small multiples in grid layout.
-
-```{r}
-total_wp <- qtm(wp_nga,"total_wp")+
-  tm_layout(legend.height = 0.3, legend.width = 0.5)
-
-wp_functional <- qtm(wp_nga,"wp_functional")+
-  tm_layout(legend.height = 0.3, legend.width = 0.5)
-
-wp_nonFunctional <- qtm(wp_nga,"wp_nonFunctional")+
-  tm_layout(legend.height = 0.3, legend.width = 0.5)
-
-wp_unknown <- qtm(wp_nga,"wp_unknown")+
-  tm_layout(legend.height = 0.3, legend.width = 0.5)
-
-tmap_arrange(total_wp, wp_functional, wp_nonFunctional, wp_unknown, asp=0, ncol = 2, nrow = 2, widths = 5, heights = 10, sync = TRUE)
-```
-:::
-
-#### 3.4.5.13 extract "water_tech_category" to *wp_nga*
+### 3.5.4 Extract Water Points by "water_tech_category"
 
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
-freq(wp_joined1$water_tech_category, sort = "dec")
+freq(wp_joined1$water_tech_category)
 ```
 
 Remarks :
@@ -1364,6 +1005,7 @@ Remarks :
 Only "Hand Pump", "Mechanized Pump", and "Tapstand" are to be extracted for further analysis as the rest are either less than 0.5% or "Unknown".
 
 ```{r}
+#| code-fold: false
 wtc_hPump <- wp_joined1 %>%
   filter(water_tech_category %in%
            "Hand Pump")
@@ -1390,59 +1032,13 @@ wp_nga <- wp_nga %>%
   mutate(`pct_mechPump` = (`total_mechPump`/`total_wp`*100)) %>%
   mutate(`pct_tapStand` = (`total_tapStand`/`total_wp`*100))
 ```
-
-#### \-- replace "NaN" with 0
-
-```{r}
-wp_nga <- wp_nga %>%
-  mutate(`pct_handPump` = replace_na(pct_handPump, 0)) %>%
-  mutate(`pct_mechPump` = replace_na(pct_mechPump, 0)) %>%
-  mutate(`pct_tapStand` = replace_na(pct_tapStand, 0))
-
-summary(wp_nga)
-```
 :::
 
-#### 3.4.5.14 visualise *wp_nga* distribution :: "water_tech_category"
+### 3.5.5 Extract Water Point by "usage_capacity"
 
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
-handPump <- tm_shape(bdy_nga)+
-  tm_polygons(alpha = 0.1) +
-tm_shape(wp_nga) +  
-  tm_dots(col = "pct_handPump",
-          border.col = "gray60",
-          border.lwd = 0.5) +
-  tm_view(set.zoom.limits = c(5,9))
-
-mechPump <- tm_shape(bdy_nga)+
-  tm_polygons(alpha = 0.1) +
-tm_shape(wp_nga) +  
-  tm_dots(col = "pct_mechPump",
-          border.col = "gray60",
-          border.lwd = 0.5) +
-  tm_view(set.zoom.limits = c(5,9))
-
-tapStand <- tm_shape(bdy_nga)+
-  tm_polygons(alpha = 0.1) +
-tm_shape(wp_nga) +  
-  tm_dots(col = "pct_tapStand",
-          border.col = "gray60",
-          border.lwd = 0.5) +
-  tm_view(set.zoom.limits = c(5,9))
-
-tmap_arrange(handPump, mechPump, tapStand,
-             asp=1, 
-             ncol=2,
-             sync = TRUE)
-```
-:::
-
-#### 3.4.5.15 extract "usage_capacity" to *wp_nga*
-
-::: {.callout-warning appearance="simple" icon="false"}
-```{r}
-freq(wp_joined1$usage_capacity, sort = "dec")
+freq(wp_joined1$usage_capacity)
 ```
 
 Remarks :
@@ -1452,6 +1048,7 @@ Remarks :
 -   But, "50" will be included in the new variable "total_ucN1000" as part of the none '1000' "usage_capacity" value.
 
 ```{r}
+#| code-fold: false
 uCap_300 <- wp_joined1 %>%
   filter(usage_capacity %in%
            "300")
@@ -1495,59 +1092,13 @@ wp_nga <- wp_nga %>%
   mutate(`pct_uc1000` = (`total_uc1000`/`total_wp`*100)) %>%
   mutate(`pct_uc250` = (`total_uc250`/`total_wp`*100))
 ```
-
-#### \-- replace "NaN" with 0
-
-```{r}
-wp_nga <- wp_nga %>%
-  mutate(`pct_ucN1000` = replace_na(pct_ucN1000, 0)) %>%
-  mutate(`pct_uc300` = replace_na(pct_uc300, 0)) %>%
-  mutate(`pct_uc1000` = replace_na(pct_uc1000, 0)) %>%
-  mutate(`pct_uc250` = replace_na(pct_uc250, 0))
-
-summary(wp_nga)
-```
 :::
 
-#### 3.4.5.16 visualise *wp_nga* distribution :: "usage_capacity"
+### 3.5.6 Extract Water Point by "is_urban"
 
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
-uc300 <- tm_shape(bdy_nga)+
-  tm_polygons(alpha = 0.1) +
-tm_shape(wp_nga) +  
-  tm_dots(col = "pct_uc300",
-          border.col = "gray60",
-          border.lwd = 0.5) +
-  tm_view(set.zoom.limits = c(5,9))
-
-uc1000 <- tm_shape(bdy_nga)+
-  tm_polygons(alpha = 0.1) +
-tm_shape(wp_nga) +  
-  tm_dots(col = "pct_uc1000",
-          border.col = "gray60",
-          border.lwd = 0.5) +
-  tm_view(set.zoom.limits = c(5,9))
-
-uc250 <- tm_shape(bdy_nga)+
-  tm_polygons(alpha = 0.1) +
-tm_shape(wp_nga) +  
-  tm_dots(col = "pct_uc250",
-          border.col = "gray60",
-          border.lwd = 0.5) +
-  tm_view(set.zoom.limits = c(5,9))
-
-tmap_arrange(uc300, uc1000, uc250,
-             asp=1, 
-             ncol=2,
-             sync = TRUE)
-```
-:::
-
-#### 3.4.5.17 extract "is_urban" to *wp_nga*
-
-::: {.callout-warning appearance="simple" icon="false"}
-```{r}
+#| code-fold: false
 urban_1 <- wp_joined1 %>%
   filter(is_urban %in%
            "TRUE")
@@ -1557,126 +1108,215 @@ urban_0 <- wp_joined1 %>%
            "FALSE")
 
 wp_nga <- wp_nga %>%
-  mutate(`total_urban1` = lengths(
-    st_intersects(bdy_nga, urban_1)
-  )) %>%
-  mutate(`total_urban0` = lengths(
-    st_intersects(bdy_nga, urban_0)
-  )) %>%
+  mutate(`total_urban1` = lengths(st_intersects
+                                  (bdy_nga, urban_1)
+                                  )) %>%
+  mutate(`total_urban0` = lengths(st_intersects
+                                  (bdy_nga, urban_0)
+                                  )) %>%
   mutate(`pct_urban1` = (`total_urban1`/`total_wp`*100)) %>%
   mutate(`pct_urban0` = (`total_urban0`/`total_wp`*100))
 ```
-
-#### \-- replace "NaN" with 0
-
-```{r}
-wp_nga <- wp_nga %>%
-  mutate(`pct_urban1` = replace_na(pct_urban1, 0)) %>%
-  mutate(`pct_urban0` = replace_na(pct_urban0, 0))
-
-summary(wp_nga)
-```
 :::
 
-#### 3.4.5.18 visualise *wp_nga* distribution :: "is_urban"
+### 3.5.7 Save and Read RDS File :: *wp_nga*
 
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
-urban1 <- tm_shape(bdy_nga)+
-  tm_polygons(alpha = 0.1) +
-tm_shape(wp_nga) +  
-  tm_dots(col = "pct_urban1",
-          border.col = "gray60",
-          border.lwd = 0.5) +
-  tm_view(set.zoom.limits = c(5,9))
-
-urban0 <- tm_shape(bdy_nga)+
-  tm_polygons(alpha = 0.1) +
-tm_shape(wp_nga) +  
-  tm_dots(col = "pct_urban0",
-          border.col = "gray60",
-          border.lwd = 0.5) +
-  tm_view(set.zoom.limits = c(5,9))
-
-tmap_arrange(urban1, urban0,
-             asp=1, 
-             ncol=2,
-             sync = TRUE)
+#| eval: false
+write_rds(wp_nga,"data/geodata/wp_nga.rds")
 ```
 
-#### 3.4.5.19 save and read RDS File :: *wp_nga*
-
 ```{r}
-write_rds(wp_nga,"data/geodata/wp_nga.rds")
+#| code-fold: false
 wp_nga <- read_rds("data/geodata/wp_nga.rds")
 ```
 :::
 
-#### 3.4.5.20 transform to Projected Coordinate System
+## 3.6 Transform Coordinate System
 
 ::: {.callout-warning appearance="simple" icon="false"}
-[Usage of the code chunk below :]{style="color:#a39f9d"}
+The EPSG for *wp_nga* is 4326, which is WGS 84. To compute the proximity distance matrix for clustering analysis, the coordinate reference system for attribute (wp_nga) and boundary (bdy_nga) data frames needs to transform into EPSG: 26391.
 
-[***st_crs( )*** - sf -]{style="color:#d46e15"} to inspect the coordinate reference system.
+### 3.6.1 Transform Attribute and Boundary
 
-```{r}
-st_crs(wp_nga)
-```
-
-Remarks :
-
-The EPSG for *wp_nga* is 4326, which is WGS 84. To compute the proximity distance matrix for clustering analysis, this coordinate reference system needs to transform into EPSG: 26391.
-
-[Usage of the code chunk below :]{style="color:#a39f9d"}
-
+::: {.callout-alert appearance="simple" icon="false"}
 [***st_set_crs( )*** - sf -]{style="color:#d46e15"} to update the coordinate reference system.
+:::
 
 ```{r}
+#| code-fold: false
 wp_ngaTrans <- st_set_crs(wp_nga, 26391)
 bdy_ngaTrans <- st_set_crs(bdy_nga, 26391)
 ```
 
-#### \-- review CRS :: *wp_ngaTrans*
+### 3.6.2 Review CRS :: *wp_ngaTrans*
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_crs( )*** - sf -]{style="color:#d46e15"} to inspect the coordinate reference system.
+:::
 
 ```{r}
 st_crs(wp_ngaTrans)
 ```
 
-\-- review CRS :: bdy_ngaTrans
+### 3.6.3 Review CRS :: *bdy_ngaTrans*
 
 ```{r}
 st_crs(bdy_ngaTrans)
 ```
 :::
 
-## 3.5 Exploratory Data Analysis
+## 3.7 Exploratory Data Analysis (EDA)
 
-### 3.5.1 Identify Outliers
+### 3.7.1 Geospatial EDA
 
-::: {.callout-warning appearance="simple" icon="false"}
-#### 3.5.1.1 plot boxplot "pct_functional"
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+Reference of the code chunk below source from Lin S.Y., 2022[^7].
 
 ```{r}
-ggplot(data=wp_ngaTrans, 
+shapeName_na <- function(x){
+  tm_shape(wp_ngaTrans) +
+    tm_fill(col=x,
+            style="pretty") +
+    tm_borders(alpha=0.5) +
+    tm_layout(legend.height = 0.2, 
+              legend.width = 0.2)
+}
+
+eda_wpNA <- map(names(wp_ngaTrans)
+                [c(3,5,7,13:15,21:24,28)], 
+                shapeName_na)
+tmap_arrange(eda_wpNA)
+```
+
+Remarks :
+
+The LGA that does not have any water points as shown above to be removed from the data frame.
+
+#### 3.7.1.1 filter state without water point
+
+```{r}
+wp_ngaTrim <- wp_ngaTrans %>%
+  filter(if_all(
+    starts_with("total_wp"),~. > 0))
+```
+
+3.7.1.2
+
+```{r}
+fun <- tm_shape (wp_ngaTrim) +
+  tm_fill("pct_functional",
+          style = "jenks",
+          n=6,
+          title = "Functional (%)") +
+  tm_layout(main.title = "Distribution of Functional Water Point by LGA",
+            main.title.position = "center",
+            main.title.size = 0.7,
+            main.title.fontface = "bold",
+            legend.height = 0.45, 
+            legend.width = 0.35,
+            frame = TRUE) +
+  tm_borders(alpha = 0.5)
+
+nfun <- tm_shape (wp_ngaTrim) +
+  tm_fill("pct_nonFunctional",
+          style = "jenks",
+          n=6,
+          title = "Non-Functional (%)") +
+  tm_layout(main.title = "Distribution of Non Functional Water Point by LGA",
+            main.title.position = "center",
+            main.title.size = 0.7,
+            main.title.fontface = "bold",
+            legend.height = 0.45, 
+            legend.width = 0.35,
+            frame = TRUE) +
+  tm_borders(alpha = 0.5)
+
+tmap_arrange (fun, nfun, ncol = 2, asp = 1)
+```
+:::
+
+[^7]: Lin S.Y.(2022). Regionalisation Using Water Point Availability in Nigeria. https://lins-92-isss624.netlify.app/take-home_ex02/take-home_ex02#exploratory-data-analysis
+
+### 3.7.2 Visualise Distribution of Cluster Variable
+
+::: {.callout-warning appearance="simple" icon="false"}
+Create a data frame with variables for clustering analysis before visualise the distribution.
+
+#### 3.7.2.1 create cluster variable data frame
+
+```{r}
+cluster_vars <- wp_ngaTrim %>%
+  st_set_geometry(NULL) %>%
+  select("shapeName",
+         "pct_functional", 
+         "pct_nonFunctional",
+         "pct_handPump",
+         "pct_mechPump",
+         "pct_tapStand",
+         "pct_uc300",
+         "pct_uc1000",
+         "pct_ucN1000",
+         "pct_uc250",
+         "pct_urban0")
+```
+
+#### 3.7.2.2 replace row ID with "shapeName"
+
+```{r}
+row.names(cluster_vars) <- cluster_vars$shapeName
+cluster_vars <- cluster_vars %>%
+  select(-shapeName)
+```
+
+#### 3.7.2.3 examine distribution of Cluster Variables
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_join( )*** - sf -]{style="color:#d46e15"} to join *sf*-class objects based on geometry, namely, *wp_sf* and *bdy_nga*.
+:::
+
+Reference of the code chunk below source from Lin S.Y., 2022[^8].
+
+```{r}
+plot_num(cluster_vars)
+```
+:::
+
+[^8]: Lin S.Y.(2022). Regionalisation Using Water Point Availability in Nigeria. https://lins-92-isss624.netlify.app/take-home_ex02/take-home_ex02#exploratory-data-analysis
+
+### 3.7.3 Identify Outliers
+
+::: {.callout-warning appearance="simple" icon="false"}
+Boxplot shows the minimum, maximum, median, first quartile, third quartile and outliers, if any.
+
+#### 3.7.3.1 plot boxplot "pct_functional"
+
+```{r}
+ggplot(data=cluster_vars, 
        aes(x=`pct_functional`)) +
   geom_boxplot(color="black", 
                fill="#543005")
 ```
 
-### 3.5.1.2 plot boxplot "pct_nonFunctional"
+#### 3.7.3.2 plot boxplot "pct_nonFunctional"
 
 ```{r}
-ggplot(data=wp_ngaTrans, 
+ggplot(data=cluster_vars, 
        aes(x=`pct_nonFunctional`)) +
   geom_boxplot(color="black", 
                fill="#C16622FF")
 ```
 
-### 3.5.1.3 plot boxplot "pct_unknown"
+#### 3.7.3.3 plot boxplot "pct_handPump"
 
 ```{r}
-ggplot(data=wp_ngaTrans, 
-       aes(x=`pct_unknown`)) +
+ggplot(data = cluster_vars, 
+       aes(x = `pct_handPump`)) +
   geom_boxplot(color="black", 
                fill="#FFA319FF")
 ```
@@ -1686,73 +1326,44 @@ Remarks :
 Among these 3 key categories of "status_clean", "unknown" has the most outliers.
 :::
 
-### 3.5.2 Multi-plot Histogram
+### 3.7.4 Multi-plot Histogram
 
 ::: {.callout-warning appearance="simple" icon="false"}
-#### 3.5.2.1 plot histogram for "status_clean"
-
 ```{r}
-pctFunctional <- ggplot(data = wp_ngaTrans,
+pctFunctional <- ggplot(data = cluster_vars,
                          aes(x = `pct_functional`))+
   geom_histogram(bins=10,
                  colour = "black",
                  fill = "#543005")
 
-pctNonFunctional <- ggplot(data = wp_ngaTrans,
+pctNonFunctional <- ggplot(data = cluster_vars,
                          aes(x = `pct_nonFunctional`))+
   geom_histogram(bins=10,
                  colour = "black",
                  fill = "#C16622FF")
-
-pctUnknown <- ggplot(data = wp_ngaTrans,
-                     aes(x = `pct_unknown`))+
-  geom_histogram(bins = 10,
-                 colour = "black",
-                 fill = "#FFA319FF")
 ```
 
 ```{r}
-ggarrange(pctFunctional,pctNonFunctional,pctUnknown,
-          ncol = 2,
-          nrow = 2)
+ggarrange(pctFunctional,pctNonFunctional,
+          ncol = 2)
 ```
 :::
 
 # 4. CORRELATION ANALYSIS
 
-## 4.1 Create Data Table for Correlation Matrix Analysis
+## 4.1 Visualise Correlation Matrix
 
 ::: {.callout-warning appearance="simple" icon="false"}
-```{r}
-cluster_vars <- wp_ngaTrans %>%
-  st_set_geometry(NULL) %>%
-  select("shapeName",
-         "pct_functional", 
-         "pct_nonFunctional",
-         "pct_unknown", 
-         "pct_handPump",
-         "pct_mechPump",
-         "pct_tapStand",
-         "pct_uc300",
-         "pct_uc1000",
-         "pct_ucN1000",
-         "pct_uc250",
-         "pct_urban0")
-head(cluster_vars,5)
-```
-:::
-
-## 4.2 Visualise Correlation Matrix
-
-::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***corrplot.mixed( )*** - corrplot -]{style="color:#d46e15"} to use mixed methods to visualise a correlation matrix.
+:::
 
 This plot allows to identify the pattern and the relationship in the matrix.
 
 ```{r}
-corrplot.mixed((cor(cluster_vars[,2:12])),
+corrplot.mixed((cor(cluster_vars)),
                upper = "number",
                lower = "ellipse",
                tl.col = "black",
@@ -1767,34 +1378,28 @@ Following are the pairs with strong correlation :
 | correlation coefficients |  variable_1  | variable_2  |
 |:------------------------:|:------------:|:-----------:|
 |           1.00           | pct_mechPump | pct_uc1000  |
+|          -1.00           | pct_mechPump | pct_ucN1000 |
+|          -1.00           |  pct_uc1000  | pct_ucN1000 |
 |           0.99           | pct_tapStand |  pct_uc250  |
 |           0.99           |  pct_uc300   | pct_ucN1000 |
-|          -0.91           | pct_mechPump | pct_ucN1000 |
-|          -0.91           |  pct_uc1000  | pct_ucN1000 |
-|          -0.90           | pct_mechPump |  pct_uc300  |
-|          -0.90           |  pct_uc300   | pct_uc1000  |
+|          -0.99           | pct_mechPump |  pct_uc300  |
+|          -0.99           |  pct_uc300   | pct_uc1000  |
 :::
 
-### 4.2.1 Replace Row ID with "shapeName"
+## 4.2 Avoid Multicollinearity
 
 ::: {.callout-warning appearance="simple" icon="false"}
-```{r}
-row.names(cluster_vars) <- cluster_vars$shapeName
-```
-:::
+### 4.2.1 Remove Variable Highly Correlated
 
-### 4.2.2 Trim High Correlation Variable and "shapeName"
-
-::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
-cluster_varsTrim <- cluster_vars %>%
-  select(-shapeName, -pct_ucN1000, -pct_mechPump)
+cluster_varsWM <- cluster_vars %>%
+  select(-pct_ucN1000, -pct_mechPump)
 ```
 
-#### 4.2.2.1 review trimmed data table
+#### 4.2.2 review trimmed data table
 
 ```{r}
-summary(cluster_varsTrim)
+head(cluster_varsWM)
 ```
 :::
 
@@ -1817,14 +1422,14 @@ As shown in the 4.2.3.1, there are few variables with Max. different from others
 
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
-nga_wpStd <- normalize(cluster_varsTrim)
+nga_wpStd <- normalize(cluster_varsWM)
 summary(nga_wpStd)
 ```
 
 #### 5.1.1.2 standardise with Z-score method
 
 ```{r}
-nga_wpZ <- scale(cluster_varsTrim)
+nga_wpZ <- scale(cluster_varsWM)
 describe(nga_wpZ)
 ```
 :::
@@ -1835,7 +1440,7 @@ describe(nga_wpZ)
 #### \-- functional water point
 
 ```{r}
-fwp <- ggplot(data=cluster_varsTrim, 
+fwp <- ggplot(data=cluster_varsWM, 
              aes(x= `pct_functional`)) +
   geom_histogram(bins=20, 
                  color="black", 
@@ -1865,7 +1470,7 @@ ggarrange(fwp, fwp_std, fwp_z,
 ```
 
 ```{r}
-fwp <- ggplot(data=cluster_varsTrim, 
+fwp <- ggplot(data=cluster_varsWM, 
              aes(x= `pct_functional`)) +
   geom_density(color="black", 
                  fill="steelblue") +
@@ -1894,7 +1499,7 @@ ggarrange(fwp, fwp_std, fwp_z,
 #### \-- water point deployed with handpump
 
 ```{r}
-HP <- ggplot(data=cluster_varsTrim, 
+HP <- ggplot(data=cluster_varsWM, 
              aes(x= `pct_handPump`)) +
   geom_histogram(bins=20, 
                  color="black", 
@@ -1924,7 +1529,7 @@ ggarrange(HP, HP_std, HP_z,
 ```
 
 ```{r}
-HP <- ggplot(data=cluster_varsTrim, 
+HP <- ggplot(data=cluster_varsWM, 
              aes(x= `pct_handPump`)) +
   geom_density(color="black", 
                  fill="steelblue") +
@@ -1953,7 +1558,7 @@ ggarrange(HP, HP_std, HP_z,
 #### \-- water point with 1000 users usage capacity
 
 ```{r}
-uc1000 <- ggplot(data=cluster_varsTrim, 
+uc1000 <- ggplot(data=cluster_varsWM, 
              aes(x= `pct_uc1000`)) +
   geom_histogram(bins=20, 
                  color="black", 
@@ -1982,7 +1587,7 @@ ggarrange(uc1000, uc1000_std, uc1000_z,
 ```
 
 ```{r}
-uc1000 <- ggplot(data=cluster_varsTrim, 
+uc1000 <- ggplot(data=cluster_varsWM, 
              aes(x= `pct_uc1000`)) +
   geom_density(color="black", 
                  fill="steelblue") +
@@ -2012,23 +1617,27 @@ ggarrange(uc1000, uc1000_std, uc1000_z,
 ### 5.1.2 Compute Proximity Matrix
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***dist( )*** - stats -]{style="color:#d46e15"} to compute the proximity distance matrix. Among **euclidean, maximum, manhattan, canberra, binary and minkowski**, *euclidean* is used to compute *proxmat_euc.*
+:::
 
 ```{r}
-proxmat_euc <- dist(cluster_varsTrim, method = 'euclidean')
+proxmat_euc <- dist(cluster_varsWM, method = 'euclidean')
 ```
 :::
 
 ### 5.1.3 Compute Hierarchical Clustering
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***hclust( )*** - stats -]{style="color:#d46e15"} to compute cluster with agglomeration method.
 
 [***ggdendrogram( )*** - ggdendro -]{style="color:#d46e15"} to plot dendrogram with tools available in [ggplot2]{style="color:#d46e15"}.
+:::
 
 ```{r}
 hieClust_warD <- hclust(proxmat_euc, method = 'ward.D')
@@ -2042,9 +1651,11 @@ ggdendrogram(hieClust_warD,
 ### 5.1.4 Determine Optimal Clustering Algorithm
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***agnes( )*** - cluster -]{style="color:#d46e15"} to get agglomerative coefficient of 4 clustering structure, namely "average", "single", "complete" and "ward".
+:::
 
 ```{r}
 m <- c( "average", "single", "complete", "ward")
@@ -2052,7 +1663,7 @@ m <- c( "average", "single", "complete", "ward")
 names(m) <- c( "average", "single", "complete", "ward")
 
 ac <- function(x) {
-  agnes(cluster_varsTrim, method = x)$ac
+  agnes(cluster_varsWM, method = x)$ac
   }
 
 map_dbl(m, ac)
@@ -2078,13 +1689,15 @@ To determine the optimal clusters to retain, following commons methods are teste
 #### 5.1.5.1 compute Gap Statistic method
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***clusGap( )*** - cluster -]{style="color:#d46e15"} to compute the gap statistic.
+:::
 
 ```{r}
 set.seed(12345)
-gap_stat <- clusGap(cluster_varsTrim, 
+gap_stat <- clusGap(cluster_varsWM, 
                     FUN = hcut, 
                     nstart = 25, 
                     K.max = 30, 
@@ -2097,9 +1710,11 @@ print(gap_stat, method = "firstmax")
 #### \-- visualise *gap_stat*
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***fviz_nbclust( )*** - factoextra -]{style="color:#d46e15"} to compute and visualise the Optimal Number of clusters.
+:::
 
 ```{r}
 set.seed(12345)
@@ -2134,9 +1749,11 @@ Given the Elbow method, Silhouette method and Gap Statistic method, the 5-cluste
 #### 5.1.5.4 interpret with Dendrogram
 
 ::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***rect.hclust( )*** - stats -]{style="color:#d46e15"} to draw the dendrogram with a border around the selected clusters.
+:::
 
 ```{r}
 plot(hieClust_warD, cex = 0.6)
@@ -2153,21 +1770,25 @@ The data is loaded into a data frame, but it has to be a data matrix to plot the
 #### 5.1.6.1 transform data frame into matrix
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***data.matrix( )*** - base -]{style="color:#d46e15"} to transform *cluster_varsTrim* data frame into a data matrix, and named it as *nga_clustMat*.
+:::
 
 ```{r}
-nga_clustMat <- data.matrix(cluster_varsTrim)
+nga_clustMat <- data.matrix(cluster_varsWM)
 ```
 :::
 
 #### 5.1.6.2 plot interactive cluster heatmap
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***heatmaply( )*** - heatmaply -]{style="color:#d46e15"} to build an interactive cluster heatmap.
+:::
 
 ```{r}
 heatmaply(normalize(nga_clustMat),
@@ -2194,9 +1815,11 @@ Based on the plot above, 5 clusters to be retained for further analysis.
 #### 5.1.6.3 map the formed cluster
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***cutree( )*** - base -]{style="color:#d46e15"} to derive a 5-cluster model, and named the output as *groups*.
+:::
 
 ```{r}
 groups <- as.factor(cutree(hieClust_warD, k=5))
@@ -2207,7 +1830,7 @@ groups <- as.factor(cutree(hieClust_warD, k=5))
 
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
-nga_clust.sf <- cbind(wp_ngaTrans, as.matrix(groups)) %>%
+nga_clust.sf <- cbind(wp_ngaTrim, as.matrix(groups)) %>%
   rename(`cluster`=`as.matrix.groups.`)
 ```
 :::
@@ -2231,21 +1854,25 @@ SKATER function only support sp objects in SpatialPolygonDataFrame. Hence, the *
 ### 5.2.1 Convert SF to SP Data Frame
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***as_Spatial( )*** - sf -]{style="color:#d46e15"} to convert *wp_ngaTrans* into *nga_sp* in a SP data frame.
+:::
 
 ```{r}
-nga.sp <- as_Spatial(wp_ngaTrans)
+nga.sp <- as_Spatial(wp_ngaTrim)
 ```
 :::
 
 ### 5.2.2 Compute Neighbour List
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***poly2nb( )*** - spdep -]{style="color:#d46e15"} to compute the neighbours list from polygon list.
+:::
 
 ```{r}
 nga.nb <- poly2nb(nga.sp, queen = TRUE)
@@ -2261,8 +1888,8 @@ There is one (1) region, i.e. #86 is without link. It has to be removed first be
 
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
-wp_ngaTrans1 <- wp_ngaTrans[-86,]
-cluster_varsTrim1 <- cluster_varsTrim[-86,]
+wp_ngaTrans1 <- wp_ngaTrim[-86,]
+cluster_varsTrim1 <- cluster_varsWM[-86,]
 nga_clust.sf1 <- nga_clust.sf[-86,]
 nga_wpZ1 <- nga_wpZ[-86,]
 nga.sp1 <- as_Spatial(wp_ngaTrans1)
@@ -2292,9 +1919,11 @@ plot(nga.nb1,
 #### 5.2.3.1 calculate edge costs
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***nbcosts( )*** - spdep -]{style="color:#d46e15"} to compute the cost of each edge which is the distance between nodes.
+:::
 
 ```{r}
 edge_cost <- nbcosts(nga.nb1, cluster_varsTrim1)
@@ -2304,7 +1933,9 @@ edge_cost <- nbcosts(nga.nb1, cluster_varsTrim1)
 #### 5.2.3.2 specify spatial weight
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [***nb2listw( )*** - spdep -]{style="color:#d46e15"} to specify *edge_cost* as the spatial weights. Set the "style" to "B" to ensure the cost values are not row-standardised.
+:::
 
 ```{r}
 nga.w <- nb2listw(nga.nb1,
@@ -2317,9 +1948,11 @@ summary(nga.w)
 #### 5.2.3.3 compute minimum spanning tree
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***nbcosts( )*** - spdep -]{style="color:#d46e15"} to compute the minimum spanning tree.
+:::
 
 ```{r}
 nga_minSpanT <- mstree(nga.w)
@@ -2359,9 +1992,11 @@ plot.mst(nga_minSpanT,
 ### 5.2.4 Compute Spatially Constrained Cluster
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***skater( )*** - spdep -]{style="color:#d46e15"} to compute the spatially constrained cluster.
+:::
 
 ```{r}
 clust5 <- spdep::skater(edges = nga_minSpanT[,1:2],
@@ -2426,9 +2061,11 @@ tmap_arrange(hieClust_map, ngaClust_map,
 ### 5.3.1 Perform Ward-like Hierarchical Clustering
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***hclustgeo( )*** - ClustGeo -]{style="color:#d46e15"} to perform a typical Ward-like hierarchical clustering.
+:::
 
 ```{r}
 proxmat_ngc <- dist(cluster_varsTrim1, method = 'euclidean')
@@ -2463,11 +2100,13 @@ qtm(nga_ngeo_clust.sf, "cluster")
 ### 5.3.2 Perform Spatially Constrained Hierarchical Clustering
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***st_distance( )*** - sf -]{style="color:#d46e15"} to derive the spatial distance matrix before perform spatially constrained hierarchical clustering.
 
 [***as.dist( )*** - stats -]{style="color:#d46e15"} to convert the data frame into matrix.
+:::
 
 ```{r}
 dist <- st_distance(wp_ngaTrans1, wp_ngaTrans1)
@@ -2478,7 +2117,9 @@ dist_mat <- as.dist(dist)
 #### 5.3.2.1 determine alpha value
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [***choicealpha( )*** - psych -]{style="color:#d46e15"} to determine a suitable value for the mixing parameter alpha.
+:::
 
 ```{r}
 cr <- choicealpha(
@@ -2550,9 +2191,11 @@ The boxplot reveals Cluster 5 displays the highest mean of functional water poin
 ### 5.4.2 Visualise Multivariate
 
 ::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
 [***ggparcoord( )*** - GGally -]{style="color:#d46e15"} to reveal clustering variables by cluster.
+:::
 
 ```{r}
 nga_ngeo_clust.sf1 <- nga_ngeo_clust.sf %>%
