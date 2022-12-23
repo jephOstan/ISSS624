@@ -2,6 +2,17 @@
 title: "GWLR - Osun Water Points"
 editor: visual
 date: 17 Dec 2022
+reference-location: margin
+citation-location: margin
+code-copy: true
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
 ---
 
 case study : ***Modelling the Spatial Variation of the Explanatory Factors of Water Point Status using Geographically Weighted Logistic Regression (GWLR).***
@@ -12,7 +23,7 @@ This study focuses on GWLR analysis based on Nigeria's water points attributes.
 
 ## 1.1 Objectives
 
-To build an explanatory model to discover factor affecting water point status in Osun State, Nigeria.
+To build an explanatory model to discover factor affecting water point status in Osun State, Nigeria :
 
 ## 1.2 Study Area
 
@@ -22,8 +33,6 @@ Osun State, Nigeria
 
 # 2. R PACKAGE REQUIRED
 
-The following are the packages required for this exercise :
-
 ## 2.1 Load R Packages into R Environment
 
 [Usage of the code chunk below :]{style="color:#5e5c5c"}
@@ -31,7 +40,7 @@ The following are the packages required for this exercise :
 [***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages. This function will attempt to install the package from CRAN or pacman repository list if its found not installed.
 
 ```{r}
-pacman::p_load(sf, tidyverse, funModeling, blorr, corrplot, ggpubr, spdep, GWmodel, tmap, skimr, caret, berryFunctions)
+pacman::p_load(sf, tidyverse, funModeling, blorr, corrplot, ggpubr, spdep, GWmodel, tmap, skimr, caret, questionr, berryFunctions)
 ```
 
 <br>
@@ -85,17 +94,17 @@ skim(wp_osun)
 #### 3.3.1.1 visualise "status"
 
 ```{r}
-wp_osun %>%
-  freq(input = "status")
+#| eval: false
+wp_osun %>% freq(input = "status")
 ```
 
-#### 3.3.1.2 visualise "status" by "water_tech_category"
+#### **3.3.1.2 visualise "status" by "water_tech_category"**
 
 ```{r}
 cross_plot(data = wp_osun, input = "water_tech_category", target = "status")
 ```
 
-#### 3.3.1.3 visualise "status" by "usage_capacity"
+**3.3.1.3 visualise "status" by "usage_capacity"**
 
 ```{r}
 cross_plot(data = wp_osun, input = "usage_capacity", target = "status")
@@ -113,15 +122,13 @@ tm_shape(wp_osun) +
   tm_dots(col = "status",
           alpha = 0.6) +
   tm_view(set.zoom.limits = c(8.5,12))
-```
 
-```{r}
 tmap_mode("plot")
 ```
 
 ## 3.4 Data Wrangling
 
-### 3.4.1 Edit Key Variables
+### 3.4.1. Edit Key Variables
 
 ```{r}
 wp_osun.sf <- wp_osun %>%
@@ -162,15 +169,13 @@ match(c("distance_to_primary_road",
       names(wp_osun.sf))
 ```
 
-### 3.4.3 Create Correlation Analysis Data Table
+### 3.4.3 **Create Correlation Analysis Data Table**
 
 ```{r}
 wp_osun.sf_clean <- wp_osun.sf %>%
   select(c(7, 35:39, 42:43, 46:47, 57)) %>%
   st_set_geometry(NULL)
 ```
-
-<br>
 
 # 4. CORRELATION ANALYSIS
 
@@ -191,7 +196,7 @@ Remarks :
 
 The correlation matrix above indicated there is no highly correlated variable pairs.
 
-# 5. LOGISTIC REGRESSION MODEL
+# **5. LOGISTIC REGRESSION MODEL**
 
 ## 5.1 Build Logistic Regression Model
 
@@ -211,7 +216,7 @@ model <- glm(status ~
              family = binomial(link = 'logit'))
 ```
 
-### 5.1.1 Create Model Overview :: *model*
+### 5.1.1 Create Model Overview
 
 ```{r}
 blr_regress(model)
@@ -229,7 +234,7 @@ For a logistic regression model, the specificity rate is only 0.6154.
 
 # **6. GEOGRAPHICALLY WEIGHTED LOGISTIC REGRESSION (GWLR) MODEL**
 
-## 6.1 Convert Simple Feature to SpatialPointsDataFrame
+## 6.1 Convert Simple Feature to SpatialPointDataFrame
 
 ```{r}
 wp_osun.sp <- wp_osun.sf %>%
@@ -285,7 +290,7 @@ Recommended bandwidth is 2,599.672 metres.
 ### 6.2.2 Perform Fixed Bandwidth GWR Model
 
 ```{r}
-gwlr.fixed <- ggwr.basic(status ~
+gwr.fixed <- ggwr.basic(status ~
                            distance_to_primary_road + 
                            distance_to_secondary_road +
                            distance_to_tertiary_road +
@@ -304,16 +309,12 @@ gwlr.fixed <- ggwr.basic(status ~
                     longlat = FALSE)
 ```
 
-Remarks :
-
-Calibrate the model with the recommended bandwidth, bw = 2,599.672.
-
 ```{r}
-gwlr.fixed
+gwr.fixed
 ```
 
 ```{r}
-gwr.fixed <- as.data.frame(gwlr.fixed$SDF)
+gwr.fixed <- as.data.frame(gwr.fixed$SDF)
 ```
 
 ### 6.2.3 Set Threshold Value
@@ -324,12 +325,10 @@ gwr.fixed <- as.data.frame(gwlr.fixed$SDF)
 
 ```{r}
 gwr.fixed <- gwr.fixed %>% 
-  mutate(most = ifelse(
-    gwr.fixed$yhat >= 0.5, T, F
-  ))
+  mutate(most = ifelse(gwr.fixed$yhat >= 0.5, T, F))
 ```
 
-#### 6.2.3.1 visualise "most"
+#### 6.2.3.1 Visualise "most"
 
 ```{r}
 freq(gwr.fixed$most)
@@ -359,7 +358,9 @@ wp_osun.sf_selected <- wp_osun.sf %>%
 gwr_sf.fixed <- cbind(wp_osun.sf_selected, gwr.fixed)
 ```
 
-#### 6.2.5.3 visualise coefficient estimates
+#### 6.2.5.3 visualise Coefficient Estimates
+
+Create interactive point symbol map.
 
 ```{r}
 tmap_mode("view")
@@ -372,34 +373,30 @@ tm_shape(gwr_sf.fixed) +
           border.lwd = 1) +
   tm_view(set.zoom.limits = c(8.5,14))
 prob_T
-```
 
-```{r}
 tmap_mode("plot")
 ```
 
-<br>
-
-# 7 MODEL CALIBRATION
+# 7. MODEL CALIBRATION
 
 ## 7.1 Calibrate Logistic Regression Model
 
-Remove the insignificant variables "distance_to_primary_road" and "distance_to_secondary_road" that identified under section 5.2.
+Remove the insignificant variables \"distance_to_primary_road\" and \"distance_to_secondary_road\" that identified under section 5.2.
 
 ```{r}
-model_calibr <- glm(status ~  distance_to_tertiary_road+
-                 distance_to_city+
-                 distance_to_town+
-                 water_point_population+
-                 local_population_1km+
-                 usage_capacity+
-                 is_urban+
+model_calibr <- glm(status ~  distance_to_tertiary_road +
+                 distance_to_city +
+                 distance_to_town +
+                 water_point_population +
+                 local_population_1km +
+                 usage_capacity +
+                 is_urban +
                  water_source_clean,
              data = wp_osun.sf,
              family = binomial(link = "logit"))
 ```
 
-## 7.2 Create Model Overview :: *model_calibr*
+## 7.2 **Create Model Overview :: *model_calibr***
 
 ```{r}
 blr_regress(model_calibr)
@@ -431,7 +428,7 @@ wp_osun.sp2 <- wp_osun.sf %>%
 wp_osun.sp2
 ```
 
-## 7.4 Fixed Bandwidth GWR Model :: *model_calibr*
+## **7.4 Fixed Bandwidth GWR Model :: *model_calibr***
 
 ```{r}
 #| eval: false
@@ -522,6 +519,7 @@ gwr_sf.fixed_calibr <- cbind(wp_osun.sf_selected_calibr, gwr.fixed_calibr)
 
 ```{r}
 tmap_mode("view")
+
 prob_TCalibr <- tm_shape(bdy_osun) + 
   tm_polygons(alpha = 0.1) +
 tm_shape(gwr_sf.fixed_calibr) + 
@@ -533,12 +531,6 @@ tm_shape(gwr_sf.fixed_calibr) +
 prob_TCalibr
 ```
 
-```{r}
-tmap_mode("plot")
-```
-
-<br>
-
-# 8 REFERENCE
+# 8. REFERENCES
 
 Chua A. (2022). In-class Ex5: Modelling the Spatial Variation of the Explanatory Factors of Water Point Status using Geographically Weighted Logistic Regression. https://isss624-amelia.netlify.app/exercises/in-class_ex5/in-class_ex5
