@@ -381,7 +381,7 @@ tmap_mode("plot")
 
 ## 7.1 Calibrate Logistic Regression Model
 
-Remove the insignificant variables \"distance_to_primary_road\" and \"distance_to_secondary_road\" that identified under section 5.2.
+Remove the insignificant variables "distance_to_primary_road" and "distance_to_secondary_road" that identified under section 5.2.
 
 ```{r}
 model_calibr <- glm(status ~  distance_to_tertiary_road +

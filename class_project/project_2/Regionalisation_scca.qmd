@@ -293,7 +293,7 @@ The following are the packages required for this exercise :
 [***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages. This function will attempt to install the package from CRAN or pacman repository list if its found not installed.
 
 ```{r}
-pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools)
+pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis)
 ```
 :::
 
@@ -696,7 +696,7 @@ glimpse(dupl_shapeName)
 :::
 
 | lga      | row_id | headquarter | state    | iso3166code | dupl_shapeName_coord | lga_office_coord                                                                                                                                                                                                                                                                                                          |
-|------|------|------|------|------|------|-----------------------------------------|
+|----------|--------|-------------|----------|-------------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Bassa    | 94     | Oguma       | Kogi     | NG.KO.BA    | 7.791971, 7.031827   | [7.80932, 6.74853](https://goo.gl/maps/WDitgPiphRDGX52d9)                                                                                                                                                                                                                                                                 |
 | Bassa    | 95     | Bassa       | Plateau  | NG.PL.BA    | 10.08015, 8.782946   | [10.11143, 8.71559](https://goo.gl/maps/eNj4Aqan83aiM7AK8)                                                                                                                                                                                                                                                                |
 | Ifelodun | 304    | Share       | Kwara    | NG.KW.IF    | 8.544311, 5.052235   | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)                                                                                                                                                                                                                                                        |
@@ -1465,7 +1465,7 @@ cluster_varsTech2 <- cluster_varsTech1 %>%
 
 As shown in 3.7.3.3, not all variables are not distributed normally. Hence, standardisation will be required before the clustering analysis.
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-warning appearance="simple" icon="false"}
 ### 5.2.1 Standardise :: Min-Max Method
 
 ```{r}
@@ -1584,13 +1584,11 @@ First determine the clustering algorithm before compute Hierarchical Clustering 
 :::
 
 ```{r}
-m <- c( "average", "single", "complete", "ward")
+m <- c("average","single","complete","ward")
 
-names(m) <- c( "average", "single", "complete", "ward")
+names(m) <- c("average","single","complete","ward")
 
-ac <- function(x) {
-  agnes(wp_stdMM, method = x)$ac
-  }
+ac <- function(x){agnes(wp_stdMM, method = x)$ac}
 
 map_dbl(m, ac)
 ```
@@ -1610,13 +1608,14 @@ Remarks :
 :::
 
 ```{r}
-prox_mat_euc <- dist(wp_stdMM, method = 'euclidean')
+prox_mat_euc <- dist(wp_stdMM, 
+                     method = 'euclidean')
 ```
 :::
 
 ### 6.1.2 Compute Hierarchical Clustering
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-warning appearance="simple" icon="false"}
 ::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
@@ -1626,7 +1625,8 @@ prox_mat_euc <- dist(wp_stdMM, method = 'euclidean')
 :::
 
 ```{r}
-hclust_ward <- hclust(prox_mat_euc, method = 'ward.D')
+hclust_ward <- hclust(prox_mat_euc, 
+                      method = 'ward.D')
 ggdendrogram(hclust_ward,
              rotate = TRUE,
              cex = 0.1,
@@ -1642,7 +1642,7 @@ This is in spite of adjusting the *cex=* parameter that scales the resolution of
 
 ### 6.1.3 Identify Number of Optimal Cluster
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-warning appearance="simple" icon="false"}
 To determine the optimal clusters to retain, following commons methods are tested :
 
 -   Gap statistic
@@ -1729,7 +1729,7 @@ Given the Elbow method, Silhouette method and Gap Statistic method, the 5-cluste
 
 ### 6.1.4 Merge Similar Clusters
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-warning appearance="simple" icon="false"}
 ::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
@@ -1746,7 +1746,7 @@ rect.hclust(hclust_ward,
 
 ### 6.1.5 Visually-Driven Hierarchical Clustering Analysis
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-warning appearance="simple" icon="false"}
 The data is loaded into a data frame, but it has to be a data matrix to plot the heatmap. Hence, the data frame will need to first transform into a matrix.
 
 #### 6.1.5.1 transform data frame into matrix
@@ -1778,7 +1778,7 @@ heatmaply(normalize(wp_stdMM_mat),
           colors = Blues,
           k_row = 5,
           margins = c(NA,200,60,NA),
-          fontsize_row = 4,
+          fontsize_row = 1,
           fontsize_col = 5,
           main="Geographic Segmentation of Nigeria by Water Points",
           xlab = "Water Points",
@@ -1818,7 +1818,20 @@ nga_clust.sf <- cbind(wp_ngaTrim, as.matrix(groups)) %>%
 #### 6.1.5.5 plot choropleth map :: *nga_clust.sf*
 
 ```{r}
-qtm(nga_clust.sf, "cluster")
+clusGeo.map <- tm_shape(nga_clust.sf) +
+  tm_fill(col = "cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_layout(main.title = "Non-Spatial with Hierarchical Clustering",
+            main.title.size = 1.2,
+            main.title.position = "center",
+            legend.height = 0.4,
+            legend.width = 0.2, 
+            legend.title.size = 2,
+            legend.text.size = 2,
+            frame = TRUE)
+
+clusGeo.map
 ```
 
 Remarks :
@@ -1859,6 +1872,7 @@ First compute the neighbour list before plot it.
 
 ```{r}
 nga.nb <- poly2nb(nga.sp, queen = TRUE)
+
 summary(nga.nb)
 ```
 
@@ -1873,6 +1887,7 @@ There is no LGA without link.
 ```{r}
 plot(nga.sp, 
      border = grey(.5))
+
 plot(nga.nb, 
      coordinates(nga.sp), 
      col = "blue", 
@@ -1952,7 +1967,7 @@ plot.mst(nga_minSpanT,
 
 ### 6.2.4 Compute Spatially Constrained Cluster
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-warning appearance="simple" icon="false"}
 ::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
@@ -1983,7 +1998,7 @@ plot(nga.sp, border = gray(.5))
 plot(clust5, 
      coordinates(nga.sp), 
      cex.lab = .7,
-     groups.colors = c("red","green","blue", "brown", "pink"),
+     groups.colors = c("red","green","blue", "brown"),
      cex.circles = 0.005, 
      add = TRUE)
 ```
@@ -1991,68 +2006,106 @@ plot(clust5,
 
 ### 6.2.5 Visualise SKATER Clusters in Choropleth Map
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 groups_mat <- as.matrix(clust5$groups)
 
-nga_spClust.sf <- cbind(nga_clust.sf, as.factor(groups_mat)) %>%
+nga_spClust.sf <- cbind(nga_clust.sf, 
+                        as.factor(groups_mat)) %>%
   rename(`sp_cluster`=`as.factor.groups_mat.`)
 ```
 
 To compare the output of hierarchical clustering and spatially constrained hierarchical clustering :
 
 ```{r}
-hclust_map <- qtm(nga_clust.sf, "cluster") + 
-  tm_borders(alpha = 0.5) 
+clusGeo_SKAT.map <- tm_shape(nga_spClust.sf) +
+  tm_fill(col = "sp_cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_layout(main.title = "Spatially Constrained with SKATER Method",
+            main.title.size = 1.2,
+            main.title.position = "center",
+            legend.height = 0.4,
+            legend.width = 0.2, 
+            legend.title.size = 2,
+            legend.text.size = 2,
+            frame = TRUE)
 
-ngaClust_map <- qtm(nga_spClust.sf, "sp_cluster") + 
-  tm_borders(alpha = 0.5) 
-
-tmap_arrange(hclust_map, ngaClust_map,
-             asp=NA, ncol=2)
+clusGeo_SKAT.map
 ```
 :::
 
-## 6.3 Spatially Constrained Clustering :: ClustGeo Method
+## 6.3 ClustGeo Method
 
-### 6.3.1 Perform Ward-like Hierarchical Clustering
+This section consists of two (2) parts i.e. spatially and non-spatially Constrained Cluster analysis.
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"} ::: {.callout-alert appearance="simple" icon="false"} [Usage of the code chunk below :]{style="color:#a39f9d"}
+### 6.3.1 Non-Spatially Constrained Hierarchical Cluster Analysis
 
-[***hclustgeo( )*** - ClustGeo -]{style="color:#d46e15"} to perform a typical Ward-like hierarchical clustering. :::
+::: {.callout-warning appearance="simple" icon="false"}
+Dissimilarity matrix must be an object of class dist.
+
+#### 6.3.1.1 create Class `dist` Object
 
 ```{r}
 proxmat_ngc <- dist(wp_stdMM, method = 'euclidean')
 ```
 
+#### 6.3.1.2 compute Non-Spatially Constrained Hierarchical Clustering
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***hclustgeo( )*** - ClustGeo -]{style="color:#d46e15"} to perform a typical Ward-like hierarchical clustering.
+:::
+
 ```{r}
 nonGeo_clust <- hclustgeo(proxmat_ngc)
-plot(nonGeo_clust, cex = 0.5)
+plot(nonGeo_clust, 
+     cex = 0.5)
 rect.hclust(nonGeo_clust, 
             k = 5, 
             border = 2:5)
 ```
 
-#### 6.3.1.1 visualise the formed clusters
+#### 6.3.1.3 derive 5-cluster model
 
-::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
-groups_ngc <- as.factor(cutree(nonGeo_clust, k = 5))
+groups_ngc <- as.factor(cutree(nonGeo_clust, 
+                               k = 5))
 ```
+
+#### 6.3.1.4 combine *groups_ngc* with *wp_ngaTrim*
 
 ```{r}
 nga_ngeo_clust.sf <- cbind(wp_ngaTrim, as.matrix(groups_ngc)) %>%
   rename(`cluster` = `as.matrix.groups_ngc.`)
 ```
 
+#### 6.3.1.5 visualise Non-Spatially Constrained Hierarchical Cluster
+
 ```{r}
-qtm(nga_ngeo_clust.sf, "cluster")
+clusGeo_nSp.map <- tm_shape(nga_ngeo_clust.sf) +
+  tm_fill(col = "cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_layout(main.title = "Non-Spatially Constrained with ClustGeo Method",
+            main.title.size = 1.2,
+            main.title.position = "center",
+            legend.height = 0.4,
+            legend.width = 0.2, 
+            legend.title.size = 2,
+            legend.text.size = 2,
+            frame = TRUE)
+
+clusGeo_nSp.map
 ```
 :::
 
-### 6.3.2 Perform Spatially Constrained Hierarchical Clustering
+### 6.3.2 Spatially Constrained Hierarchical Cluster Analysis
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-warning appearance="simple" icon="false"}
+#### 6.3.2.1 determine Spatial Distance Matrix
+
 ::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
 
@@ -2066,7 +2119,7 @@ dist <- st_distance(wp_ngaTrim, wp_ngaTrim)
 dist_mat <- as.dist(dist)
 ```
 
-#### 6.3.2.1 determine alpha value
+#### 6.3.2.2 determine Alpha value
 
 ::: {.callout-alert appearance="simple" icon="false"}
 [***choicealpha( )*** - psych -]{style="color:#d46e15"} to determine a suitable value for the mixing parameter alpha.
@@ -2085,7 +2138,7 @@ Remarks :
 
 With reference to the plot above, alpha = 0.5 to be used to perform spatially constrained hierarchical clustering.
 
-#### 6.3.2.2 compute spatially constrained hierarchical clustering
+#### 6.3.2.3 compute Spatially Constrained Hierarchical Clustering
 
 ```{r}
 clustG <- hclustgeo(proxmat_ngc, 
@@ -2093,52 +2146,61 @@ clustG <- hclustgeo(proxmat_ngc,
                     alpha = 0.5)
 ```
 
-#### 6.3.2.3 derive cluster object
+#### 6.3.2.4 derive "cluster" Object
 
 ```{r}
 groups_cg <- as.factor(cutree(clustG, k = 5))
 ```
 
-#### 6.3.2.4 combine *groups_cg* with *wp_ngaTrim*
+#### 6.3.2.5 combine *groups_cg* with *wp_ngaTrim*
 
 ```{r}
 wp_nga_clustG <- cbind(wp_ngaTrim, as.matrix(groups_cg)) %>%
   rename(`cluster` = `as.matrix.groups_cg.`)
 ```
 
-#### 6.3.2.5 plot delineated spatially constrained cluster
+#### 6.3.2.6 Visualise Spatially Constrained Hierarchical Clustering
 
 ```{r}
-qtm(wp_nga_clustG, "cluster")
+clusGeo_sp.map <- tm_shape(wp_nga_clustG) +
+  tm_fill(col = "cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_layout(main.title = "Spatially Constrained with ClustGeo Method",
+            main.title.size = 1.2,
+            main.title.position = "center",
+            legend.height = 0.4,
+            legend.width = 0.2, 
+            legend.title.size = 2,
+            legend.text.size = 2,
+            frame = TRUE)
+
+clusGeo_sp.map
 ```
 :::
 
-## 7 VISUAL INTERPRETATION
+# 7. VISUAL INTERPRETATION
 
 ## 7.1 Visualise Individual Clustering Variable
 
 ### 7.1.1 Plot Boxplot
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 ggplot(data = nga_ngeo_clust.sf,
-       aes(x = cluster, y = pct_functional)) +
+       aes(x = cluster, y = pct_nonFunctional)) +
   geom_boxplot()
 ```
 
 Remarks :
 
-The boxplot reveals Cluster 5 displays the highest mean of functional water points. This is followed by Cluster 1, 3, 2, and 4.
+The boxplot reveals Cluster 3 displays the highest mean of non-functional water points. This is followed by Cluster 2.
 :::
 
 ### 7.1.2 Visualise Multivariate
 
-::: {.callout-warning .column-page-right appearance="simple" icon="false"}
-::: {.callout-alert appearance="simple" icon="false"}
-[Usage of the code chunk below :]{style="color:#a39f9d"}
-
-[***ggparcoord( )*** - GGally -]{style="color:#d46e15"} to reveal clustering variables by cluster.
-:::
+::: {.callout-warning appearance="simple" icon="false"}
+#### 7.1.2.1 prepare data frame
 
 ```{r}
 nga_ngeo_clust.sf1 <- nga_ngeo_clust.sf %>%
@@ -2153,38 +2215,71 @@ nga_ngeo_clust.sf1 <- nga_ngeo_clust.sf %>%
 head(nga_ngeo_clust.sf1,3)
 ```
 
-```{r}
-ggparcoord(data = nga_ngeo_clust.sf1,
-           columns = c(2:4,6),
-           scale = "globalminmax",
-           alphaLines = 0.2,
-           boxplot = TRUE, 
-           title = "Multiple Parallel Coordinates Plots of Variables by Cluster") +
-  facet_grid(~ cluster, 
-             scales = "fixed") + 
-  theme(axis.text.x = element_text(angle = 30))
-```
+#### 7.1.2.2 plot parallel coordinate plot
 
-The parallel coordinate plot above reveals that households in Cluster 4 townships tend to own the highest number of TV and mobile-phone. On the other hand, households in Cluster 5 tends to own the lowest of all the five ICT.
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
 
-Note that the `scale` argument of `ggparcoor()` provide several methods to scale the clustering variables. They are:
+[***ggparcoord( )*** - GGally -]{style="color:#d46e15"} to plot static parallel coordinate plots to reveal distribution of variables by cluster.
 
--   std: univariately, subtract mean and divide by standard deviation.
+-   `scale` is a character string with the following options -
 
--   robust: univariately, subtract median and divide by median absolute deviation.
+    -   std : **univariately**, **subtract mean** & **divide by standard deviation**.
 
--   uniminmax: univariately, scale so the minimum of the variable is zero, and the maximum is one.
+    -   robust : **univariately**, **subtract median** & **divide by median absolute deviation**.
 
--   globalminmax: no scaling is done; the range of the graphs is defined by the global minimum and the global maximum.
+    -   uniminmax : **univariately**, scale the minimum to 0, the maximum to 1.
 
--   center: use uniminmax to standardize vertical height, then center each variable at a value specified by the scaleSummary param.
+    -   globalminmax : **no scaling**; the range of the graphs is defined by the global minimum and the global maximum.
 
--   centerObs: use uniminmax to standardize vertical height, then center each variable at the value of the observation specified by the centerObsID param
+    -   center : **use uniminmax** to standardize vertical height, then center each variable at a value specified by the scaleSummary param.
+
+    -   centerObs : **use uniminmax to** standardize vertical height, then center each variable at the value of the observation specified by the centerObsID param
 :::
 
-### 7.1.3 Compute Summary Statistics
+```{r}
+ggparcoord(data = nga_ngeo_clust.sf1[
+  nga_ngeo_clust.sf1$cluster %in% c(2:6),],
+           columns = c(2:6),
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE,
+           groupColumn = 3) +
+  labs(title = "Visual Clustering for ClustGeo Method Spatially Constrained Clustering",
+       subtitle = "Multiple Parallel Coordinates Plot") +
+  scale_color_viridis(discrete = FALSE) +
+  facet_grid(~ cluster,) +
+  theme(axis.text.x = element_text(angle = 90),
+        text = element_text(size = 12))
+```
+
+Remarks :
+
+Based on the parallel coordinate plot above, insights for the stakeholder or decision makers from :
+
+-   the Federal Ministry of Agriculture & Rural Development (FMARD) -
+
+    -   Cluster 2 LGA has the highest percentage of non-functional water points, followed by Cluster 1 LGA.
+
+    -   Cluster 2 also has the highest percentage of rural communities.
+
+!!!!! 1 cluster is missing. Evaluation may be misled.
+:::
+
+## 7.2 Compare Clustering Method Visually
 
 ::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+```{r}
+tmap_arrange(clusGeo.map, clusGeo_SKAT.map, clusGeo_nSp.map, clusGeo_sp.map,
+             ncol = 2)
+```
+:::
+
+# 8. CONCLUSION
+
+## 8.1 Conclude with Summary Statistics
+
+::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 nga_ngeo_clust.sf1 %>% 
   st_set_geometry(NULL) %>%
@@ -2196,4 +2291,18 @@ nga_ngeo_clust.sf1 %>%
             mean_pct_urban0 = mean(pct_urban0))
          
 ```
+
+Remarks :
+
+Non-Functional Water Point
+
+-   More than 90% of the water points in Cluster 3 are within non-urban communities, and approximately 62% of these water points are non-functional.
+
+-   Although Cluster 2 and Cluster 5 have similar percentage of approximately 88% water points falls within non-urban communities, the non-functional water points in Cluster 2 is more than twice the amount in Cluster 5 LGA.
+
+    -   Resources may required to attain more information regarding the stakeholder who task to maintain the water points that identified as non-functional but having status indicated otherwise.
+
+    -   !!!! Analysis need to include parameter such as "status" to support the statement above.
+
+-   Cluster 1, however, may require more resources to update the water point data. Unlike Cluster 2, 3, and 5 where more than 85% of water points are updated with data, only two-third of Cluster 1's water points status and various attributes are known.
 :::
