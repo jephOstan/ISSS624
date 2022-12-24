@@ -293,7 +293,7 @@ The following are the packages required for this exercise :
 [***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages. This function will attempt to install the package from CRAN or pacman repository list if its found not installed.
 
 ```{r}
-pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis)
+pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis, rgeoda)
 ```
 :::
 
@@ -2177,7 +2177,7 @@ clusGeo_sp.map <- tm_shape(wp_nga_clustG) +
             legend.title.size = 2,
             legend.text.size = 2,
             frame = TRUE,
-            asp = 0)
+            asp = 1)
 
 clusGeo_sp.map
 ```
@@ -2279,7 +2279,8 @@ Based on the parallel coordinate plot above, insights for the stakeholder or dec
 ::: {.callout-warning .column-page-right appearance="simple" icon="false"}
 ```{r}
 tmap_arrange(clusGeo.map, clusGeo_SKAT.map, clusGeo_nSp.map, clusGeo_sp.map,
-             ncol = 2)
+             ncol = 2,
+             asp = 2)
 ```
 :::
 
