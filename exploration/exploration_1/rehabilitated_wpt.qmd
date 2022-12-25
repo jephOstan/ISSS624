@@ -1,0 +1,686 @@
+---
+title: "Explore Rehabilated Non-Functional Water Points in Nigeria"
+editor: visual
+date: 25 Dec 2022
+reference-location: margin
+citation-location: margin
+code-copy: true
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
+---
+
+# 1. OVERVIEW
+
+## 1.1 Objectives
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Explore non-functional water points by attributes**]{style="color:#93c54b"}
+
+-   Explore the relationship between non-functional water points and other attributes.
+:::
+
+## 1.2 Study Area Introduction
+
+::: {.callout-tip .column-page collapse="true" appearance="simple" icon="false"}
+## [**Water points in Federal Republic of Nigeria**]{style="color:#93c54b"}
+
+Alpha-3 Code : **NGA**
+
+Population : **225 million** (1st in Africa, 6th globally)
+
+Local Government Areas (LGA) : **774**
+
+Water Point Observations : **95,008**
+
+Environmental Aspects :
+
+-   **Geography** :
+
+    -   Southwest - "rugged" highland.
+
+    -   Southeast - hills and mountains, which form the Mambilla Plateau, the highest plateau in Nigeria.
+
+-   **Hydrology** :
+
+    -   Two (2) main catchment areas - Chad Basin & Niger catchment area.
+
+    -   Surface area of lake Chad is shrinking recent decades due to irrigation activities.[^1]
+
+    -   Untreated wastes dump in places resulted in waterways and groundwater pollution.[^2]
+
+-   **Vegetation Coverage** :
+
+    -   Lost nearly 80% of primary forest by 2012.[^3]
+
+    -   States with dense forests concentrated : Bayelsa, Cross River, Edo, Ekiti, Ondo, Osun, Rivers, and Taraba.
+:::
+
+[^1]: Wikipedia. *Nigeria.* https://en.wikipedia.org/wiki/Nigeria
+
+[^2]: Ogbonna, D.N., Ekweozor, I.K.E., Igwe, F.U. (2002). "Waste Management: A Tool for Environmental Protection in Nigeria". *Ambio: A Journal of the Human Environment*. **31** (1): 55--57. [doi](https://en.wikipedia.org/wiki/Doi_(identifier) "Doi (identifier)"):[10.1639/0044-7447(2002)031\[0055:wmatfe\]2.0.co;2](https://doi.org/10.1639%2F0044-7447%282002%29031%5B0055%3Awmatfe%5D2.0.co%3B2).
+
+[^3]: https://rainforests.mongabay.com/20nigeria.htm
+
+## 1.3 Scope of Works
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+### [**Specific tasks required for this study :**]{style="color:#93c54b"}
+
+-   Explore the non-functional water points that recently rehabilitated.
+:::
+
+# 2. R PACKAGE REQUIRED
+
+## 2.1 Load R Packages
+
+::: {.callout-warning appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages. This function will attempt to install the package from CRAN or pacman repository list if its found not installed.
+
+```{r}
+pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis, rgeoda)
+```
+:::
+
+# 3. GEOSPATIAL DATA
+
+## 3.1 Acquire Data Source
+
+-   **Aspatial Data**
+
+    1.  Download the Nigeria data set in shapefile format via [Access WPdx+ Global Data Repository](https://data.waterpointdata.org/dataset/Water-Point-Data-Exchange-Plus-WPDx-/eqje-vguj/data) from [WPdx Global Data Repositories](https://www.waterpointdata.org/access-data/).
+    2.  Rename the title of the data set to "***geo_export***".
+
+::: callout-note
+The file size of the downloaded data is about 422 MB due to water points data from multiple countries.
+
+-   Such file size may require extra effort and time to manage the code chunks and files in the R environment before pushing them to GitHub.
+
+Hence, to avoid any error in pushing files larger than 100 MB to Git, filtered Nigeria water points and removed unnecessary variables before uploading into the R environment.
+
+Therewith, the CSV file size should be lesser than 100 MB.
+:::
+
+-   **Geospatial Data**
+
+    1.  Download the Nigeria geoBoundaries data set at ADM2 level[^4] from [geoBoundaries.org](https://www.geoboundaries.org/index.html#getdata) or the [Humanitarian Data Exchange portal](https://data.humdata.org/).
+    2.  Rename the title of the data set to "***nga_admbnda_adm2_osgof_20190417***"
+
+[^4]: Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866. https://doi.org/10.1371/journal.pone.0231866
+
+## 3.2 Import Attribute Data
+
+Four (4) data frames to be created for different context, i.e.
+
+-   *wp_coord* = coordinated related variables.
+
+-   *wp_cond* = status and conditions related variables.
+
+-   *wp_adm* = administrative and measurements related variables.
+
+-   *wp* = master file that combine all three (3) data frames above.
+
+### 3.2.1 Import Coordinate-related Variable
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+wp_coord3 <- read_csv("data/aspatial/WPdx_NGAv1.3.csv",
+                       col_select = c(`row_id`,
+                                      `#lat_deg`,
+                                      `#lon_deg`,
+                                      `New Georeferenced Column`,
+                                      `lat_lon_deg`)) %>%
+  rename(lat_deg = "#lat_deg", 
+         lon_deg = "#lon_deg")
+
+problems(wp_coord3)
+```
+:::
+
+#### 3.2.1.1 save and read RDS file :: *wp_coord*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+write_rds(wp_coord3,"data/geodata/wp_coord3.rds")
+```
+
+```{r}
+#| code-fold: false
+wp_coord3 <- read_rds("data/geodata/wp_coord3.rds")
+```
+:::
+
+#### 3.2.1.2 review data frame :: *wp_coord*
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+```{r}
+skim(wp_coord3)
+```
+:::
+
+### 3.2.2 Import Status and Condition-related Variable
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+wp_cond3 <- read_csv("data/aspatial/WPdx_NGAv1.3.csv", 
+                     col_select = c(`row_id`,
+                                    `#water_source`,
+                                    `#water_source_clean`,
+                                    `#water_source_category`,
+                                    `#water_tech_clean`,
+                                    `#water_tech_category`,
+                                    `#status_clean`,
+                                    `#status`,
+                                    `#status_id`)) %>%
+  rename(water_source = `#water_source`,
+         water_source_clean = `#water_source_clean`, 
+         water_source_category = `#water_source_category`, 
+         water_tech_clean = `#water_tech_clean`, 
+         water_tech_category = `#water_tech_category`,
+         status_clean = `#status_clean`,
+         status = `#status`,
+         status_id = `#status_id`)
+
+problems(wp_cond3)
+```
+:::
+
+#### 3.2.2.1 save and read RDS file :: *wp_cond*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+write_rds(wp_cond3,"data/geodata/wp_cond3.rds")
+```
+
+```{r}
+#| code-fold: false
+wp_cond3 <- read_rds("data/geodata/wp_cond3.rds")
+```
+:::
+
+#### 3.2.2.2 review data frame :: *wp_cond*
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+```{r}
+skim(wp_cond3)
+```
+:::
+
+### 3.2.3 Import Admistrative and Measure-related Variable
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+wp_adm3 <- read_csv("data/aspatial/WPdx_NGAv1.3.csv", 
+                    col_select = c(`row_id`,
+                                   `#clean_adm1`,
+                                   `#clean_adm2`,
+                                   `water_point_population`,
+                                   `local_population_1km`,
+                                   `crucialness_score`,
+                                   `pressure_score`,
+                                   `usage_capacity`,
+                                   `staleness_score`,
+                                   `rehab_priority`,
+                                   `is_urban`
+                                   )) %>%
+  rename(clean_adm1 = `#clean_adm1`,
+         clean_adm2 = `#clean_adm2`)
+
+problems(wp_adm3)
+```
+:::
+
+#### 3.2.3.1 save and read RDS file :: *wp_adm*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+write_rds(wp_adm3,"data/geodata/wp_adm3.rds")
+```
+
+```{r}
+#| code-fold: false
+wp_adm3 <- read_rds("data/geodata/wp_adm3.rds")
+```
+:::
+
+#### 3.2.3.2 review data frame :: *wp_adm*
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+```{r}
+skim(wp_adm3)
+```
+:::
+
+### 3.2.4 Create Master File
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+wp3 <- left_join(
+  (left_join
+   (wp_coord3,wp_cond3,
+     by = c("row_id")
+     )),
+  wp_adm3, 
+  by = c("row_id"))
+```
+:::
+
+### 3.2.5 Convert Well Known Text (WKT) Data to SF Data Frame
+
+-   The "New Georeferenced Column" in *wp_rds* contains spatial data in a WKT format.
+
+-   Two (2) steps to convert the WKT data format into an sf data frame.
+
+#### 3.2.5.1 derive new field :: "geometry"
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+wp3$geometry = st_as_sfc(wp3$`New Georeferenced Column`)
+```
+:::
+
+#### 3.2.5.2 convert to SF Data Frame
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+wp3_sf<- st_sf(wp3, crs = 4326)
+st_crs(wp3_sf)
+```
+:::
+
+## 3.3 Import Boundary Data
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+bdy_nga <- st_read(dsn = "data/geospatial",
+               layer = "geoBoundaries-NGA-ADM2",
+               crs = 4326) %>%
+  select(shapeName)
+
+problems(bdy_nga)
+```
+:::
+
+#### 3.3.1 save and read RDS file :: *wp_adm*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+write_rds(bdy_nga,"data/geodata/bdy_nga.rds",compress = "xz")
+```
+
+```{r}
+#| code-fold: false
+bdy_nga <- read_rds("data/geodata/bdy_nga.rds")
+```
+:::
+
+### 3.3.2 Review Imported File
+
+#### 3.3.2.1 check for missing and duplicated data
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+```{r}
+skim(bdy_nga)
+```
+
+Remarks :
+
+-   There is no missing data.
+
+-   Under "n_unique", there is 774 unique "geometry" but only 768 unique "shapeName".
+
+    -   That's mean there are 6 values of "shapeName" duplicated among the identified unique shapeNames.
+:::
+
+#### 3.3.2.2 list the unique "shapeName" associated with duplication
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+dupl_shapeName <- bdy_nga %>%
+  add_count(bdy_nga$shapeName) %>%
+  filter(n!=1) %>%
+  select(-n)
+
+freq(dupl_shapeName$shapeName)
+```
+:::
+
+#### 3.3.2.3 verify findings in section 3.3.1.2
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+```{r}
+tmap_mode("view")
+
+tm_shape(bdy_nga)+
+  tm_polygons()+
+  tm_view(set.zoom.limits = c(6,8))+
+
+tm_shape(dupl_shapeName)+
+  tm_fill("shapeName",
+          n = 6,
+          style = "jenks")+
+  tm_borders(alpha = 0.5)+
+  tmap_style("albatross")+
+  tm_layout(main.title = "Distribution of Duplicated ShapeName",
+            main.title.size = 1.3,
+            main.title.position = "center")
+
+tmap_mode("plot")
+```
+
+Remarks :
+
+The plot above indicates those duplicated water points are not within the same location.
+:::
+
+#### 3.3.2.4 acquire State info for duplicated value
+
+::: {.callout-warning appearance="simple" icon="false"}
+The State info to be combined with the duplicated "shapeName". This will make all the shapeName unique.
+
+```{r}
+dupl_shapeName %>%
+  mutate(st_centroid(
+    dupl_shapeName$geometry, of_largest_polygon = FALSE))
+
+glimpse(dupl_shapeName)
+```
+:::
+
+| lga      | row_id | headquarter | state    | iso3166code | dupl_shapeName_coord | lga_office_coord                                                                                                                                                                                                                                                                                                          |
+|----------|--------|-------------|----------|-------------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Bassa    | 94     | Oguma       | Kogi     | NG.KO.BA    | 7.791971, 7.031827   | [7.80932, 6.74853](https://goo.gl/maps/WDitgPiphRDGX52d9)                                                                                                                                                                                                                                                                 |
+| Bassa    | 95     | Bassa       | Plateau  | NG.PL.BA    | 10.08015, 8.782946   | [10.11143, 8.71559](https://goo.gl/maps/eNj4Aqan83aiM7AK8)                                                                                                                                                                                                                                                                |
+| Ifelodun | 304    | Share       | Kwara    | NG.KW.IF    | 8.544311, 5.052235   | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)                                                                                                                                                                                                                                                        |
+| Ifelodun | 305    | Ikirun      | Osun     | NG.OS.ID    | 7.920948, 4.636735   | [7.5 4.5](https://latitude.to/map/ng/nigeria/regions/osun-state/)                                                                                                                                                                                                                                                         |
+| Irepodun | 355    | Omu Aran    | Kwara    | NG.KW.IR    | 8.169349, 4.926215   | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)                                                                                                                                                                                                                                                        |
+| Irepodun | 356    | Ilobu       | Osun     | NG.OS.IP    | 7.84861, 4.498797    | [7.5 4.5](https://latitude.to/map/ng/nigeria/regions/osun-state/)                                                                                                                                                                                                                                                         |
+| Nasarawa | 519    | Bompai      | Kano     | NG.KN.NA    | 12.00446, 8.578262   | [11.5, 8.5](https://latitude.to/map/ng/nigeria/regions/kano-state/)                                                                                                                                                                                                                                                       |
+| Nasarawa | 520    | Nasarawa    | Nasarawa | NG.NA.NA    | 8.304034, 7.760272   | [8.53477, 7.70153](https://goo.gl/maps/gZptpjpGGAPkPhFp7)                                                                                                                                                                                                                                                                 |
+| Obi      | 546    | Obarike-Ito | Benue    | NG.BE.OB    | 7.022495, 8.281026   | [7.01129, 8.33118](https://www.google.com/maps/place/Obi+L+G+A+Office+Benue+State+Nigeria/@7.0173612,8.317536,15z/data=!4m5!3m4!1s0x105b02a2fcb55b01:0x534d97153bbf03f6!8m2!3d7.0101782!4d8.3282674)                                                                                                                      |
+| Obi      | 547    | Obi         | Nasarawa | NG.NA.OB    | 8.35534, 8.734777    | [8.37944, 8.78561](https://www.google.com/maps/place/Local+Govt+Secretariat/@8.3740903,8.7748577,14.55z/data=!4m5!3m4!1s0x1050e131ff5c6639:0x76010b5a66e763d7!8m2!3d8.3781745!4d8.782189)                                                                                                                                 |
+| Surelere | 693    | Surelere    | Lagos    | NG.LA.SU    | 6.493217, 3.346919   | [6.50048, 3.35488](https://www.google.com/maps/place/Local+Government+Office/@6.4997824,3.3523702,17z/data=!3m1!4b1!4m5!3m4!1s0x103b8c1437be057d:0xc427d7c19d4332af!8m2!3d6.4997848!4d3.3545626)                                                                                                                          |
+| Surelere | 694    | Iresa-Adu   | Oyo      | NG.OY.SU    | 8.088897, 4.393574   | [8.08459, 4.38538](https://www.google.com/maps/place/Iresa+Adu+Local+government+house/@8.0860984,4.3846214,15.95z/data=!4m13!1m7!3m6!1s0x103775694baada77:0xcb78cc728922fde9!2s210104,+Aba+Ladunni,+Oyo,+Nigeria!3b1!8m2!3d8.0885998!4d4.3928622!3m4!1s0x103775d913035017:0xe95c9c72c52ac566!8m2!3d8.0844129!4d4.3838421) |
+
+## 3.4 Data Wrangling
+
+### 3.4.1 Edit Duplicated Value :: "shapeName"
+
+::: {.callout-warning appearance="simple" icon="false"}
+Two (2) Main Steps involved :
+
+1.  Combine "shapeName" with the State name to make each of them unique.
+2.  Replace the "shapeName" value according to each row index.[^5]
+
+```{r}
+bdy_nga$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)] <- 
+  c("Bassa Kogi",
+    "Bassa Plateau",
+    "Ifelodun Kwara",
+    "Ifelodun Osun",
+    "Irepodun Kwara",
+    "Irepodun Osun",
+    "Nasarawa Kano",
+    "Nasarawa Nasarawa",
+    "Obi Nasarawa",
+    "Obi Benue",
+    "Surulere Lagos",
+    "Surulere Oyo")
+
+bdy_nga$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)]
+```
+
+#### 3.4.1.1 validate edited value :: "shapeName"
+
+```{r}
+dupl_shapeName_val <- bdy_nga %>%
+  add_count(bdy_nga$shapeName) %>%
+  filter(n!=1) %>%
+  select(-n)
+
+dupl_shapeName_val
+```
+:::
+
+[^5]: Ong Z.R.J. (2022). Geospatial Analytics for Social Good - Understanding Nigeria Water functional and non-functional water point rate. https://jordan-isss624-geospatial.netlify.app/posts/geo/geospatial_exercise/#checking-of-duplicated-area-name
+
+### 3.4.2 Perform Point-in-Polygon Overlay
+
+::: {.callout-warning appearance="simple" icon="false"}
+Combine both attribute and boundary of the water points into a simple feature object.
+
+#### 3.4.2.1 join objects :: *wp_sf*, *bdy_nga*
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_join( )*** - sf -]{style="color:#d46e15"} to join *sf*-class objects based on geometry, namely, *wp_sf* and *bdy_nga*.
+:::
+
+```{r}
+#| eval: false
+wp_joined3 <- st_join(x = wp3_sf,
+                     y = bdy_nga,
+                     join = st_intersects,
+                     left = TRUE)
+
+skim(wp_joined3)
+```
+
+Remarks :
+
+There are only 14 Nigeria water points that are fully rehabilitated.
+
+#### \-- save and read RDS File :: *wp_joined*
+
+```{r}
+#| eval: false
+write_rds(wp_joined3,"data/geodata/wp_joined3.rds")
+```
+
+```{r}
+#| code-fold: false
+wp_joined3 <- read_rds("data/geodata/wp_joined3.rds") %>%
+  mutate(status = replace_na(status, "Unknown")) %>%
+  mutate(water_tech_clean = replace_na(water_tech_clean, "Unknown")) %>%
+  mutate(water_tech_category = replace_na(water_tech_category, "Unknown"))
+```
+
+#### 3.4.2.2 inspect joined file :: *wp_joined*
+
+#### \-- assess uniqueness of Water Point
+
+```{r}
+#| code-fold: false
+wp_joined3 %>% janitor::get_dupes(shapeName,lat_lon_deg)
+```
+
+Remarks :
+
+Each water point observation is unique as there are no duplicate combination of "shapeName" together with "lat_lon_deg".
+
+#### \-- determine reference point :: "shapeName" or "clean_adm2"
+
+```{r}
+wp_reference <- (wp_joined3$shapeName == wp_joined3$clean_adm2)
+
+summary(wp_reference)
+```
+
+Remarks :
+
+-   There are 4 "FALSE", which is approximately 28% of LGA names mismatched between "shapeName" and "clean_adm2".
+
+    -   [Since the geoBoundaries data is collected from government-published and reliable internet sources.]{style="color:#d69c3c"}[^6]
+
+        -   [Hence, the "shapeName" variable to be used throughout this study.]{style="color:#d69c3c"}
+
+#### \-- review "status"
+
+```{r}
+unique(wp_joined3$status)
+```
+
+#### 3.4.2.3 save and read RDS file :: *wp_joined3*
+
+Save the updated values into wp_joined1 RDS file.
+
+```{r}
+#| eval: false
+write_rds(wp_joined3,"data/geodata/wp_joined3.rds")
+```
+
+```{r}
+#| code-fold: false
+wp_joined3 <- read_rds("data/geodata/wp_joined3.rds")
+```
+:::
+
+[^6]: Daniel et. al (2020) geoBoundaries: A global database of political administrative boundaries. *PlosOne*. <https://doi.org/10.1371/journal.pone.0231866>
+
+## 3.5 Extract Water Point by Attribute
+
+### 3.5.1 Extract Non-Functional Water Point :: *wpt_nonFunctional3*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+wpt_nonFunctional3 <- wp_joined3 %>%
+  filter(status %in% "Non-functional Technical breakdown")
+```
+
+#### 3.5.1.1 save and read RDS file :: *wpt_functional*
+
+```{r}
+#| eval: false
+write_rds(wpt_nonFunctional3,"data/geodata/wpt_nonFunctional3.rds")
+```
+
+```{r}
+#| code-fold: false
+wpt_nonFunctional3 <- read_rds("data/geodata/wpt_nonFunctional3.rds")
+```
+
+#### 3.5.1.2 compute data table for clustering analysis
+
+```{r}
+wp_nga3 <- bdy_nga %>%
+  mutate(`total_nonFunctional` = lengths(
+    st_intersects(bdy_nga, wpt_nonFunctional3)))
+```
+
+```{r}
+questionr::freq(wpt_nonFunctional3$is_urban)
+```
+
+Remarks :
+
+These four (4) water points fall within non-urban communities.
+
+```{r}
+questionr::freq(wpt_nonFunctional3$status_id)
+```
+
+Remarks :
+
+Water is available in all these non-functional water points.
+
+```{r}
+questionr::freq(wpt_nonFunctional3$pressure_score)
+```
+
+Remarks :
+
+All water points are over its usage capacity.
+
+```{r}
+tmap_mode("view")
+
+nfunc.map3 <- tm_shape(wpt_nonFunctional3) + 
+  tm_view(set.zoom.limits = c(11,13)) +
+  tm_dots(col = "pressure_score",
+          title = "Non-Functional",
+          breaks = c(0,3,6,9,12,15),
+          palette = "Blues") +
+  tm_layout(main.title = "Pressure Score for \n non-Functional Water Points",
+            main.title.size = 1.2,
+            main.title.position = "center",
+            legend.height = 0.4,
+            legend.width = 0.2, 
+            legend.title.size = 2,
+            legend.text.size = 2,
+            frame = TRUE,
+            asp = 0) +
+  tmap_style("bw")
+
+nfunc.map3
+```
+
+```{r}
+tmap_mode("plot")
+```
+:::
+
+### 3.5.3 Extract Water Points by "water_tech_category"
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+freq(wp_joined3$water_tech_clean)
+
+freq(wp_joined3$water_tech_clean[wp_joined3$status == "Non-functional Technical breakdown"])
+```
+
+Remarks :
+
+Among the six (6) known water tech deployed to these 14 water points, two of these tech contributed to all these rehabilitated but non-functional due to technical breakdown.
+
+```{r}
+wtc_hPump3 <- wp_joined3 %>%
+  filter(water_tech_clean %in%
+           c("Hand Pump - India Mark II",
+             "Hand Pump - India Mark III",
+             "Hand Pump - India Mark III",
+             "Hand Pump",
+             "Hand Pump - Afridev"
+             ))
+```
+
+```{r}
+#| code-fold: false
+wtc_iMii <- wtc_hPump3 %>%
+  filter(water_tech_clean %in%
+           "Hand Pump - India Mark II")
+
+wtc_iMiii <- wp_joined3 %>%
+  filter(water_tech_clean %in%
+           "Hand Pump - India Mark III")
+
+wp_nga3 <- wp_nga3 %>%
+  mutate(`total_hPump` = lengths(
+    st_intersects(bdy_nga, wtc_hPump3)
+    )) %>%
+  mutate(`total_iMii` = lengths(
+    st_intersects(bdy_nga, wtc_iMii)
+    )) %>%
+  mutate(`total_iMiii` = lengths(
+    st_intersects(bdy_nga, wtc_iMiii)
+    )) %>%      
+  mutate(`pct_iMii` = (`total_iMii`/`total_hPump`*100)) %>%
+  mutate(`pct_iMiii` = (`total_iMiii`/`total_hPump`*100))
+```
+:::

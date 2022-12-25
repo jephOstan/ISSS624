@@ -384,7 +384,9 @@ Remarks :
 
 ```{r}
 #| eval: false
-write_rds(wp_coord,"data/geodata/wp_coord.rds",compress = "xz")
+write_rds(wp_coord,
+          "data/geodata/wp_coord.rds",
+          compress = "xz")
 ```
 
 ```{r}
@@ -420,14 +422,16 @@ wp_cond <- read_csv("data/aspatial/WPdx_NGAv1.2.1.csv",
                                     `#water_tech_clean`,
                                     `#water_tech_category`,
                                     `#status_clean`,
-                                    `#status`)) %>%
+                                    `#status`,
+                                    `#status_id`)) %>%
   rename(water_source = `#water_source`,
          water_source_clean = `#water_source_clean`, 
          water_source_category = `#water_source_category`, 
          water_tech_clean = `#water_tech_clean`, 
          water_tech_category = `#water_tech_category`,
          status_clean = `#status_clean`,
-         status = `#status`)
+         status = `#status`,
+         status_id = `#status_id`)
 
 problems(wp_cond)
 ```
@@ -438,7 +442,9 @@ problems(wp_cond)
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 #| eval: false
-write_rds(wp_cond,"data/geodata/wp_cond.rds",compress = "xz")
+write_rds(wp_cond,
+          "data/geodata/wp_cond.rds",
+          compress = "xz")
 ```
 
 ```{r}
@@ -484,7 +490,9 @@ problems(wp_adm)
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 #| eval: false
-write_rds(wp_adm,"data/geodata/wp_adm.rds",compress = "xz")
+write_rds(wp_adm,
+          "data/geodata/wp_adm.rds",
+          compress = "xz")
 ```
 
 ```{r}
@@ -585,7 +593,9 @@ problems(bdy_nga)
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 #| eval: false
-write_rds(bdy_nga,"data/geodata/bdy_nga.rds",compress = "xz")
+write_rds(bdy_nga,
+          "data/geodata/bdy_nga.rds",
+          compress = "xz")
 ```
 
 ```{r}
@@ -626,14 +636,14 @@ Remarks :
 ```{r}
 dupl_shapeName <- bdy_nga %>%
   add_count(bdy_nga$shapeName) %>%
-  filter(n!=1) %>%
+  filter(n != 1) %>%
   select(-n)
 
 freq(dupl_shapeName$shapeName)
 ```
 :::
 
-#### 3.3.2.3 verify findings in section 3.3.1.2
+#### 3.3.2.3 verify findings in section 3.3.2.2
 
 ::: {.callout-warning .column-page-right appearance="simple" icon="false"}
 ::: {.callout-alert appearance="simple" icon="false"}
@@ -657,18 +667,19 @@ freq(dupl_shapeName$shapeName)
 :::
 
 ```{r}
+#| code-fold: false
 tmap_mode("view")
 
-tm_shape(bdy_nga)+
-  tm_polygons()+
-  tm_view(set.zoom.limits = c(6,8))+
+tm_shape(bdy_nga) +
+  tm_polygons() +
+  tm_view(set.zoom.limits = c(6,8)) +
 
-tm_shape(dupl_shapeName)+
+tm_shape(dupl_shapeName) +
   tm_fill("shapeName",
           n = 6,
-          style = "jenks")+
-  tm_borders(alpha = 0.5)+
-  tmap_style("albatross")+
+          style = "jenks") +
+  tm_borders(alpha = 0.5) +
+  tmap_style("albatross") +
   tm_layout(main.title = "Distribution of Duplicated ShapeName",
             main.title.size = 1.3,
             main.title.position = "center")
@@ -683,20 +694,31 @@ The plot above indicates those duplicated water points are not within the same l
 
 #### 3.3.2.4 acquire State info for duplicated value
 
-::: {.callout-warning appearance="simple" icon="false"}
-The State info to be combined with the duplicated "shapeName". This will make all the shapeName unique.
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
 
-```{r}
-dupl_shapeName %>%
-  mutate(st_centroid(
-    dupl_shapeName$geometry, of_largest_polygon = FALSE))
+First, retrieve the centroid coordinate for each "shapeName".
 
-glimpse(dupl_shapeName)
-```
+Thereafter, get the coordinates for LGA Headquarters or Secretariat office via [**Google Maps**](https://www.google.com/maps).
+
+Lastly, match the duplicated LGA's coordinate with the offices' coordinates to determine the State therein.
+
+The steps to update can be referred to in section [**3.4.1**](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#edit-duplicated-value-shapename).
 :::
 
+```{r}
+#| code-fold: false
+centroid_dupl <- dupl_shapeName %>%
+  mutate(st_centroid(
+    dupl_shapeName$geometry, 
+    of_largest_polygon = FALSE))
+
+centroid_dupl[[4]]
+```
+
 | lga      | row_id | headquarter | state    | iso3166code | dupl_shapeName_coord | lga_office_coord                                                                                                                                                                                                                                                                                                          |
-|----------|--------|-------------|----------|-------------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|-----|-----|-----|-----|-----|-----|-----------------------------------------|
 | Bassa    | 94     | Oguma       | Kogi     | NG.KO.BA    | 7.791971, 7.031827   | [7.80932, 6.74853](https://goo.gl/maps/WDitgPiphRDGX52d9)                                                                                                                                                                                                                                                                 |
 | Bassa    | 95     | Bassa       | Plateau  | NG.PL.BA    | 10.08015, 8.782946   | [10.11143, 8.71559](https://goo.gl/maps/eNj4Aqan83aiM7AK8)                                                                                                                                                                                                                                                                |
 | Ifelodun | 304    | Share       | Kwara    | NG.KW.IF    | 8.544311, 5.052235   | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)                                                                                                                                                                                                                                                        |
@@ -709,16 +731,14 @@ glimpse(dupl_shapeName)
 | Obi      | 547    | Obi         | Nasarawa | NG.NA.OB    | 8.35534, 8.734777    | [8.37944, 8.78561](https://www.google.com/maps/place/Local+Govt+Secretariat/@8.3740903,8.7748577,14.55z/data=!4m5!3m4!1s0x1050e131ff5c6639:0x76010b5a66e763d7!8m2!3d8.3781745!4d8.782189)                                                                                                                                 |
 | Surelere | 693    | Surelere    | Lagos    | NG.LA.SU    | 6.493217, 3.346919   | [6.50048, 3.35488](https://www.google.com/maps/place/Local+Government+Office/@6.4997824,3.3523702,17z/data=!3m1!4b1!4m5!3m4!1s0x103b8c1437be057d:0xc427d7c19d4332af!8m2!3d6.4997848!4d3.3545626)                                                                                                                          |
 | Surelere | 694    | Iresa-Adu   | Oyo      | NG.OY.SU    | 8.088897, 4.393574   | [8.08459, 4.38538](https://www.google.com/maps/place/Iresa+Adu+Local+government+house/@8.0860984,4.3846214,15.95z/data=!4m13!1m7!3m6!1s0x103775694baada77:0xcb78cc728922fde9!2s210104,+Aba+Ladunni,+Oyo,+Nigeria!3b1!8m2!3d8.0885998!4d4.3928622!3m4!1s0x103775d913035017:0xe95c9c72c52ac566!8m2!3d8.0844129!4d4.3838421) |
+:::
 
 ## 3.4 Data Wrangling
 
 ### 3.4.1 Edit Duplicated Value :: "shapeName"
 
 ::: {.callout-warning appearance="simple" icon="false"}
-Two (2) Main Steps involved :
-
-1.  Combine "shapeName" with the State name to make each of them unique.
-2.  Replace the "shapeName" value according to each row index.[^5]
+Update the LGA boundary data frame with the matched state and "shapeName" by row index.[^5]
 
 ```{r}
 bdy_nga$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)] <- 
@@ -743,7 +763,7 @@ bdy_nga$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)]
 ```{r}
 dupl_shapeName_val <- bdy_nga %>%
   add_count(bdy_nga$shapeName) %>%
-  filter(n!=1) %>%
+  filter(n != 1) %>%
   select(-n)
 
 dupl_shapeName_val
@@ -755,7 +775,7 @@ dupl_shapeName_val
 ### 3.4.2 Perform Point-in-Polygon Overlay
 
 ::: {.callout-warning appearance="simple" icon="false"}
-Combine both attribute and boundary of the water points into a simple feature object.
+Combine the attribute and boundary of the water points into a simple feature object.
 
 #### 3.4.2.1 join objects :: *wp_sf*, *bdy_nga*
 
@@ -773,11 +793,13 @@ wp_joined <- st_join(x = wp_sf,
                      left = TRUE)
 ```
 
-#### \-- save and read RDS File :: *wp_joined*
+#### 3.4.2.2 save and read RDS File :: *wp_joined*
 
 ```{r}
 #| eval: false
-write_rds(wp_joined,"data/geodata/wp_joined.rds",compress = "xz")
+write_rds(wp_joined,
+          "data/geodata/wp_joined.rds",
+          compress = "xz")
 ```
 
 ```{r}
@@ -785,22 +807,24 @@ write_rds(wp_joined,"data/geodata/wp_joined.rds",compress = "xz")
 wp_joined <- read_rds("data/geodata/wp_joined.rds")
 ```
 
-#### 3.4.2.2 inspect joined file :: *wp_joined*
+#### 3.4.2.3 inspect joined file :: *wp_joined*
 
-#### \-- assess uniqueness of Water Point
+#### \-- assess the uniqueness of water Point
 
 ```{r}
 #| code-fold: false
-wp_joined %>% janitor::get_dupes(shapeName,lat_lon_deg)
+wp_joined %>% janitor::get_dupes(shapeName,
+                                 lat_lon_deg)
 ```
 
 Remarks :
 
-Each water point observation is unique as there are no duplicate combination of "shapeName" together with "lat_lon_deg".
+Each water point observation is unique as there is no duplication between the "shapeName" and "lat_lon_deg".
 
-#### \-- determine reference point :: "shapeName" or "clean_adm2"
+#### \-- determine reference point :: "shapeName" / "clean_adm2"
 
 ```{r}
+#| code-fold: false
 wp_reference <- (wp_joined$shapeName == wp_joined$clean_adm2)
 
 summary(wp_reference)
@@ -808,11 +832,11 @@ summary(wp_reference)
 
 Remarks :
 
--   There are 29,713 "FALSE", which is more than 30% of LGA names mismatched between "shapeName" and "clean_adm2".
+-   There are 29,856 "FALSE", which is approximately 31% of LGA names mismatched between "shapeName" and "clean_adm2".
 
     -   [Since the geoBoundaries data is collected from government-published and reliable internet sources.]{style="color:#d69c3c"}[^6]
 
-        -   [Hence, the "shapeName" variable to be used throughout this study.]{style="color:#d69c3c"}
+        -   [Hence, the "shapeName" variable will be used throughout this study.]{style="color:#d69c3c"}
 
 -   The 29 NA's are 29 water points located beyond the LGA boundary, as shown in the plot below.
 
@@ -821,12 +845,12 @@ tmap_mode("view")
 
 tm_shape(bdy_nga) +
   tm_polygons() +
-  tm_view(set.zoom.limits = c(5.5, 12))+
+  tm_view(set.zoom.limits = c(5.5, 12)) +
   
 tm_shape(filter(wp_joined, 
                 is.na(wp_reference))) +
-  tm_dots(size=0.1,
-          col="red")
+  tm_dots(size = 0.05,
+          col = "red")
 
 tmap_mode("plot")
 ```
@@ -860,6 +884,8 @@ There are 9 unique values for "status_clean". However, four (4) of them share th
 
 Hence, the same context values need to combine into one unique value.
 
+#### 3.4.4.1 combine values with the same context
+
 ```{r}
 #| code-fold: false
 wp_joined1$status_clean[wp_joined1$status_clean == "Non functional due to dry season"] <- "Non-Functional due to dry season"
@@ -867,19 +893,33 @@ wp_joined1$status_clean[wp_joined1$status_clean == "Non functional due to dry se
 wp_joined1$status_clean[wp_joined1$status_clean == "Abandoned"] <- "Abandoned/Decommissioned"
 ```
 
-#### 3.4.4.1 review combined output
+#### \-- review combined output
 
 ```{r}
 unique(wp_joined1$status_clean)
 ```
 
-#### 3.4.4.2 save and read RDS file :: *wp_joined1*
+#### 3.4.4.2 compute missing value :: "crucialness_score"
+
+```{r}
+summary(wp_joined1$water_point_population == 0)
+summary(wp_joined1$local_population_1km == 0)
+summary(wp_joined1$crucialness_score == 0)
+```
+
+Remarks :
+
+There will be 6,873 water points without crucialness score due to 0 value in 6,336 observations or missing value in 537 observations.
+
+#### 3.4.4.3 save and read RDS file :: *wp_joined1*
 
 Save the updated values into wp_joined1 RDS file.
 
 ```{r}
 #| eval: false
-write_rds(wp_joined1,"data/geodata/wp_joined1.rds",compress = "xz")
+write_rds(wp_joined1,
+          "data/geodata/wp_joined1.rds",
+          compress = "xz")
 ```
 
 ```{r}
@@ -895,6 +935,7 @@ wp_joined1 <- read_rds("data/geodata/wp_joined1.rds")
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 #| eval: false
+#| code-fold: false
 wpt_functional <- wp_joined1 %>%
   filter(status_clean %in%
            c("Functional", 
@@ -906,7 +947,9 @@ wpt_functional <- wp_joined1 %>%
 
 ```{r}
 #| eval: false
-write_rds(wpt_functional,"data/geodata/wpt_functional.rds",compress = "xz")
+write_rds(wpt_functional,
+          "data/geodata/wpt_functional.rds",
+          compress = "xz")
 ```
 
 ```{r}
@@ -919,11 +962,11 @@ wpt_functional <- read_rds("data/geodata/wpt_functional.rds")
 ```{r}
 wp_nga <- bdy_nga %>%
   mutate(`total_wp` = lengths(
-    st_intersects(bdy_nga, wp_joined1))) %>%
-  
+    st_intersects(bdy_nga, 
+                  wp_joined1))) %>%
   mutate(`wp_functional` = lengths(
-    st_intersects(bdy_nga, wpt_functional))) %>%
-  
+    st_intersects(bdy_nga, 
+                  wpt_functional))) %>%
   mutate(`pct_functional` = (`wp_functional`/`total_wp`*100))
 ```
 :::
@@ -933,6 +976,7 @@ wp_nga <- bdy_nga %>%
 ::: {.callout-warning .column-page-right appearance="simple" icon="false"}
 ```{r}
 #| eval: false
+#| code-fold: false
 wpt_nonFunctional <- wp_joined1 %>%
   filter(status_clean %in%
            c("Abandoned/Decommissioned", 
@@ -944,7 +988,9 @@ wpt_nonFunctional <- wp_joined1 %>%
 
 ```{r}
 #| eval: false
-write_rds(wpt_nonFunctional,"data/geodata/wpt_nonFunctional.rds",compress = "xz")
+write_rds(wpt_nonFunctional,
+          "data/geodata/wpt_nonFunctional.rds",
+          compress = "xz")
 ```
 
 ```{r}
@@ -957,7 +1003,8 @@ wpt_nonFunctional <- read_rds("data/geodata/wpt_nonFunctional.rds")
 ```{r}
 wp_nga <- wp_nga %>%
   mutate(`wp_nonFunctional` = lengths(
-    st_intersects(bdy_nga, wpt_nonFunctional))) %>%
+    st_intersects(bdy_nga, 
+                  wpt_nonFunctional))) %>%
   mutate(`pct_nonFunctional` = (`wp_nonFunctional`/`total_wp`*100))
 ```
 :::
@@ -967,6 +1014,7 @@ wp_nga <- wp_nga %>%
 ::: {.callout-warning .column-page-right appearance="simple" icon="false"}
 ```{r}
 #| eval: false
+#| code-fold: false
 wpt_unknown <- wp_joined1 %>%
   filter(status_clean == "Unknown")
 ```
@@ -988,7 +1036,8 @@ wpt_unknown <- read_rds("data/geodata/wpt_unknown.rds")
 ```{r}
 wp_nga <- wp_nga %>%
   mutate(`wp_unknown` = lengths(
-    st_intersects(bdy_nga, wpt_unknown))) %>%
+    st_intersects(bdy_nga, 
+                  wpt_unknown))) %>%
   mutate(`pct_unknown` = (`wp_unknown`/`total_wp`*100))
 ```
 :::
@@ -1020,14 +1069,14 @@ wtc_tStand <- wp_joined1 %>%
 
 wp_nga <- wp_nga %>%
   mutate(`total_handPump` = lengths(
-    st_intersects(bdy_nga, wtc_hPump)
-  )) %>%
+    st_intersects(bdy_nga, 
+                  wtc_hPump))) %>%
   mutate(`total_mechPump` = lengths(
-    st_intersects(bdy_nga, wtc_mPump)
-  )) %>%
+    st_intersects(bdy_nga,
+                  wtc_mPump))) %>%
     mutate(`total_tapStand` = lengths(
-    st_intersects(bdy_nga, wtc_tStand)
-  )) %>%
+    st_intersects(bdy_nga, 
+                  wtc_tStand))) %>%
   mutate(`pct_handPump` = (`total_handPump`/`total_wp`*100)) %>%
   mutate(`pct_mechPump` = (`total_mechPump`/`total_wp`*100)) %>%
   mutate(`pct_tapStand` = (`total_tapStand`/`total_wp`*100))
@@ -1046,6 +1095,12 @@ Remarks :
 -   Only "300", "1000", and "250" are to be extracted for further analysis as the rest are either less than 0.5% or "Unknown".
 
 -   But, "50" will be included in the new variable "total_ucN1000" as part of the none '1000' "usage_capacity" value.
+
+-   Based on the metadata description, the usage capacity is a recommended value of maximum users per water point based on the Sphere Standards.[^7]
+
+    -   250 people usually consists of tapstand, kiosk, rainwater catchment.
+
+    -   1,000 people - mechanised well.
 
 ```{r}
 #| code-fold: false
@@ -1067,25 +1122,23 @@ uCap_50 <- wp_joined1 %>%
 
 wp_nga <- wp_nga %>%
   mutate(`total_uc300` = lengths(
-    st_intersects(bdy_nga, uCap_300)
-  )) %>%
+    st_intersects(bdy_nga, 
+                  uCap_300))) %>%
   mutate(`total_uc1000` = lengths(
-    st_intersects(bdy_nga, uCap_1000)
-  )) %>%
+    st_intersects(bdy_nga, 
+                  uCap_1000))) %>%
   mutate(`total_uc250` = lengths(
-    st_intersects(bdy_nga, uCap_250)
-  )) %>%
+    st_intersects(bdy_nga, 
+                  uCap_250))) %>%
   mutate(`total_uc50` = lengths(
-    st_intersects(bdy_nga, uCap_50)
-  )) %>%
-  mutate(`total_ucN1000` = ((lengths(
-    st_intersects(
-      bdy_nga, uCap_300))) + (lengths(
-        st_intersects(
-          bdy_nga, uCap_250))) + (lengths(
-            st_intersects(
-              bdy_nga, uCap_50))))
-    )%>%
+    st_intersects(bdy_nga, 
+                  uCap_50))) %>%
+  mutate(`total_ucN1000` = ((lengths(st_intersects(bdy_nga,
+                                                   uCap_300))) +
+                              (lengths(st_intersects(bdy_nga,
+                                                     uCap_250))) +
+                              (lengths(st_intersects(bdy_nga,
+                                                     uCap_50))))) %>%
            
   mutate(`pct_ucN1000` = (`total_ucN1000`/`total_wp`*100)) %>%
   mutate(`pct_uc300` = (`total_uc300`/`total_wp`*100)) %>%
@@ -1094,9 +1147,19 @@ wp_nga <- wp_nga %>%
 ```
 :::
 
+[^7]: Sphere Association. *The Sphere Handbook : Humanitarian Charter and Minimum Standards in Humanitarian Response 2018 Edition.* Pg.106. https://spherestandards.org/wp-content/uploads/Sphere-Handbook-2018-EN.pdf
+
 ### 3.5.6 Extract Water Point by "is_urban"
 
 ::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+questionr::freq(wp_joined1$'is_urban')
+```
+
+Remarks :
+
+Approximately 79.4% of the water points fall within non-urban community.
+
 ```{r}
 #| code-fold: false
 urban_1 <- wp_joined1 %>%
@@ -1108,18 +1171,172 @@ urban_0 <- wp_joined1 %>%
            "FALSE")
 
 wp_nga <- wp_nga %>%
-  mutate(`total_urban1` = lengths(st_intersects
-                                  (bdy_nga, urban_1)
-                                  )) %>%
-  mutate(`total_urban0` = lengths(st_intersects
-                                  (bdy_nga, urban_0)
-                                  )) %>%
+  mutate(`total_urban1` = lengths(
+    st_intersects(bdy_nga, 
+                  urban_1))) %>%
+  mutate(`total_urban0` = lengths(
+    st_intersects(bdy_nga, 
+                  urban_0))) %>%
   mutate(`pct_urban1` = (`total_urban1`/`total_wp`*100)) %>%
   mutate(`pct_urban0` = (`total_urban0`/`total_wp`*100))
 ```
 :::
 
-### 3.5.7 Save and Read RDS File :: *wp_nga*
+### 3.5.7 Extract Water Point by "crucialness_score"
+
+Under section 3.4.4.2, there are 6,873 of records without value. Hence, these NAs need to first replace with 0 value.
+
+#### 3.5.7.1 replace NA with 0
+
+```{r}
+wp_joined1 <- wp_joined1 %>%
+  mutate(crucialness_score = replace_na(crucialness_score, 0))
+```
+
+#### 3.5.7.2 examine distribution statistically
+
+```{r}
+summary(wp_joined1$crucialness_score)
+summary(wp_joined1$crucialness_score == 1)
+```
+
+Remarks :
+
+According to the metadata, the "crucialness_score" indicates the importance of each water point to the surrounding communities. The value is a ratio of users assigned to the water point to the total local population within a 1km radius thereof.
+
+-   For non-functional water points, the "crucialness_score" shows how important the water point would be if it were to be rehabilitated.
+
+-   Having a median value of 0.26671 means 50% of the water points supply approximately 26% of residents within 1 km of the water point.
+
+-   According to Sphere Standards[^8], the distance from any household to the nearest water point should be less than 500 metres.
+
+-   However, 15,011 water points cover entire communities within 1 km. This is approximately 15.8% of the total water points.
+
+[^8]: 
+
+    Sphere Association. *The Sphere Handbook : Humanitarian Charter and Minimum Standards in Humanitarian Response 2018 Edition.* Pg.106. https://spherestandards.org/wp-content/uploads/Sphere-Handbook-2018-EN.pdf
+
+#### 3.5.7.3 reveal the distribution "crucialness_score" by "shapeName"
+
+```{r}
+wp_joined1$crucialness_score[wp_joined1$shapeName == "Kirfi"]
+```
+
+Remarks :
+
+Cannot use means to compute the "crucialness_score" to represent a "shapeName". As shown in the output above, ranging from 0 to 1, a mean value can reduce the accuracy of the analysis.
+
+Hence, the "crucialness_score" will be split into 2 groups. Since its 3rd quartile value is around 0.56, 0.6 will be the lowest bin as shown below -
+
+-   x \<= 0.60
+
+-   x \> 0.60
+
+#### 3.5.7.4 compute additional variables into *wp_nga*
+
+```{r}
+#| code-fold: false
+crucialS_0.4 <- wp_joined1 %>%
+  filter(crucialness_score <= 0.6)
+
+crucialS_1.0 <- wp_joined1 %>%
+  filter(crucialness_score > 0.6)
+
+wp_nga <- wp_nga %>%
+  mutate(`total_cs0.4` = lengths(
+    st_intersects(bdy_nga, crucialS_0.4))) %>%
+  mutate(`total_cs1.0` = lengths(
+    st_intersects(bdy_nga, crucialS_1.0))) %>%
+  mutate(`pct_cs0.4` = (`total_cs0.4`/`total_wp`*100)) %>%
+  mutate(`pct_cs1.0` = (`total_cs1.0`/`total_wp`*100))
+```
+
+### 3.5.8 Extract Water Point by "pressure_score"
+
+Replace NAs with 0 value before compute new variable associate with "pressure_score".
+
+#### 3.5.8.1 replace NA with 0
+
+```{r}
+wp_joined1 <- wp_joined1 %>%
+  mutate(pressure_score = replace_na(pressure_score, 0))
+```
+
+#### 3.5.8.2 examine distribution statistically
+
+```{r}
+summary(wp_joined1$pressure_score)
+summary(wp_joined1$pressure_score > 1)
+```
+
+Remarks :
+
+Based on the metadata, pressure_score is a ratio of water point users assigned by the recommended maximum usage capacity of the water tech deployed for the water point.
+
+When the score is greater than 1, that reflects the water point is supplying over its limit.
+
+-   48,081 water points, approximately 50.6% of the water points are over their usage capacity limit.
+
+#### 3.5.8.3 compute additional variables into *wp_nga*
+
+```{r}
+#| code-fold: false
+pressS_0.9 <- wp_joined1 %>%
+  filter(crucialness_score <= 0.9)
+
+pressS_1.9 <- wp_joined1 %>%
+  filter(crucialness_score > 0.9 & crucialness_score <= 1.9)
+
+pressS_3.9 <- wp_joined1 %>%
+  filter(crucialness_score > 1.9 & crucialness_score <= 3.9)
+
+pressS_4.0 <- wp_joined1 %>%
+  filter(crucialness_score > 3.9)
+
+wp_nga <- wp_nga %>%
+  mutate(`total_ps0.9` = lengths(
+    st_intersects(bdy_nga, pressS_0.9))) %>%
+  mutate(`total_ps1.9` = lengths(
+    st_intersects(bdy_nga, pressS_1.9))) %>%
+  mutate(`total_ps3.9` = lengths(
+    st_intersects(bdy_nga, pressS_3.9))) %>%
+  mutate(`total_ps4.0` = lengths(
+    st_intersects(bdy_nga, pressS_4.0))) %>%
+  
+  mutate(`pct_ps0.9` = (`total_ps0.9`/`total_wp`*100)) %>%
+  mutate(`pct_ps1.9` = (`total_ps1.9`/`total_wp`*100)) %>%
+  mutate(`pct_ps3.9` = (`total_ps3.9`/`total_wp`*100)) %>%
+  mutate(`pct_ps4.0` = (`total_ps4.0`/`total_wp`*100))
+
+```
+
+### 3.5.8 Extract Water Point by "status_id"
+
+```{r}
+questionr::freq(wp_joined1$status_id)
+```
+
+```{r}
+status_1 <- wp_joined1 %>%
+  filter(status_id %in%
+           "Yes")
+
+status_0 <- wp_joined1 %>%
+  filter(status_id %in%
+           "No")
+
+wp_nga <- wp_nga %>%
+  mutate(`total_status1` = lengths(
+    st_intersects(bdy_nga, 
+                  status_1))) %>%
+  mutate(`total_status0` = lengths(
+    st_intersects(bdy_nga, 
+                  status_0))) %>%
+  mutate(`pct_status1` = (`total_status1`/`total_wp`*100)) %>%
+  mutate(`pct_status0` = (`total_status0`/`total_wp`*100))
+```
+
+### 3.5.9 Save and Read RDS File :: *wp_nga*
 
 ::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
@@ -1138,8 +1355,6 @@ wp_nga <- read_rds("data/geodata/wp_nga.rds")
 ::: {.callout-warning appearance="simple" icon="false"}
 The EPSG for *wp_nga* is 4326, which is WGS 84. To compute the proximity distance matrix for clustering analysis, the coordinate reference system for attribute (wp_nga) and boundary (bdy_nga) data frames needs to transform into EPSG: 26391.
 
-### 3.6.1 Transform Attribute and Boundary
-
 ::: {.callout-alert appearance="simple" icon="false"}
 [***st_set_crs( )*** - sf -]{style="color:#d46e15"} to update the coordinate reference system.
 :::
@@ -1150,7 +1365,7 @@ wp_ngaTrans <- st_set_crs(wp_nga, 26391)
 bdy_ngaTrans <- st_set_crs(bdy_nga, 26391)
 ```
 
-### 3.6.2 Review CRS :: *wp_ngaTrans*
+### 3.6.1 Review CRS :: *wp_ngaTrans*
 
 ::: {.callout-alert appearance="simple" icon="false"}
 [Usage of the code chunk below :]{style="color:#a39f9d"}
@@ -1162,10 +1377,22 @@ bdy_ngaTrans <- st_set_crs(bdy_nga, 26391)
 st_crs(wp_ngaTrans)
 ```
 
-### 3.6.3 Review CRS :: *bdy_ngaTrans*
+### 3.6.2 Review CRS :: *bdy_ngaTrans*
 
 ```{r}
 st_crs(bdy_ngaTrans)
+```
+
+### 3.6.3 Save and Read RDS File :: *wp_ngaTrans*
+
+```{r}
+#| eval: false
+write_rds(wp_ngaTrans,"data/geodata/wp_ngaTrans.rds")
+```
+
+```{r}
+#| code-fold: false
+wp_ngaTrans <- read_rds("data/geodata/wp_ngaTrans.rds")
 ```
 :::
 
@@ -1174,7 +1401,7 @@ st_crs(bdy_ngaTrans)
 ### 3.7.1 Geospatial EDA
 
 ::: {.callout-warning .column-page-right appearance="simple" icon="false"}
-Reference of the code chunk below source from Lin S.Y., 2022[^7].
+Reference of the code chunk below source from Lin S.Y., 2022[^9].
 
 ```{r}
 shapeName_na <- function(x){
@@ -1253,7 +1480,7 @@ wp_ngaTrim <- read_rds("data/geodata/wp_ngaTrim.rds")
 :::
 :::
 
-[^7]: Lin S.Y.(2022). Regionalisation Using Water Point Availability in Nigeria. https://lins-92-isss624.netlify.app/take-home_ex02/take-home_ex02#exploratory-data-analysis
+[^9]: Lin S.Y.(2022). Regionalisation Using Water Point Availability in Nigeria. https://lins-92-isss624.netlify.app/take-home_ex02/take-home_ex02#exploratory-data-analysis
 
 ### 3.7.2 Visualise Distribution of Cluster Variable
 
@@ -1295,14 +1522,14 @@ cluster_vars <- cluster_vars %>%
 [***st_join( )*** - sf -]{style="color:#d46e15"} to join *sf*-class objects based on geometry, namely, *wp_sf* and *bdy_nga*.
 :::
 
-Reference of the code chunk below source from Lin S.Y., 2022[^8].
+Reference of the code chunk below source from Lin S.Y., 2022[^10].
 
 ```{r}
 plot_num(cluster_vars)
 ```
 :::
 
-[^8]: Lin S.Y.(2022). Regionalisation Using Water Point Availability in Nigeria. https://lins-92-isss624.netlify.app/take-home_ex02/take-home_ex02#exploratory-data-analysis
+[^10]: Lin S.Y.(2022). Regionalisation Using Water Point Availability in Nigeria. https://lins-92-isss624.netlify.app/take-home_ex02/take-home_ex02#exploratory-data-analysis
 
 ### 3.7.3 Identify Outliers
 
@@ -1438,9 +1665,9 @@ It means two or more predictor variables in the model are perfectly correlated.
 :::
 
 ::: callout-note
-Variables with VIF threshold value between 5 to 10 may need to be cautious but VIF greater than 10 can be problematic to the model performance due to serious collinearity problem.[^9]
+Variables with VIF threshold value between 5 to 10 may need to be cautious but VIF greater than 10 can be problematic to the model performance due to serious collinearity problem.[^11]
 
-"A VIF value of 10 means that the tolerance of the relevant independent variable is 0.10 and that 90% (𝐑𝟐) of the variable is explained by other variables. This is undesirable, as it indicates that **the relevant independent variable is unnecessarily included in the model**."[^10]
+"A VIF value of 10 means that the tolerance of the relevant independent variable is 0.10 and that 90% (𝐑𝟐) of the variable is explained by other variables. This is undesirable, as it indicates that **the relevant independent variable is unnecessarily included in the model**."[^12]
 
 When a study involve a large sample size, the VIF threshold value can be set up to 10.
 :::
@@ -1448,9 +1675,9 @@ When a study involve a large sample size, the VIF threshold value can be set up 
 Based on the VIF report, there is no multicollinearity in the model.
 :::
 
-[^9]: Chouiry G. (2022). What is an Acceptable Value for VIF? (With References). https://quantifyinghealth.com/vif-threshold/
+[^11]: Chouiry G. (2022). What is an Acceptable Value for VIF? (With References). https://quantifyinghealth.com/vif-threshold/
 
-[^10]: ResearchGate. Multicollinearity issues: is a value less than 10 acceptable for VIF? https://www.researchgate.net/post/Multicollinearity_issues_is_a\_value_less_than_10_acceptable_for_VIF
+[^12]: ResearchGate. Multicollinearity issues: is a value less than 10 acceptable for VIF? https://www.researchgate.net/post/Multicollinearity_issues_is_a\_value_less_than_10_acceptable_for_VIF
 
 # 5. DATA STANDARDISATION
 
@@ -1635,10 +1862,10 @@ ggdendrogram(hclust_ward,
 
 Remarks :
 
-This is in spite of adjusting the *cex=* parameter that scales the resolution of the dendogram to 10%. [^11]
+This is in spite of adjusting the *cex=* parameter that scales the resolution of the dendogram to 10%. [^13]
 :::
 
-[^11]: Chua Y.T. (2022). Take-home Exercise 2 - Regionalisation of Multivariate Water Point Attributes with Non-spatially Constrained and Spatially Constrained Clustering Methods. https://isss624-amelia.netlify.app/exercises/take-home_ex2/take-home_ex2#computing-hierarchical-clustering
+[^13]: Chua Y.T. (2022). Take-home Exercise 2 - Regionalisation of Multivariate Water Point Attributes with Non-spatially Constrained and Spatially Constrained Clustering Methods. https://isss624-amelia.netlify.app/exercises/take-home_ex2/take-home_ex2#computing-hierarchical-clustering
 
 ### 6.1.3 Identify Number of Optimal Cluster
 
