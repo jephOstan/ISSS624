@@ -1,0 +1,2789 @@
+---
+title: "Regionalisation with Spatially Constrained Cluster Analysis"
+editor: visual
+date: 5 Dec 2022
+reference-location: margin
+citation-location: margin
+code-copy: true
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
+---
+
+case study : ***Regionalisation by Multivariate Water Point Attributes with Non-spatially Constrained and Spatially Constrained Clustering Methods.***
+
+# 1. OVERVIEW
+
+Regionalisation with Spatially Constrained clustering analysis requires similar observations to be grouped according to their statistical attributes and spatial location.
+
+## 1.1 Objectives
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Regionalise Nigeria based on water points' attribute**]{style="color:#93c54b"}
+
+-   Total number of water points by status, i.e. functional, non-functional, and unknown;
+
+-   Percentage of water points by :
+
+    -   status (functional, non-functional, and unknown);
+
+    -   deployed water technology (hand pump, mechanical pump, stand tap, etc.) ;
+
+    -   usage capacity (1000, 300, 250, 50);
+
+    -   rural or urban.
+:::
+
+## 1.2 Study Area Introduction
+
+::: {.callout-tip .column-page collapse="true" appearance="simple" icon="false"}
+## [**Water points in Federal Republic of Nigeria**]{style="color:#93c54b"}
+
+Alpha-3 Code : **NGA**
+
+Population : **225 million** (1st in Africa, 6th globally)
+
+Local Government Areas (LGA) : **774**
+
+Water Point Observations : **95,008**
+
+Environmental Aspects :
+
+-   **Geography** :
+
+    -   Southwest - "rugged" highland.
+
+    -   Southeast - hills and mountains, which form the Mambilla Plateau, the highest plateau in Nigeria.
+
+-   **Hydrology** :
+
+    -   Two (2) main catchment areas - Chad Basin & Niger catchment area.
+
+    -   Surface area of lake Chad is shrinking recent decades due to irrigation activities.[^1]
+
+    -   Untreated wastes dump in places resulted in waterways and groundwater pollution.[^2]
+
+-   **Vegetation Coverage** :
+
+    -   Lost nearly 80% of primary forest by 2012.[^3]
+
+    -   States with dense forests concentrated : Bayelsa, Cross River, Edo, Ekiti, Ondo, Osun, Rivers, and Taraba.
+:::
+
+[^1]: Wikipedia. *Nigeria.* https://en.wikipedia.org/wiki/Nigeria
+
+[^2]: Ogbonna, D.N., Ekweozor, I.K.E., Igwe, F.U. (2002). "Waste Management: A Tool for Environmental Protection in Nigeria". *Ambio: A Journal of the Human Environment*. **31** (1): 55--57. [doi](https://en.wikipedia.org/wiki/Doi_(identifier) "Doi (identifier)"):[10.1639/0044-7447(2002)031\[0055:wmatfe\]2.0.co;2](https://doi.org/10.1639%2F0044-7447%282002%29031%5B0055%3Awmatfe%5D2.0.co%3B2).
+
+[^3]: https://rainforests.mongabay.com/20nigeria.htm
+
+## 1.3 Scope of Works
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+### [**Specific tasks required for this study :**]{style="color:#93c54b"}
+
+-   import the shapefile into R with the appropriate *sf* method, and save it in a simple feature data frame format;
+
+::: callout-note
+Three (3) Projected Coordinate Systems of Nigeria, EPSG : [26391](https://epsg.io/26391), 26392, and 26303.
+:::
+
+-   derive the proportion of functional and non-functional water points at LGA level (i.e. ADM2) by appropriate tidyr and dplyr methods;
+
+-   combine geospatial and aspatial data frames into a simple feature data frame.
+
+-   delineate water points measures functional regions by using :
+
+    -   conventional hierarchical clustering.
+
+    -   spatially constrained clustering algorithms.
+
+-   plot two (2) main types of maps below :
+
+    **Thematic Mapping**
+
+    Show the derived water-point measures by appropriate statistical graphics and choropleth mapping technique.
+
+    **Analytical Mapping**
+
+    Plot delineated functional regions using non-spatially constrained and spatially constrained clustering algorithms.
+:::
+
+# 2. R PACKAGE REQUIRED
+
+The following are the packages required for this exercise :
+
+!!!!! Tidy up the functions according to the high-level function category.
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Load one or more packages**]{style="color:#93c54b"}
+
+-   pacman package :
+
+    -   [*p_load( )*](https://www.rdocumentation.org/packages/pacman/versions/0.5.1/topics/p_load) - [2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#load-r-packages-into-r-environment)
+:::
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Import and process Geospatial data**]{style="color:#93c54b"}
+
+-   sf package :
+
+    -   [*st_as_sfc( )*](https://www.rdocumentation.org/packages/sf/versions/1.0-9/topics/st_as_sfc) - [3.2.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#derive-new-field-geometry)
+
+    -   [*st_sf( )*](https://www.rdocumentation.org/packages/sf/versions/0.1-1/topics/ST_sf) - [3.2.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#convert-to-sf-data-frame)
+
+    -   [*st_crs( )*](https://www.rdocumentation.org/packages/sf/versions/1.0-9/topics/st_crs)- [3.2.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#convert-to-sf-data-frame)
+
+    -   [*st_geometry( )*](https://www.rdocumentation.org/packages/sf/versions/1.0-9/topics/st_geometry)- [3.2.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#retrieve-geometry-summary-wp_sf), [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#inspect-joined-file-wp_joined)
+
+    -   [*st_read( )*](https://www.rdocumentation.org/packages/sf/versions/0.2-2/topics/st_read) - [3.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-boundary-data-of-nigeria-lga)
+
+    -   [*st_join( )*](https://www.rdocumentation.org/packages/sf/versions/0.5-5/topics/st_join) - [3.4.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#join-objects-wp_sf-and-bdy_nga)
+
+    -   *st_set_crs( )* - [3.4.5.20](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#transform-to-projected-coordinate-system)
+
+    -   [*st_set_geometry( )*](https://r-spatial.github.io/sf/reference/st_geometry.html) *-* [4.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#create-data-table-for-correlation-matrix-analysis)
+
+-   stars package :
+
+    -   [*st_intersects( )*](https://www.rdocumentation.org/packages/stars/versions/0.5-0/topics/st_intersects.stars)- [3.4.5.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#add-attribute-to-new-data-table)
+:::
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Import and process Aspatial data**]{style="color:#93c54b"}
+
+-   tidyverse :
+    -   readr package :
+
+        -   [*read_csv( )*](https://readr.tidyverse.org/reference/read_delim.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), [3.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-status-and-condition-related-variable), [3.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-lga-and-measure-related-variable), 3.2.2.1
+
+        -   [*problems( )*](https://www.rdocumentation.org/packages/readr/versions/1.3.1/topics/problems) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), [3.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-status-and-condition-related-variable), [3.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-lga-and-measure-related-variable), [3.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-boundary-data-of-nigeria-lga)
+
+        -   [*write_rds( )*](https://readr.tidyverse.org/reference/read_rds.html) *-* [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord), [3.2.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_cond), [3.2.3.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_adm), [3.4.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_joined), [3.4.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wpt_functional)
+
+        -   [*read_rds( )*](https://readr.tidyverse.org/reference/read_rds.html)- [3.2.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_coord), [3.2.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_cond), [3.2.3.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_adm), [3.4.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wp_joined), [3.4.4.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#read-rds-file-wp_joined1), [3.4.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#save-and-read-rds-file-wpt_functional)
+
+    -   dplyr :
+
+        -   [*rename( )*](https://dplyr.tidyverse.org/reference/rename.html) - [3.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-coordinate-related-variable), [3.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-status-and-condition-related-variable), [3.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-lga-and-measure-related-variable)
+
+        -   [*filter( )*](https://dplyr.tidyverse.org/reference/filter.html) - [3.3.1.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#list-the-duplicated-value-shapename), [3.4.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#validate-edited-value-shapename), [3.4.5.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#extract-functional-water-point)
+
+        -   [*left_join( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/join) - [3.2.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#create-master-file),
+
+        -   [*select( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/select) - [3.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#import-boundary-data-of-nigeria-lga), [3.3.1.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#list-the-duplicated-value-shapename), [3.4.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#validate-edited-value-shapename)
+
+        -   [*add_count( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/tally) - [3.3.1.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#list-the-duplicated-value-shapename), [3.4.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#validate-edited-value-shapename)
+
+        -   [*mutate( )*](https://www.rdocumentation.org/packages/dplyr/versions/0.5.0/topics/mutate) - [3.4.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-na-with-unknown), [3.4.4.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#combine-value-status_clean)
+
+    -   tidyr :
+
+        -   [*replace_na( )*](https://www.rdocumentation.org/packages/tidyr/versions/0.8.3/topics/replace_na) - [3.4.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-na-with-unknown), [3.4.5.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#replace-nan-with-0)
+:::
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Plot map for visualisation**]{style="color:#93c54b"}
+
+-   tmap :
+
+    -   [*tmap_mode( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tmap_mode) - [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
+
+    -   [*tm_shape( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_shape) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
+
+    -   [*tm_polygons( )*](https://rdrr.io/cran/tmap/man/tm_polygons.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
+
+    -   [tm_view( )](https://rdrr.io/cran/tmap/man/tm_view.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
+
+    -   [*tm_fill( )*](https://search.r-project.org/CRAN/refmans/tmap/html/tm_polygons.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
+
+    -   [*tm_borders( )*](https://www.rdocumentation.org/packages/tmap/versions/0.7/topics/tm_borders) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
+
+    -   [*tmap_style( )*](https://rdrr.io/cran/tmap/man/tmap_style.html) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
+
+    -   [*tm_layout( )*](https://www.rdocumentation.org/packages/tmap/versions/3.3-3/topics/tm_layout) *-* [3.3.1.4](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#verify-findings-in-section-3.3.1.3)
+
+    -   *qtm( )* - [3.4.5.12](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-distribution-status_clean)
+
+    -   *tmap_arrange( )* - [3.4.5.12](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-distribution-status_clean)
+:::
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Plot graph and chart**]{style="color:#93c54b"}
+
+-   ggplot2 package :
+
+    -   [*ggplot( )*](https://www.rdocumentation.org/packages/ggplot2/versions/3.4.0/topics/ggplot) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
+
+    -   [*geom_bar( )*](https://www.rdocumentation.org/packages/ggplot2/versions/1.0.1/topics/geom_bar) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
+
+    -   [*geom_text( )*](https://www.rdocumentation.org/packages/ggplot2/versions/0.9.1/topics/geom_text) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
+
+    -   [*scale_x\_discrete( )*](https://ggplot2.tidyverse.org/reference/scale_discrete.html) - [3.4.5.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#exploratory-data-analysis-eda-wpt_functional)
+
+    -   [*geom_boxplot( )*](https://www.rdocumentation.org/packages/ggplot2/versions/1.0.1/topics/geom_boxplot)- [3.5.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#plot-boxplot-pct_functional)
+
+    -   [*geom_histogram( )*](https://www.rdocumentation.org/packages/ggplot2/versions/0.9.1/topics/geom_histogram) - [3.5.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#plot-histogram-for-status_clean)
+
+-   egg package :
+
+    -   [*ggarrange( )*](https://www.rdocumentation.org/packages/egg/versions/0.4.5/topics/ggarrange) - [3.5.2.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#plot-histogram-for-status_clean)
+:::
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Visualise correlation matrix**]{style="color:#93c54b"}
+
+-   corrplot package :
+
+    -   [*corrplot.mixed( )*](https://www.rdocumentation.org/packages/corrplot/versions/0.92/topics/corrplot.mixed) - [4.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#visualise-correlation-matrix-1)
+:::
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Get descriptive stats**]{style="color:#93c54b"}
+
+-   questionr :
+
+    -   [*freq.na( )*](https://www.rdocumentation.org/packages/questionr/versions/0.7.7/topics/freq.na)- [3.3.1.1](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#check-for-missing-data)
+    -   [*freq( )*](https://www.rdocumentation.org/packages/questionr/versions/0.7.7/topics/freq) *-* [3.3.1.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#check-for-duplication-shapename), [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#determine-reference-point-shapename-or-clean_adm2)
+
+-   factoextra :
+
+    -   [*fviz_nbclust( )*](https://www.rdocumentation.org/packages/factoextra/versions/1.0.7/topics/fviz_nbclust) -
+
+-   skimr package :
+
+    -   [*skim( )*](https://www.rdocumentation.org/packages/skimr/versions/2.1.4/topics/skim) -
+
+-   stats :
+
+    -   [*dist( )*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/dist) - 5.1.2
+
+    -   [*as.dist( )*](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/dist) -
+:::
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Miscellaneous generic functions**]{style="color:#93c54b"}
+
+-   janitor package :
+
+    -   [*get_dupes( )*](https://www.rdocumentation.org/packages/janitor/versions/2.1.0/topics/get_dupes) *-* [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#assess-uniqueness-of-each-water-point)
+
+-   [plyr package](https://www.rdocumentation.org/packages/plyr/versions/1.8.8) :
+
+    -   *count( )* - [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#reveal-value-usage_capacity-by-status_clean)
+
+-   [base package](https://www.rdocumentation.org/packages/base/versions/3.6.2) :
+
+    -   [*summary( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/summary) - [3.2.1.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#review-data-frame-wp_coord), [3.2.2.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#review-data-frame-wp_cond), [3.2.3.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#review-data-frame-wp_adm), [3.4.2.3](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#reveal-value-crucialness_score), [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#reveal-value-crucialness_score-1)
+
+    -   [*duplicated( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/duplicated) - [3.3.1.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#check-for-duplication-shapename)
+
+    -   [*length( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/length)- [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#inspect-variable-and-value)
+
+    -   [*sum( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sum) *-* [3.4.5.2](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#determine-the-total-population-within-1-km-by-crucialness_score)
+:::
+
+## 2.1 Load R Packages
+
+::: {.callout-warning appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages into R environment. This function will attempt to install the package from CRAN or pacman repository list if it is not installed.
+
+```{r}
+pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis, rgeoda)
+```
+:::
+
+# 3. GEOSPATIAL DATA
+
+## 3.1 Acquire Data Source
+
+-   **Aspatial Data**
+
+    1.  Download the Nigeria data set in shapefile format via [Access WPdx+ Global Data Repository](https://data.waterpointdata.org/dataset/Water-Point-Data-Exchange-Plus-WPDx-/eqje-vguj/data) from [WPdx Global Data Repositories](https://www.waterpointdata.org/access-data/).
+    2.  Rename the title of the data set to "***geo_export***".
+
+::: callout-note
+[The file size of the downloaded data is about 422 MB due to water points data from multiple countries.]{style="color:#d69c3c"}
+
+-   [Such file size may require extra effort and time to manage the code chunks and files in the R environment before pushing them to GitHub.]{style="color:#d69c3c"}
+
+[Hence, to avoid any error in pushing files larger than 100 MB to Git, filtered Nigeria water points and removed unnecessary variables before uploading into the R environment.]{style="color:#d69c3c"}
+
+[Therewith, the CSV file size should be lesser than 100 MB.]{style="color:#d69c3c"}
+:::
+
+-   **Geospatial Data**
+
+    1.  Download the Nigeria geoBoundaries data set at ADM2 level[^4] from [geoBoundaries.org](https://www.geoboundaries.org/index.html#getdata) or the [Humanitarian Data Exchange portal](https://data.humdata.org/).
+    2.  Rename the title of the data set to "***nga_admbnda_adm2_osgof_20190417***"
+
+[^4]: Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866. https://doi.org/10.1371/journal.pone.0231866
+
+## 3.2 Import Attribute Data
+
+### 3.2.1 Import Aspatial Data
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***read_csv( )*** - readr -]{style="color:#d46e15"} to import and save the comma separated value (CSV) file as a data frame, with title "*wp_coord*".
+
+-   [**c*ol_select( )*** - readr -]{style="color:#d46e15"} to include only the selected variables into *wp_cood* data frame.
+
+[***rename( )*** - dplyr -]{style="color:#d46e15"} to remove "\#" from the variables.
+
+[***problems( )*** - readr -]{style="color:#d46e15"} to reveal any parsing errors when importing the CSV file.
+:::
+
+```{r}
+#| eval: false
+wp_attribute <- read_csv("data/aspatial/WPdx_NGAv1.2.1.csv",
+                       col_select = c(`row_id`,
+                                      `#lat_deg`,
+                                      `#lon_deg`,
+                                      `New Georeferenced Column`,
+                                      `lat_lon_deg`,
+                                      `#water_source`,
+                                      `#water_source_clean`,
+                                      `#water_source_category`,
+                                      `#water_tech_clean`,
+                                      `#water_tech_category`,
+                                      `#status_clean`,
+                                      `#status`,
+                                      `#status_id`,
+                                      `#clean_adm1`,
+                                      `#clean_adm2`,
+                                      `water_point_population`,
+                                      `local_population_1km`,
+                                      `crucialness_score`,
+                                      `pressure_score`,
+                                      `usage_capacity`,
+                                      `staleness_score`,
+                                      `rehab_priority`,
+                                      `is_urban`)) %>%
+  rename(lat_deg = `#lat_deg`, 
+         lon_deg = `#lon_deg`,
+         water_source = `#water_source`,
+         water_source_clean = `#water_source_clean`, 
+         water_source_category = `#water_source_category`, 
+         water_tech_clean = `#water_tech_clean`, 
+         water_tech_category = `#water_tech_category`,
+         status_clean = `#status_clean`,
+         status = `#status`,
+         status_id = `#status_id`,
+         clean_adm1 = `#clean_adm1`,
+         clean_adm2 = `#clean_adm2`)
+
+problems(wp_attribute)
+```
+:::
+
+### 3.2.2 Get Imported Data Frame Overview
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***skim( )*** - skimr -]{style="color:#d46e15"} to get a broad overview of *wp_coord* data frame.
+:::
+
+```{r}
+#| eval: false
+skim(wp_attribute)
+```
+:::
+
+### 3.2.3 Save Imported Data Frame into RDS Format
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***write_rds( )*** - readr -]{style="color:#d46e15"} to save *wp_attribute* data table into an RDS format.
+
+**note : reduce the file size with this function -\> compress = "xz".**
+:::
+
+```{r}
+#| eval: false
+write_rds(wp_attribute,
+          "data/geodata/wp_attribute.rds",
+          compress = "xz")
+```
+:::
+
+### 3.2.4 Save Imported Data Frame into RDS Format
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***read_rds( )*** - readr -]{style="color:#d46e15"} to read *wp_attribute* RDS file into *wp_attribute*.
+:::
+
+```{r}
+#| code-fold: false
+wp_attribute <- read_rds("data/geodata/wp_attribute.rds")
+```
+:::
+
+### 3.2.5 Convert Well Known Text (WKT) Data to SF Data Frame
+
+::: {.callout-warning appearance="simple" icon="false"}
+The "New Georeferenced Column" in *wp_attribute* contains spatial data in a WKT format.
+
+Two (2) steps to convert the WKT data format into an sf data frame :
+
+-   derive "geometry" variable.
+
+-   conversion to sf data frame.
+
+#### 3.2.5.1 derive new field :: "geometry"
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_as_sfc( )*** - sf -]{style="color:#d46e15"} to convert foreign geometry object \`New Georeferenced Column\` to an sfc object
+:::
+
+```{r}
+wp_attribute$geometry = st_as_sfc(wp_attribute$`New Georeferenced Column`)
+```
+
+#### 3.2.5.2 convert to SF Data Frame
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_sf( )*** - sf -]{style="color:#d46e15"} to convert the tibble data frame into sf data frame with crs first set to WGS 84 (EPSG : 4326).
+
+[***st_crs( )*** - sf -]{style="color:#d46e15"} to retrieve coordinate reference system from the object.
+:::
+
+```{r}
+wp.sf<- st_sf(wp_attribute, crs = 4326)
+st_crs(wp.sf)
+```
+:::
+
+## 3.3 Import Boundary Data
+
+### 3.3.1 Import Geospatial Data
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_read( )*** - sf -]{style="color:#d46e15"} to read simple features.
+
+[***select( )*** - dplyr -]{style="color:#d46e15"} to select "shapeName" variable.
+:::
+
+```{r}
+#| eval: false
+bdy_nga.sf <- st_read(dsn = "data/geospatial",
+               layer = "geoBoundaries-NGA-ADM2",
+               crs = 4326) %>%
+  select(shapeName)
+
+problems(bdy_nga.sf)
+```
+:::
+
+### 3.3.2 Save and read RDS file :: *bdy_nga.sf*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+write_rds(bdy_nga.sf,
+          "data/geodata/bdy_nga.sf.rds",
+          compress = "xz")
+```
+
+```{r}
+#| code-fold: false
+bdy_nga.sf <- read_rds("data/geodata/bdy_nga.sf.rds")
+```
+:::
+
+### 3.3.3 Review Imported File
+
+#### 3.3.3.1 check for missing and duplicated data
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+```{r}
+skim(bdy_nga.sf)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+-   [There is no missing data.]{style="color:#d69c3c"}
+
+-   [There are 774 unique "geometry" but only 768 unique "shapeName"]{style="color:#d69c3c"}
+
+    -   [That means there are 6 values of "shapeName" duplicated among the identified unique "shapeName".]{style="color:#d69c3c"}
+:::
+
+#### 3.3.3.2 list the unique "shapeName" associated with duplication
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***add_count( )*** - dplyr -]{style="color:#d46e15"} to count observations by group
+
+[***filter( )*** - dplyr -]{style="color:#d46e15"} to retain shapeName that has count not equal to 1.
+:::
+
+```{r}
+#| code-fold: false
+dupl_shapeName.sf <- bdy_nga.sf %>%
+  add_count(bdy_nga.sf$shapeName) %>%
+  filter(n != 1) %>%
+  select(-n)
+
+freq(dupl_shapeName.sf$shapeName)
+```
+:::
+
+#### 3.3.3.3 verify findings in section 3.3.3.2
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***tmap_mode( )*** - tmap -]{style="color:#d46e15"} to set tmap mode to static plotting or interactive.
+
+[***tm_shape( )*** - tmap -]{style="color:#d46e15"} to specify the shape object.
+
+[***tm_polygons( )*** - tmap -]{style="color:#d46e15"} to fill the polygons and draw the polygon borders.
+
+[***tm_view( )*** - tmap -]{style="color:#d46e15"} to set the options for the interactive tmap viewer.
+
+[***tm_fill( )*** - tmap -]{style="color:#d46e15"} to specify either which colour to be used or which data variable mapped to the colour palette.
+
+[***tm_borders( )*** - tmap -]{style="color:#d46e15"} to draw the polygon borders.
+
+[***tmap_style( )*** - tmap -]{style="color:#d46e15"} to set the tmap style.
+
+[***tm_layout( )*** - tmap -]{style="color:#d46e15"} to set the layout of cartographic map.
+:::
+
+```{r}
+#| code-fold: false
+tmap_mode("view")
+
+tm_shape(bdy_nga.sf) +
+  tm_polygons() +
+  tm_view(set.zoom.limits = c(6,8)) +
+
+tm_shape(dupl_shapeName.sf) +
+  tm_fill("shapeName",
+          n = 6,
+          style = "jenks") +
+  tm_borders(alpha = 0.5) +
+  tmap_style("albatross") +
+  tm_layout(main.title = "Distribution of Duplicated ShapeName",
+            main.title.size = 1.3,
+            main.title.position = "center")
+
+tmap_mode("plot")
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[The plot above indicates those duplicated water points are not within the same location.]{style="color:#d69c3c"}
+:::
+
+#### 3.3.3.4 acquire State info for duplicated value
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+To identify the correct State for the duplicated "shapeName" value -
+
+-   First, retrieve the centroid coordinate for each "shapeName".
+
+-   Next, get the coordinates for LGA Headquarters or Secretariat office via [**Google Maps**](https://www.google.com/maps).
+
+-   Lastly, match the duplicated LGA's coordinate with the offices' coordinates to determine the State therein.
+
+    -   The steps to update can be referred to in section [**3.4.1**](https://geospatial-analysis-jeph0stan.netlify.app/class_project/project_2/regionalisation_scca#edit-duplicated-value-shapename).
+:::
+
+```{r}
+#| code-fold: false
+centroid_dupl.sf <- dupl_shapeName.sf %>%
+  mutate(
+    st_centroid(
+      dupl_shapeName.sf$geometry,
+      of_largest_polygon = FALSE))
+
+centroid_dupl.sf[[4]]
+```
+
+| lga      | row_id | headquarter | state    | iso3166code | dupl_shapeName_coord | lga_office_coord                                                                                                                                                                                                                                                                                                          |
+|----------|----------|----------|----------|----------|----------|----------------|
+| Bassa    | 94     | Oguma       | Kogi     | NG.KO.BA    | 7.791971, 7.031827   | [7.80932, 6.74853](https://goo.gl/maps/WDitgPiphRDGX52d9)                                                                                                                                                                                                                                                                 |
+| Bassa    | 95     | Bassa       | Plateau  | NG.PL.BA    | 10.08015, 8.782946   | [10.11143, 8.71559](https://goo.gl/maps/eNj4Aqan83aiM7AK8)                                                                                                                                                                                                                                                                |
+| Ifelodun | 304    | Share       | Kwara    | NG.KW.IF    | 8.544311, 5.052235   | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)                                                                                                                                                                                                                                                        |
+| Ifelodun | 305    | Ikirun      | Osun     | NG.OS.ID    | 7.920948, 4.636735   | [7.5 4.5](https://latitude.to/map/ng/nigeria/regions/osun-state/)                                                                                                                                                                                                                                                         |
+| Irepodun | 355    | Omu Aran    | Kwara    | NG.KW.IR    | 8.169349, 4.926215   | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)                                                                                                                                                                                                                                                        |
+| Irepodun | 356    | Ilobu       | Osun     | NG.OS.IP    | 7.84861, 4.498797    | [7.5 4.5](https://latitude.to/map/ng/nigeria/regions/osun-state/)                                                                                                                                                                                                                                                         |
+| Nasarawa | 519    | Bompai      | Kano     | NG.KN.NA    | 12.00446, 8.578262   | [11.5, 8.5](https://latitude.to/map/ng/nigeria/regions/kano-state/)                                                                                                                                                                                                                                                       |
+| Nasarawa | 520    | Nasarawa    | Nasarawa | NG.NA.NA    | 8.304034, 7.760272   | [8.53477, 7.70153](https://goo.gl/maps/gZptpjpGGAPkPhFp7)                                                                                                                                                                                                                                                                 |
+| Obi      | 546    | Obarike-Ito | Benue    | NG.BE.OB    | 7.022495, 8.281026   | [7.01129, 8.33118](https://www.google.com/maps/place/Obi+L+G+A+Office+Benue+State+Nigeria/@7.0173612,8.317536,15z/data=!4m5!3m4!1s0x105b02a2fcb55b01:0x534d97153bbf03f6!8m2!3d7.0101782!4d8.3282674)                                                                                                                      |
+| Obi      | 547    | Obi         | Nasarawa | NG.NA.OB    | 8.35534, 8.734777    | [8.37944, 8.78561](https://www.google.com/maps/place/Local+Govt+Secretariat/@8.3740903,8.7748577,14.55z/data=!4m5!3m4!1s0x1050e131ff5c6639:0x76010b5a66e763d7!8m2!3d8.3781745!4d8.782189)                                                                                                                                 |
+| Surelere | 693    | Surelere    | Lagos    | NG.LA.SU    | 6.493217, 3.346919   | [6.50048, 3.35488](https://www.google.com/maps/place/Local+Government+Office/@6.4997824,3.3523702,17z/data=!3m1!4b1!4m5!3m4!1s0x103b8c1437be057d:0xc427d7c19d4332af!8m2!3d6.4997848!4d3.3545626)                                                                                                                          |
+| Surelere | 694    | Iresa-Adu   | Oyo      | NG.OY.SU    | 8.088897, 4.393574   | [8.08459, 4.38538](https://www.google.com/maps/place/Iresa+Adu+Local+government+house/@8.0860984,4.3846214,15.95z/data=!4m13!1m7!3m6!1s0x103775694baada77:0xcb78cc728922fde9!2s210104,+Aba+Ladunni,+Oyo,+Nigeria!3b1!8m2!3d8.0885998!4d4.3928622!3m4!1s0x103775d913035017:0xe95c9c72c52ac566!8m2!3d8.0844129!4d4.3838421) |
+:::
+
+## 3.4 Data Wrangling
+
+### 3.4.1 Edit Duplicated Value :: "shapeName"
+
+::: {.callout-warning appearance="simple" icon="false"}
+Update the LGA boundary data frame with the matched state and "shapeName" by row index.[^5]
+
+```{r}
+bdy_nga.sf$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)] <- 
+  c("Bassa Kogi",
+    "Bassa Plateau",
+    "Ifelodun Kwara",
+    "Ifelodun Osun",
+    "Irepodun Kwara",
+    "Irepodun Osun",
+    "Nasarawa Kano",
+    "Nasarawa Nasarawa",
+    "Obi Nasarawa",
+    "Obi Benue",
+    "Surulere Lagos",
+    "Surulere Oyo")
+
+bdy_nga.sf$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)]
+```
+
+#### 3.4.1.1 validate edited value :: "shapeName"
+
+```{r}
+dupl_shapeName_val.sf <- bdy_nga.sf %>%
+  add_count(bdy_nga.sf$shapeName) %>%
+  filter(n != 1) %>%
+  select(-n)
+
+dupl_shapeName_val.sf
+```
+:::
+
+[^5]: Ong Z.R.J. (2022). Geospatial Analytics for Social Good - Understanding Nigeria Water functional and non-functional water point rate. https://jordan-isss624-geospatial.netlify.app/posts/geo/geospatial_exercise/#checking-of-duplicated-area-name
+
+### 3.4.2 Perform Point-in-Polygon Overlay
+
+::: {.callout-warning appearance="simple" icon="false"}
+Combine the attribute and boundary of the water points into a simple feature object.
+
+#### 3.4.2.1 join objects :: *wp.sf*, *bdy_nga.sf*
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_join( )*** - sf -]{style="color:#d46e15"} to join *sf*-class objects based on geometry, namely, *wp.sf* and *bdy_nga.sf*.
+:::
+
+```{r}
+#| eval: false
+wp_joined.sf <- st_join(x = wp.sf,
+                     y = bdy_nga.sf,
+                     join = st_intersects,
+                     left = TRUE)
+```
+
+#### 3.4.2.2 save and read RDS File :: *wp_joined.sf*
+
+```{r}
+#| eval: false
+write_rds(wp_joined.sf,
+          "data/geodata/wp_joined.sf.rds",
+          compress = "xz")
+```
+
+```{r}
+#| code-fold: false
+wp_joined.sf <- read_rds("data/geodata/wp_joined.sf.rds")
+```
+
+#### 3.4.2.3 inspect joined file :: *wp_joined*
+
+#### \-- assess the uniqueness of water Point
+
+```{r}
+#| code-fold: false
+wp_joined.sf %>% janitor::get_dupes(shapeName,
+                                 lat_lon_deg)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Each water point observation is unique as there is no duplication between the "shapeName" and "lat_lon_deg".]{style="color:#d69c3c"}
+
+#### \-- determine reference point :: "shapeName" / "clean_adm2"
+
+```{r}
+#| code-fold: false
+wp_reference <- (wp_joined.sf$shapeName == wp_joined.sf$clean_adm2)
+
+summary(wp_reference)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+-   [There are 29,856 "FALSE", which is approximately 31% of LGA names mismatched between "shapeName" and "clean_adm2".]{style="color:#d69c3c"}
+
+    -   [Since the geoBoundaries data is collected from government-published and reliable internet sources.]{style="color:#d69c3c"}[^6]
+
+        -   [Hence, the "shapeName" variable will be used throughout this study.]{style="color:#d69c3c"}
+
+-   [The 29 NA's are 29 water points located beyond the LGA boundary, as shown in the plot below.]{style="color:#d69c3c"}
+
+```{r}
+tmap_mode("view")
+
+tm_shape(bdy_nga.sf) +
+  tm_polygons() +
+  tm_view(set.zoom.limits = c(5.5, 12)) +
+  
+tm_shape(filter(wp_joined.sf, 
+                is.na(wp_reference))) +
+  tm_dots(size = 0.05,
+          col = "red")
+
+tmap_mode("plot")
+```
+:::
+
+[^6]: Daniel et. al (2020) geoBoundaries: A global database of political administrative boundaries. *PlosOne*. <https://doi.org/10.1371/journal.pone.0231866>
+
+### 3.4.3 Remove Water Point Outside LGA Boundary
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| code-fold: false
+wp_joined1.sf <- wp_joined.sf %>% 
+  filter(
+    shapeName == clean_adm2 | shapeName != clean_adm2)
+```
+:::
+
+### 3.4.4 Combine Unique Value
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+questionr::freq(wp_joined1.sf$status_clean)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[There are 9 unique values for "status_clean". However, four (4) of them share the same context :]{style="color:#d69c3c"}
+
+-   ["Non functional due to dry season"]{style="color:#d69c3c"}
+
+-   ["Non-Functional due to dry season"]{style="color:#d69c3c"}
+
+-   ["Abandoned"]{style="color:#d69c3c"}
+
+-   ["Abandoned/Decommissioned"]{style="color:#d69c3c"}
+
+[Hence, the same context values need to combine into one unique value.]{style="color:#d69c3c"}
+
+#### 3.4.4.1 combine values with the same context
+
+```{r}
+#| code-fold: false
+wp_joined1.sf$status_clean[wp_joined1.sf$status_clean == "Non functional due to dry season"] <- "Non-Functional due to dry season"
+
+wp_joined1.sf$status_clean[wp_joined1.sf$status_clean == "Abandoned"] <- "Abandoned/Decommissioned"
+```
+
+#### \-- review combined output
+
+```{r}
+unique(wp_joined1.sf$status_clean)
+```
+
+#### 3.4.4.2 compute missing value :: "crucialness_score"
+
+```{r}
+summary(wp_joined1.sf$water_point_population == 0)
+summary(wp_joined1.sf$local_population_1km == 0)
+summary(wp_joined1.sf$crucialness_score == 0)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[There will be 6,873 water points without crucialness score due to 0 value in 6,336 observations or missing value in 537 observations.]{style="color:#d69c3c"}
+
+!!!!! need to remove these 537 observations?
+
+#### 3.4.4.3 save and read RDS file :: *wp_joined1.sf*
+
+Save the updated values into *wp_joined1.sf* RDS file.
+
+```{r}
+#| eval: false
+write_rds(wp_joined1.sf,
+          "data/geodata/wp_joined1.sf.rds",
+          compress = "xz")
+```
+
+```{r}
+#| code-fold: false
+wp_joined1.sf <- read_rds("data/geodata/wp_joined1.sf.rds")
+```
+:::
+
+## 3.5 Extract Water Point by Attribute
+
+### 3.5.1 Extract Functional Water Point :: *wpt_functional.sf*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+wpt_functional.sf <- wp_joined1.sf %>%
+  filter(status_clean %in%
+           c("Functional", 
+             "Functional but not in use",
+             "Functional but needs repair"))
+```
+
+#### 3.5.1.1 compute data table for clustering analysis
+
+```{r}
+#| code-fold: false
+wp_nga.sf <- bdy_nga.sf %>%
+  mutate(`total_wp` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wp_joined1.sf))) %>%
+  mutate(`wp_functional` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_functional.sf))) %>%
+  mutate(`pct_functional` = (`wp_functional`/`total_wp`*100))
+```
+:::
+
+### 3.5.2 Extract Non-Functional Water Point :: *wpt_nonFunctional.sf*
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+```{r}
+wpt_nonFunctional.sf <- wp_joined1.sf %>%
+  filter(status_clean %in%
+           c("Abandoned/Decommissioned", 
+             "Non-Functional",
+             "Non-Functional due to dry season"))
+```
+
+#### 3.5.2.1 compute additional variables
+
+```{r}
+#| code-fold: false
+wp_nga.sf <- wp_nga.sf %>%
+  mutate(`wp_nonFunctional` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_nonFunctional.sf))) %>%
+  mutate(`pct_nonFunctional` = (`wp_nonFunctional`/`total_wp`*100))
+```
+:::
+
+### 3.5.3 Extract Unknown Water Point :: *wpt_unknown.sf*
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+```{r}
+wpt_unknown.sf <- wp_joined1.sf %>%
+  filter(status_clean == "Unknown")
+```
+
+#### 3.5.3.1 compute additional variables
+
+```{r}
+#| code-fold: false
+wp_nga.sf <- wp_nga.sf %>%
+  mutate(`wp_unknown` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_unknown.sf))) %>%
+  mutate(`pct_unknown` = (`wp_unknown`/`total_wp`*100))
+```
+:::
+
+### 3.5.4 Extract Water Points by "water_tech_category"
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+freq(wp_joined1.sf$water_tech_category)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Only "Hand Pump", "Mechanized Pump", and "Tapstand" are to be extracted for further analysis as the rest are either less than 0.5% or "Unknown".]{style="color:#d69c3c"}
+
+```{r}
+wpt_hPump.sf <- wp_joined1.sf %>%
+  filter(water_tech_category %in% "Hand Pump")
+
+wpt_mPump.sf <- wp_joined1.sf %>%
+  filter(water_tech_category %in% "Mechanized Pump")
+
+wpt_tStand.sf <- wp_joined1.sf %>%
+  filter(water_tech_category %in% "Tapstand")
+```
+
+#### 3.5.4.1 compute additional variables
+
+```{r}
+#| code-fold: false
+wp_nga.sf <- wp_nga.sf %>%
+  mutate(`total_handPump` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_hPump.sf))) %>%
+  mutate(`total_mechPump` = lengths(
+    st_intersects(bdy_nga.sf,
+                  wpt_mPump.sf))) %>%
+  mutate(`total_tapStand` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_tStand.sf))) %>%
+  mutate(`pct_handPump` = (`total_handPump`/`total_wp`*100)) %>%
+  mutate(`pct_mechPump` = (`total_mechPump`/`total_wp`*100)) %>%
+  mutate(`pct_tapStand` = (`total_tapStand`/`total_wp`*100))
+```
+:::
+
+### 3.5.5 Extract Water Point by "usage_capacity"
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+freq(wp_joined1.sf$usage_capacity)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+-   [Only "300", "1000", and "250" are to be extracted for further analysis as the rest are either less than 0.5% or "Unknown".]{style="color:#d69c3c"}
+
+-   [But, "50" will be included in the new variable "total_ucN1000" as part of the none '1000' "usage_capacity" value.]{style="color:#d69c3c"}
+
+-   [Based on the metadata description, the usage capacity is a recommended value of maximum users per water point based on the Sphere Standards.]{style="color:#d69c3c"}[^7]
+
+    -   [250 people usually consists of tapstand, kiosk, rainwater catchment.]{style="color:#d69c3c"}
+
+    -   [1,000 people - mechanised well.]{style="color:#d69c3c"}
+
+```{r}
+wpt_uC300.sf <- wp_joined1.sf %>%
+  filter(usage_capacity %in% "300")
+
+wpt_uC1000.sf <- wp_joined1.sf %>%
+  filter(usage_capacity %in% "1000")
+
+wpt_uC250.sf <- wp_joined1.sf %>%
+  filter(usage_capacity %in% "250")
+
+wpt_uC50.sf <- wp_joined1.sf %>%
+  filter(usage_capacity %in% "50")
+```
+
+#### 3.5.5.1 compute additional variables
+
+```{r}
+#| code-fold: false
+wp_nga.sf <- wp_nga.sf %>%
+  mutate(`total_uc300` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_uC300.sf))) %>%
+  mutate(`total_uc1000` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_uC1000.sf))) %>%
+  mutate(`total_uc250` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_uC250.sf))) %>%
+  mutate(`total_uc50` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_uC50.sf))) %>%
+  mutate(`total_ucN1000` = (
+    (lengths(
+      st_intersects(bdy_nga.sf, wpt_uC300.sf))) +
+      (lengths(
+        st_intersects(bdy_nga.sf, wpt_uC250.sf))) +
+      (lengths(
+        st_intersects(bdy_nga.sf, wpt_uC50.sf))))) %>%
+  mutate(`pct_ucN1000` = (`total_ucN1000`/`total_wp`*100)) %>%
+  mutate(`pct_uc300` = (`total_uc300`/`total_wp`*100)) %>%
+  mutate(`pct_uc1000` = (`total_uc1000`/`total_wp`*100)) %>%
+  mutate(`pct_uc250` = (`total_uc250`/`total_wp`*100))
+```
+:::
+
+[^7]: [Sphere Association. *The Sphere Handbook : Humanitarian Charter and Minimum Standards in Humanitarian Response 2018 Edition.* Pg.106. https://spherestandards.org/wp-content/uploads/Sphere-Handbook-2018-EN.pdf]{style="color:#d69c3c"}
+
+### 3.5.6 Extract Water Point by "is_urban"
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+questionr::freq(wp_joined1.sf$'is_urban')
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Approximately 79.4% of the water points fall within non-urban community.]{style="color:#d69c3c"}
+
+```{r}
+wpt_urban1.sf <- wp_joined1.sf %>%
+  filter(is_urban %in% "TRUE")
+
+wpt_urban0.sf <- wp_joined1.sf %>%
+  filter(is_urban %in% "FALSE")
+```
+
+#### 3.5.6.1 compute additional variables
+
+```{r}
+#| code-fold: false
+wp_nga.sf <- wp_nga.sf %>%
+  mutate(`total_urban1` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_urban1.sf))) %>%
+  mutate(`total_urban0` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_urban0.sf))) %>%
+  mutate(`pct_urban1` = (`total_urban1`/`total_wp`*100)) %>%
+  mutate(`pct_urban0` = (`total_urban0`/`total_wp`*100))
+```
+:::
+
+### 3.5.7 Extract Water Point by "crucialness_score"
+
+::: {.callout-warning appearance="simple" icon="false"}
+Under section 3.4.4.2, there are 6,873 records without value. Hence, these NAs need to first replace with 0 value.
+
+#### 3.5.7.1 replace NA with 0
+
+```{r}
+#| code-fold: false
+wp_joined1.sf <- wp_joined1.sf %>%
+  mutate(crucialness_score = replace_na(crucialness_score, 0))
+```
+
+#### 3.5.7.2 examine distribution statistically
+
+```{r}
+summary(wp_joined1.sf$crucialness_score)
+summary(wp_joined1.sf$crucialness_score == 1)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[According to the metadata, the "crucialness_score" indicates the importance of each water point to the surrounding communities. The value is a ratio of users assigned to the water point to the total local population within a 1km radius thereof.]{style="color:#d69c3c"}
+
+-   [For non-functional water points, the "crucialness_score" shows how important the water point would be if it were to be rehabilitated.]{style="color:#d69c3c"}
+
+-   [Having a median value of 0.26671 means 50% of the water points supply approximately 26% of residents within 1 km of the water point.]{style="color:#d69c3c"}
+
+-   [According to Sphere Standards]{style="color:#d69c3c"}[^8], the distance from any household to the nearest water point should be less than 500 metres.
+
+-   [However, 15,011 water points cover entire communities within 1 km. This is approximately 15.8% of the total water points.]{style="color:#d69c3c"}
+
+#### 3.5.7.3 reveal the distribution "crucialness_score" by "shapeName"
+
+```{r}
+questionr::freq(wp_joined1.sf$crucialness_score[
+  wp_joined1.sf$shapeName == "Kirfi"])
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Cannot use means to compute the "crucialness_score" to represent a "shapeName". As shown in the output above, ranging from 0 to 1, a mean value can reduce the accuracy of the analysis.]{style="color:#d69c3c"}
+
+[Hence, the "crucialness_score" will be split into 2 groups. Since its 3rd quartile value is around 0.56, 0.6 will be the lowest bin as shown below -]{style="color:#d69c3c"}
+
+-   [x \<= 0.60]{style="color:#d69c3c"}
+
+-   [x \> 0.60]{style="color:#d69c3c"}
+
+#### 3.5.7.4 extract water point
+
+```{r}
+wpt_cS04.sf <- wp_joined1.sf %>%
+  filter(crucialness_score <= 0.6)
+
+wpt_cS10.sf <- wp_joined1.sf %>%
+  filter(crucialness_score > 0.6)
+```
+
+#### 3.5.7.5 compute additional variable
+
+```{r}
+#| code-fold: false
+wp_nga.sf <- wp_nga.sf %>%
+  mutate(`total_cs04` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_cS04.sf))) %>%
+  mutate(`total_cs10` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_cS10.sf))) %>%
+  mutate(`pct_cs04` = (`total_cs04`/`total_wp`*100)) %>%
+  mutate(`pct_cs10` = (`total_cs10`/`total_wp`*100))
+```
+:::
+
+[^8]: [Sphere Association. *The Sphere Handbook : Humanitarian Charter and Minimum Standards in Humanitarian Response 2018 Edition.* Pg.106. https://spherestandards.org/wp-content/uploads/Sphere-Handbook-2018-EN.pdf]{style="color:#d69c3c"}
+
+### 3.5.8 Extract Water Point by "pressure_score"
+
+::: {.callout-warning appearance="simple" icon="false"}
+Replace NAs with 0 value before computing a new variable associated with "pressure_score".
+
+#### 3.5.8.1 replace NA with 0
+
+```{r}
+wp_joined1.sf <- wp_joined1.sf %>%
+  mutate(pressure_score = replace_na(pressure_score, 0))
+```
+
+#### 3.5.8.2 examine distribution statistically
+
+```{r}
+summary(wp_joined1.sf$pressure_score)
+summary(wp_joined1.sf$pressure_score > 1)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Based on the metadata, pressure_score is a ratio of water point users assigned by the recommended maximum usage capacity of the water tech deployed for the water point.]{style="color:#d69c3c"}
+
+[When the score is greater than 1, that reflects the water point is supplying over its limit.]{style="color:#d69c3c"}
+
+-   [48,081 water points, approximately 50.6% of the water points are over their usage capacity limit.]{style="color:#d69c3c"}
+
+#### 3.5.8.3 extract water point
+
+```{r}
+wpt_pS09.sf <- wp_joined1.sf %>%
+  filter(crucialness_score <= 0.9)
+wpt_pS19.sf <- wp_joined1.sf %>%
+  filter(crucialness_score > 0.9 & crucialness_score <= 1.9)
+wpt_pS39.sf <- wp_joined1.sf %>%
+  filter(crucialness_score > 1.9 & crucialness_score <= 3.9)
+wpt_pS40.sf <- wp_joined1.sf %>%
+  filter(crucialness_score > 3.9)
+```
+
+#### 3.5.8.4 compute additional variables
+
+```{r}
+#| code-fold: false
+wp_nga.sf <- wp_nga.sf %>%
+  mutate(`total_ps09` = lengths(
+    st_intersects(bdy_nga.sf, wpt_pS09.sf))) %>%
+  mutate(`total_ps19` = lengths(
+    st_intersects(bdy_nga.sf, wpt_pS19.sf))) %>%
+  mutate(`total_ps39` = lengths(
+    st_intersects(bdy_nga.sf, wpt_pS39.sf))) %>%
+  mutate(`total_ps40` = lengths(
+    st_intersects(bdy_nga.sf, wpt_pS40.sf))) %>%
+  mutate(`pct_ps09` = (`total_ps09`/`total_wp`*100)) %>%
+  mutate(`pct_ps19` = (`total_ps19`/`total_wp`*100)) %>%
+  mutate(`pct_ps39` = (`total_ps39`/`total_wp`*100)) %>%
+  mutate(`pct_ps40` = (`total_ps40`/`total_wp`*100))
+```
+:::
+
+### 3.5.9 Extract Water Point by "status_id"
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+questionr::freq(wp_joined1.sf$status_id)
+```
+
+#### 3.5.9.1 extract water point
+
+```{r}
+wpt_stat1 <- wp_joined1.sf %>%
+  filter(status_id %in% "Yes")
+
+wpt_stat0 <- wp_joined1.sf %>%
+  filter(status_id %in% "No")
+```
+
+#### 3.5.9.2 compute additional variables
+
+```{r}
+wp_nga.sf <- wp_nga.sf %>%
+  mutate(`total_status1` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_stat1))) %>%
+  mutate(`total_status0` = lengths(
+    st_intersects(bdy_nga.sf, 
+                  wpt_stat0))) %>%
+  mutate(`pct_stat1` = (`total_status1`/`total_wp`*100)) %>%
+  mutate(`pct_stat0` = (`total_status0`/`total_wp`*100))
+```
+:::
+
+### 3.5.10 Save and Read RDS File :: *wp_nga*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+write_rds(wp_nga.sf,"data/geodata/wp_nga.sf.rds")
+```
+
+```{r}
+#| code-fold: false
+wp_nga <- read_rds("data/geodata/wp_nga.sf.rds")
+```
+:::
+
+## 3.6 Transform Coordinate System
+
+::: {.callout-warning appearance="simple" icon="false"}
+The EPSG for *wp_nga* is 4326, which is WGS 84. To compute the proximity distance matrix for clustering analysis, the coordinate reference system for attribute (wp_nga) and boundary (bdy_nga) data frames needs to transform into EPSG: 26391.
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_set_crs( )*** - sf -]{style="color:#d46e15"} to update the coordinate reference system.
+:::
+
+```{r}
+#| code-fold: false
+wp_ngaTrans <- st_set_crs(wp_nga, 26391)
+bdy_ngaTrans <- st_set_crs(bdy_nga.sf, 26391)
+```
+:::
+
+### 3.6.1 Review CRS :: *wp_ngaTrans*
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_crs( )*** - sf -]{style="color:#d46e15"} to inspect the coordinate reference system.
+:::
+
+```{r}
+st_crs(wp_ngaTrans)
+```
+:::
+
+### 3.6.2 Review CRS :: *bdy_ngaTrans*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+st_crs(bdy_ngaTrans)
+```
+:::
+
+### 3.6.3 Save and Read RDS File :: *wp_ngaTrans*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+write_rds(wp_ngaTrans,"data/geodata/wp_ngaTrans.rds")
+write_rds(bdy_ngaTrans,"data/geodata/bdy_ngaTrans.rds")
+```
+
+```{r}
+#| code-fold: false
+wp_ngaTrans <- read_rds("data/geodata/wp_ngaTrans.rds")
+bdy_ngaTrans <- read_rds("data/geodata/bdy_ngaTrans.rds")
+```
+:::
+
+## 3.7 Exploratory Data Analysis (EDA)
+
+### 3.7.1 Geospatial EDA
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+Reference of the code chunk below source from Lin S.Y., 2022[^9].
+
+```{r}
+shapeName_na <- function(x){
+  tm_shape(wp_ngaTrans) +
+    tm_fill(col=x,
+            style="pretty") +
+    tm_borders(alpha=0.5) +
+    tm_layout(legend.height = 0.2, 
+              legend.width = 0.2)
+}
+
+eda_wpNA <- map(names(wp_ngaTrans)
+                [c(3,5,7,13:15,21:24,28)], 
+                shapeName_na)
+tmap_arrange(eda_wpNA)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[The LGA that does not have any water points as shown above to be removed from the data frame.]{style="color:#d69c3c"}
+
+#### 3.7.1.1 filter state without water point
+
+```{r}
+wp_ngaTrim <- wp_ngaTrans %>%
+  filter(if_all(
+    starts_with("total_wp"),~. > 0))
+```
+
+#### 3.7.1.2 visualise distribution of water status & non-functional water points
+
+```{r}
+stat1 <- tm_shape (wp_ngaTrim) +
+  tm_fill("pct_stat1",
+          style = "jenks",
+          n = 6,
+          title = "Water Observed (%)") +
+  tm_layout(main.title = "Water Point with Water Observed",
+            main.title.position = "center",
+            main.title.size = 0.9,
+            main.title.fontface = "bold",
+            legend.height = 0.25, 
+            legend.width = 0.25,
+            frame = TRUE) +
+  tm_borders(alpha = 0.5)
+
+nfunc <- tm_shape (wp_ngaTrim) +
+  tm_fill("pct_nonFunctional",
+          style = "jenks",
+          n = 6,
+          title = "Non-Functional (%)") +
+  tm_layout(main.title = "Non-Functional Water Point",
+            main.title.position = "center",
+            main.title.size = 0.9,
+            main.title.fontface = "bold",
+            legend.height = 0.25, 
+            legend.width = 0.25,
+            frame = TRUE) +
+  tm_borders(alpha = 0.5)
+
+tmap_arrange (stat1, nfunc, ncol = 2, asp = 1)
+```
+
+#### 3.7.1.3 save and read RDS file
+
+```{r}
+#| eval: false
+write_rds(wp_ngaTrim,"data/geodata/wp_ngaTrim.rds")
+```
+
+```{r}
+#| code-fold: false
+wp_ngaTrim <- read_rds("data/geodata/wp_ngaTrim.rds")
+```
+:::
+
+[^9]: Lin S.Y.(2022). Regionalisation Using Water Point Availability in Nigeria. https://lins-92-isss624.netlify.app/take-home_ex02/take-home_ex02#exploratory-data-analysis
+
+### 3.7.2 Visualise Distribution of Cluster Variable
+
+::: {.callout-warning appearance="simple" icon="false"}
+Create a data frame with variables for clustering analysis before visualise the distribution.
+
+#### 3.7.2.1 create cluster variable data frame
+
+```{r}
+cluster_vars <- wp_ngaTrim %>%
+  st_set_geometry(NULL) %>%
+  select("shapeName",
+         "total_wp",
+         "pct_functional", 
+         "pct_nonFunctional",
+         "pct_handPump",
+         "pct_mechPump",
+         "pct_tapStand",
+         "pct_uc300",
+         "pct_uc1000",
+         "pct_ucN1000",
+         "pct_uc250",
+         "pct_urban1",
+         "pct_urban0",
+         "pct_cs04",
+         "pct_cs10",
+         "pct_stat1",
+         "pct_stat0",
+         "pct_ps09",
+         "pct_ps19")
+```
+
+#### 3.7.2.2 replace row ID with "shapeName"
+
+```{r}
+row.names(cluster_vars) <- cluster_vars$shapeName
+cluster_vars <- cluster_vars %>%
+  select(-shapeName)
+```
+
+#### 3.7.2.3 examine distribution of Cluster Variables
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_join( )*** - sf -]{style="color:#d46e15"} to join *sf*-class objects based on geometry, namely, *wp_sf* and *bdy_nga*.
+:::
+
+Reference of the code chunk below source from Lin S.Y., 2022[^10].
+
+```{r}
+plot_num(cluster_vars)
+```
+:::
+
+[^10]: Lin S.Y.(2022). Regionalisation Using Water Point Availability in Nigeria. https://lins-92-isss624.netlify.app/take-home_ex02/take-home_ex02#exploratory-data-analysis
+
+### 3.7.3 Identify Outliers
+
+::: {.callout-warning appearance="simple" icon="false"}
+Boxplot shows the minimum, maximum, median, first quartile, third quartile and outliers, if any.
+
+```{r}
+ggarrange(
+  (ggplot(data=cluster_vars, aes(x=`pct_functional`)) + 
+     geom_boxplot(color="black", fill="#19ff3fFF")), 
+  ((ggplot(data=cluster_vars, aes(x=`pct_nonFunctional`)) +
+      geom_boxplot(color="black", fill="#ff1919FF"))),
+  ((ggplot(data = cluster_vars, aes(x = `pct_handPump`)) +
+      geom_boxplot(color="black", fill="#FFA319FF"))),
+  ((ggplot(data = cluster_vars, aes(x = `pct_mechPump`)) +
+      geom_boxplot(color="black", fill="#ff8419FF"))),
+  ((ggplot(data = cluster_vars, aes(x = `pct_tapStand`)) +
+      geom_boxplot(color="black", fill="#ff5619FF"))),
+  ((ggplot(data = cluster_vars, aes(x = `pct_urban0`)) +
+      geom_boxplot(color="black", fill="#19beffFF"))),
+  ((ggplot(data = cluster_vars, aes(x = `pct_uc1000`)) +
+      geom_boxplot(color="black", fill="#C16622FF"))),
+  ((ggplot(data = cluster_vars, aes(x = `pct_ucN1000`)) +
+      geom_boxplot(color="black", fill="#543005FF"))),
+   ncol = 2,
+  nrow = 4)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+:::
+
+### ?.1.2 EDA Clustering Table
+
+Before standardisation,
+
+#### ?.1.2.1 Helper Function 1
+
+The approach and the code chunk refers from Chua Y.T.[^11]
+
+[^11]: Chua Y.T. (2022). 4 Exploratory Data Analysis - Helper Function 1. https://isss624-amelia.netlify.app/exercises/take-home_ex2/take-home_ex2#exploratory-data-analysis
+
+```{r}
+#| eval: false
+hist_box_plot <- function(varname, title){ 
+  func1 <- ggplot(data = wp_ngaTrim, 
+       aes(x = varname)) + 
+  geom_histogram(bins = 30,
+                 color = "black", 
+                 fill = "steelblue") +
+  theme_classic() + 
+  xlab(title)
+  
+  func2 <- ggplot(data = wp_ngaTrim, 
+         aes(x = varname)) + 
+    geom_boxplot(fill = "steelblue", 
+                 color = "black") + 
+    theme_classic() +
+    xlab("") +
+    theme(axis.text.y = element_blank(),
+          axis.ticks.y = element_blank())
+  
+  func1/func2
+}
+```
+
+#### ?.1.2.1 Helper Function 2
+
+```{r}
+#| eval: false
+hist_plot <- function(varname, title){
+  func3 <- ggplot(data = cluster_varsNF1, 
+       aes(x = varname)) + 
+  geom_histogram(bins = 30,
+                 color = "black", 
+                 fill = "steelblue") +
+  theme_classic() + 
+  xlab(title)
+
+    func3
+}
+```
+
+#### ?1.2. Helper Function 3
+
+```{r}
+#| eval: false
+# Function 3
+# input: the dataframe and the variable name, chart style, title 
+choropleth_plot <- function(varname, style, title) {
+  tm_shape(wp_ngaTrim) +
+    tm_fill(varname, 
+          n= 5,
+          style = style) +
+    tm_borders(alpha = 0.5) +
+    tm_layout(main.title = title,
+              main.title.size = 2.2,
+              main.title.position = "center",
+              legend.height = 3.5, 
+              legend.width = 3,
+              legend.title.size = 2,
+              legend.text.size = 1.5,
+              frame = TRUE)+ 
+    tm_compass(position = c('left','bottom'))
+}
+```
+
+### ?.1.3 Univariate Distribution Analysis
+
+#### ?.1.3.1 visualise cluster variable
+
+```{r}
+#| eval: false
+hist_box_plot(wp_ngaTrim$wp_nonFunctional, "Non-Functional Water Points")
+```
+
+```{r}
+#| eval: false
+wpt_functional <- hist_plot(cluster_vars$wpt_functional, "wpt_functional")
+wpt_nonfunctional <-hist_plot(cluster_vars$wpt_nonfunctional, "wpt_nonfunctional")
+pct_functional <-hist_plot(cluster_vars$pct_functional, "pct_functional")
+pct_nonfunctional <-hist_plot(cluster_vars$pct_nonfunctional, "pct_nonfunctional")
+pct_handpump <-hist_plot(cluster_vars$pct_handpump, "pct_handpump")
+pct_mechpump <-hist_plot(cluster_vars$pct_mechpump, "pct_mechpump")
+pct_lowcap <-hist_plot(cluster_vars$pct_lowcap, "pct_lowcap")
+pct_highcap <-hist_plot(cluster_vars$pct_highcap, "pct_highcap")
+pct_rural <-hist_plot(cluster_vars$pct_rural, "pct_rural")
+pct_urban <-hist_plot(cluster_vars$pct_urban, "pct_urban")
+pct_lowcrucial <-hist_plot(cluster_vars$pct_lowcrucial, "pct_lowcrucial")
+pct_withinpressure <-hist_plot(cluster_vars$pct_withinpressure, "pct_withinpressure")
+
+wpt_functional + wpt_nonfunctional + pct_functional + 
+  pct_nonfunctional + pct_handpump + pct_mechpump + 
+  plot_layout(ncol = 3)
+
+
+pct_lowcap + pct_highcap + pct_rural + 
+  pct_urban + pct_lowcrucial + pct_withinpressure +
+  plot_layout(ncol = 3)
+```
+
+Spatial Distribution of Cluster Variables
+
+```{r}
+#| eval: false
+tmap_arrange(
+choropleth_plot("wpt_functional", "quantile", "Functional water points in Nigeria: \n partitioned by 'quantile' intervals"),
+choropleth_plot("wpt_nonfunctional", "quantile", "Non-functional water points in Nigeria: \n partitioned by 'quantile' intervals"), 
+choropleth_plot("pct_functional", "quantile", "Pct of functional water points in Nigeria: \n partitioned by 'quantile' intervals"),
+choropleth_plot("pct_nonfunctional", "quantile", "Pct of Non-functional water points in Nigeria: \n partitioned by 'quantile' intervals"),
+choropleth_plot("pct_handpump", "quantile", "Pct of hand pump water points in Nigeria: \n partitioned by 'quantile' intervals"),
+choropleth_plot("pct_rural", "quantile", "Pct of water points in rural areas in Nigeria: \n partitioned by 'quantile' intervals"),
+choropleth_plot("pct_lowcrucial", "quantile", "Pct of water points with <=0.30 crucialness \nscore: partitioned by 'quantile' intervals"),
+choropleth_plot("pct_withinpressure", "quantile", "Pct of water points with <=1.18 pressure\nscore: partitioned by 'quantile' intervals"),
+ncol = 2
+)
+```
+
+# 4. CORRELATION ANALYSIS
+
+## 4.1 Multivariate Analysis
+
+### 4.1.1 Visualise Correlation Matrix
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***corrplot.mixed( )*** - corrplot -]{style="color:#d46e15"} to use mixed methods to visualise a correlation matrix.
+:::
+
+This plot allows to identify the pattern and the relationship in the matrix.
+
+```{r}
+corrplot.mixed((cor(cluster_vars)),
+               upper = "number",
+               lower = "ellipse",
+               tl.col = "black",
+               diag = "l",
+               tl.pos = "lt")
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Following are the pairs with strong correlation :]{style="color:#d69c3c"}
+
+| correlation coefficients |    variable_1     | variable_2  |
+|:------------------------:|:-----------------:|:-----------:|
+|           1.00           |    pct_uc1000     | pct_ucN1000 |
+|           1.00           |   pct_mechPump    | pct_uc1000  |
+|          -1.00           |   pct_mechPump    | pct_ucN1000 |
+|          -1.00           |    pct_uc1000     | pct_ucN1000 |
+|          -1.00           |     pct_cs04      |  pct_cs10   |
+|          -1.00           |    pct_urban1     | pct_urban0  |
+|          -1.00           |     pct_ps09      |  pct_ps19   |
+|           0.99           |   pct_tapStand    |  pct_uc250  |
+|           0.99           |     pct_uc300     | pct_ucN1000 |
+|          -0.99           |   pct_mechPump    |  pct_uc300  |
+|          -0.99           |     pct_uc300     | pct_uc1000  |
+|           0.96           |  pct_functional   |  pct_stat1  |
+|           0.96           | pct_nonFunctional |  pct_stat0  |
+|           0.95           |     pct_cs04      |  pct_ps09   |
+|           0.95           |     pct_cs10      |  pct_ps19   |
+|          -0.95           |     pct_cs04      |  pct_ps19   |
+|          -0.95           |     pct_cs10      |  pct_ps19   |
+
+[Since only "usage_capacity" and "water_tech_category" are showing multicollinearity, hence the study will be split into 2 models with water point status by -]{style="color:#d69c3c"}
+
+1\) ["non-functional water point"]{style="color:#d69c3c"}
+
+2\) ["functional"]{style="color:#d69c3c"}
+:::
+
+## 4.2 Refine Model :: *cluster_varsNF*
+
+::: {.callout-warning appearance="simple" icon="false"}
+### 4.2.1 Remove Variable
+
+```{r}
+cluster_varsNF <- cluster_vars %>%
+  select(-pct_tapStand, -pct_uc300, -pct_uc250, -pct_urban1, -pct_cs04,-pct_stat0, -pct_ps09)
+```
+
+```{r}
+corrplot.mixed((cor(cluster_varsNF)),
+               upper = "number",
+               lower = "ellipse",
+               tl.col = "black",
+               diag = "l",
+               tl.pos = "lt")
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+["pct_handPump" and "pct_mechPump" are negatively correlated at -0.82.]{style="color:#d69c3c"}
+
+[Since hand pump is the instructed main water point technology in the scope of work, "pct_mechPump" will be removed from the model.]{style="color:#d69c3c"}
+
+```{r}
+cluster_varsNF1 <- cluster_varsNF %>%
+  select(-pct_functional, -pct_mechPump, -pct_uc1000, -pct_ucN1000, -pct_ps19)
+```
+
+#### 4.2.2 Build Regression Model
+
+```{r}
+model_test <- lm(total_wp ~ pct_nonFunctional +
+         pct_handPump +
+         pct_urban0 +
+         pct_cs10 +
+         pct_stat1,
+         data = cluster_varsNF1)
+
+summary(model_test)
+```
+
+### 4.2.3 Detect Multicollinearity
+
+```{r}
+car::vif(model_test)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+::: callout-alert
+When encountering the following error :
+
+*" Error in vif.default(model_test) : there are aliased coefficients in the mode "*
+
+It means two or more predictor variables in the model are perfectly correlated.
+:::
+
+::: callout-note
+Variables with VIF threshold values between 5 to 10 may need to be cautious, but VIF greater than 10 can be problematic to the model performance due to serious collinearity problem.[^12]
+
+"A VIF value of 10 means that the tolerance of the relevant independent variable is 0.10 and that 90% (𝐑𝟐) of the variable is explained by other variables. This is undesirable, as it indicates that **the relevant independent variable is unnecessarily included in the model**."[^13]
+
+When a study involves a large sample size, the VIF threshold value can be set up to 10.
+:::
+
+Based on the VIF report above, all value is below 5. Hence, there is no multicollinearity in the model.
+:::
+
+[^12]: Chouiry G. (2022). What is an Acceptable Value for VIF? (With References). https://quantifyinghealth.com/vif-threshold/
+
+[^13]: ResearchGate. Multicollinearity issues: is a value less than 10 acceptable for VIF? https://www.researchgate.net/post/Multicollinearity_issues_is_a\_value_less_than_10_acceptable_for_VIF
+
+# 5. DATA STANDARDISATION
+
+## 5.1 Remove Variable
+
+```{r}
+cluster_varsNF1 <- cluster_varsNF1 %>%
+  select(-total_wp)
+```
+
+## 5.2 Standardise Data
+
+As shown in 3.7.3.3, not all variables are not distributed normally. Hence, standardisation will be required before the clustering analysis.
+
+::: {.callout-warning appearance="simple" icon="false"}
+### 5.2.1 Standardise :: Min-Max Method
+
+```{r}
+wp_stdMM <- normalize(cluster_varsNF1)
+describe(wp_stdMM)
+```
+
+### 5.2.2 Standardise :: Z-score Method
+
+```{r}
+wp_stdZ <- scale(cluster_varsNF1)
+describe(wp_stdZ)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Comparing the reports above, the Min-Max method is the only method that can standardise the value to between 0 and 1.]{style="color:#d69c3c"}
+
+### 5.2.3 Compare Distribution For Standardisation Method
+
+Visualise to determine which standardisation method provide the better output.
+
+```{r}
+ggarrange(
+  (ggplot(data = cluster_varsNF1, aes(x = `pct_stat1`)) +
+    geom_density(color = "black", fill = "#19ff3fFF") + 
+    ggtitle("Before Standardisation")),
+  (ggplot(data = (as.data.frame(wp_stdMM)), aes(x = `pct_stat1`)) +
+      geom_density(color = "black", fill = "#19ff3fFF") +
+      ggtitle("Min-Max Stdsn.")),
+  (ggplot(data = (as.data.frame(wp_stdZ)), aes(x = `pct_stat1`)) +
+     geom_density(color = "black", fill="#19ff3fFF") +
+     ggtitle("Z-score Stdsn.")),
+   ncol = 3)
+```
+
+```{r}
+ggarrange(
+  (ggplot(data = cluster_varsNF1, aes(x = `pct_nonFunctional`)) +
+    geom_density(color = "black", fill = "#ff1919FF") + 
+    ggtitle("Before Standardisation")),
+  (ggplot(data = (as.data.frame(wp_stdMM)), aes(x = `pct_nonFunctional`)) +
+      geom_density(color = "black", fill = "#ff1919FF") +
+      ggtitle("Min-Max Stdsn.")),
+  (ggplot(data = (as.data.frame(wp_stdZ)), aes(x = `pct_nonFunctional`)) +
+     geom_density(color = "black", fill="#ff1919FF") +
+     ggtitle("Z-score Stdsn.")),
+   ncol = 3)
+```
+
+```{r}
+ggarrange(
+  (ggplot(data = cluster_varsNF1, aes(x = `pct_handPump`)) +
+    geom_density(color = "black", fill = "#FFA319FF") + 
+    ggtitle("Before Standardisation")),
+  (ggplot(data = (as.data.frame(wp_stdMM)), aes(x = `pct_handPump`)) +
+      geom_density(color = "black", fill = "#FFA319FF") +
+      ggtitle("Min-Max Stdsn.")),
+  (ggplot(data = (as.data.frame(wp_stdZ)), aes(x = `pct_handPump`)) +
+     geom_density(color = "black", fill="#FFA319FF") +
+     ggtitle("Z-score Stdsn.")),
+   ncol = 3)
+```
+
+```{r}
+ggarrange(
+  (ggplot(data = cluster_varsNF1, aes(x = `pct_cs10`)) +
+    geom_density(color = "black", fill = "#ff5619FF") + 
+    ggtitle("Before Standardisation")),
+  (ggplot(data = (as.data.frame(wp_stdMM)), aes(x = `pct_cs10`)) +
+      geom_density(color = "black", fill = "#ff5619FF") +
+      ggtitle("Min-Max Stdsn.")),
+  (ggplot(data = (as.data.frame(wp_stdZ)), aes(x = `pct_cs10`)) +
+     geom_density(color = "black", fill="#ff5619FF") +
+     ggtitle("Z-score Stdsn.")),
+   ncol = 3)
+```
+
+```{r}
+ggarrange(
+  (ggplot(data = cluster_varsNF1, aes(x = `pct_urban0`)) +
+    geom_density(color = "black", fill = "#19beffFF") + 
+    ggtitle("Before Standardisation")),
+  (ggplot(data = (as.data.frame(wp_stdMM)), aes(x = `pct_urban0`)) +
+      geom_density(color = "black", fill = "#19beffFF") +
+      ggtitle("Min-Max Stdsn.")),
+  (ggplot(data = (as.data.frame(wp_stdZ)), aes(x = `pct_urban0`)) +
+     geom_density(color = "black", fill="#19beffFF") +
+     ggtitle("Z-score Stdsn.")),
+   ncol = 3)
+```
+:::
+
+# 6. CLUSTERING ANALYSIS
+
+## 6.1 Hierarchical Clustering
+
+There are [four (4) main steps](https://www.learndatasci.com/glossary/hierarchical-clustering/) :
+
+-   compute proximity matrix and determine clustering algorithm.
+-   compute Hierarchical Clustering.
+-   identify optimal number of cluster and merge similar clusters.
+-   update the distance matrix.
+
+### 6.1.1 Compute Proximity Matrix and Clustering Algorithm
+
+::: {.callout-warning appearance="simple" icon="false"}
+First determine the clustering algorithm before compute Hierarchical Clustering analysis.
+
+#### 6.1.1.1 determine Hierarchical Clustering algorithm
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***agnes( )*** - cluster -]{style="color:#d46e15"} to get agglomerative coefficient of 4 clustering structure, namely "average", "single", "complete" and "ward".
+:::
+
+```{r}
+m <- c("average","single","complete","ward")
+
+names(m) <- c("average","single","complete","ward")
+
+ac <- function(x){agnes(wp_stdMM, method = x)$ac}
+
+map_dbl(m, ac)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+-   [Value 1 indicates the strongest clustering structure.]{style="color:#d69c3c"}
+
+-   [With value of 0.9892, Ward's method provides the strongest clustering structure. Therefore, Ward's method will be used in subsequent analysis.]{style="color:#d69c3c"}
+
+#### 6.1.1.2 compute proximity matrix
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***dist( )*** - stats -]{style="color:#d46e15"} to compute the proximity distance matrix. Among **euclidean, maximum, manhattan, canberra, binary and minkowski**, *euclidean* is used to compute *proxmat_euc.*
+:::
+
+```{r}
+prox_mat_euc <- dist(wp_stdMM, 
+                     method = 'euclidean')
+```
+:::
+
+### 6.1.2 Compute Hierarchical Clustering
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***hclust( )*** - stats -]{style="color:#d46e15"} to compute cluster with agglomeration method.
+
+[***ggdendrogram( )*** - ggdendro -]{style="color:#d46e15"} to plot dendrogram with tools available in [ggplot2]{style="color:#d46e15"}.
+:::
+
+```{r}
+hclust_ward <- hclust(prox_mat_euc, 
+                      method = 'ward.D')
+ggdendrogram(hclust_ward,
+             rotate = TRUE,
+             cex = 0.1,
+             theme_dendro = FALSE)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[This is in spite of adjusting the *cex =* parameter that scales the resolution of the dendogram to 10%.]{style="color:#d69c3c"}[^14]
+:::
+
+[^14]: [Chua Y.T. (2022). Take-home Exercise 2 - Regionalisation of Multivariate Water Point Attributes with Non-spatially Constrained and Spatially Constrained Clustering Methods. https://isss624-amelia.netlify.app/exercises/take-home_ex2/take-home_ex2#computing-hierarchical-clustering]{style="color:#d69c3c"}
+
+### 6.1.3 Identify Number of Optimal Cluster
+
+::: {.callout-warning appearance="simple" icon="false"}
+To determine the optimal clusters to retain, the following commons methods are to be tested :
+
+-   Gap statistic
+
+-   Elbow
+
+-   Average Silhouette
+
+#### 6.1.3.1 compute Gap Statistic method
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***clusGap( )*** - cluster -]{style="color:#d46e15"} to compute the gap statistic.
+:::
+
+```{r}
+set.seed(12345)
+
+gap_stat <- clusGap(wp_stdMM, 
+                    FUN = hcut, 
+                    nstart = 25, 
+                    K.max = 7, 
+                    B = 50)
+
+print(gap_stat, method = "firstmax")
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[The number of clusters recommended by "firstmax" approach of the Gap Statistic method is 4.]{style="color:#d69c3c"}
+
+#### 6.1.3.2 visualise *gap_stat*
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***fviz_nbclust( )*** - factoextra -]{style="color:#d46e15"} to compute and visualise the Optimal Number of clusters.
+:::
+
+```{r}
+set.seed(12345)
+
+fviz_nbclust(wp_stdMM,
+             FUNcluster = hcut,
+             nstart = 25,  
+             method = "gap_stat", 
+             nboot = 50,
+             linecolor = "white")+
+  theme_dark() +
+  labs(subtitle = "Gap statistic method")
+```
+
+#### 6.1.3.3 compute and visualise Total Within Sum of Squares (Elbow) method
+
+```{r}
+fviz_nbclust(wp_stdMM, 
+             kmeans, 
+             method = "wss",
+             linecolor = "white")+
+  theme_dark() +
+  labs(subtitle = "Elbow method")
+```
+
+#### 6.1.3.4 compute and visualise Silhouette method
+
+```{r}
+fviz_nbclust(wp_stdMM, 
+             kmeans, 
+             method = "silhouette",
+             linecolor = "white") +
+  theme_dark() +
+  labs(subtitle = "Silhouette method")
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+| Method              | Gap stat | Elbow | Silhouette |
+|---------------------|----------|-------|------------|
+| Optimal Value for K | 4        | 3     | 3          |
+
+[Both Elbow method, Silhouette method indicated the 3-cluster by Silhouette method will be used for the rest of the study.]{style="color:#d69c3c"}
+:::
+
+### 6.1.4 Merge Similar Clusters
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***rect.hclust( )*** - stats -]{style="color:#d46e15"} to draw a dendrogram with a borders around the selected clusters.
+:::
+
+```{r}
+plot(hclust_ward, cex = 0.5)
+rect.hclust(hclust_ward, 
+            k = 3, 
+            border = 2:5)
+```
+:::
+
+### 6.1.5 Visually-Driven Hierarchical Clustering Analysis
+
+::: {.callout-warning appearance="simple" icon="false"}
+The data is loaded into a data frame, but it has to be a data matrix to plot the heatmap. Hence, the data frame will need to first transform into a matrix.
+
+#### 6.1.5.1 transform data frame into matrix
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***data.matrix( )*** - base -]{style="color:#d46e15"} to transform *wp_stdMM* data frame into a data matrix, and named it as *wp_stdMM_mat*.
+:::
+
+```{r}
+wp_stdMM_mat <- data.matrix(wp_stdMM)
+```
+
+#### 6.1.5.2 plot interactive cluster heatmap
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***heatmaply( )*** - heatmaply -]{style="color:#d46e15"} to build an interactive cluster heatmap. The variables are already transformed with Min-Max method to have comparable values. Hence, neither scaling, normalise or percentise is required.
+:::
+
+```{r}
+#| code-fold: false
+heatmaply(wp_stdMM_mat,
+          Colv = NA,
+          dist_method = "euclidean",
+          hclust_method = "ward.D",
+          seriate = "OLO",
+          colors = Blues,
+          k_row = 3,
+          margins = c(NA,200,60,NA),
+          fontsize_row = 1,
+          fontsize_col = 8,
+          main="Cluster Heatmap of Non-Functional Water Points",
+          xlab = "Attribute",
+          ylab = "Nigeria LGA",
+          dend_hoverinfo = TRUE
+          )
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Following are the interpretation of the heatmap above :]{style="color:#d69c3c"}
+
+-   [Among these clusters, Cluster 1 has the highest percentage of water points that failed to supply to more than 60% of the residents within 1 km therefrom.]{style="color:#d69c3c"}
+
+-   [Most non-functional and non-urban water points are deployed with hand pumps in Cluster 3.]{style="color:#d69c3c"}
+
+-   [As indicated by the percentage of stat1, water was observed at the majority of the water points in Cluster 3.]{style="color:#d69c3c"}
+
+#### 6.1.5.3 create 3 clusters model
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***cutree( )*** - base -]{style="color:#d46e15"} to derive a 3-cluster model, and named the output as *groups*.
+:::
+
+```{r}
+groups <- as.factor(cutree(hclust_ward, k = 3))
+```
+
+#### 6.1.5.4 append *groups* to *wp_ngaTrim*
+
+```{r}
+nga_clust.sf <- cbind(wp_ngaTrim, as.matrix(groups)) %>%
+  rename(`cluster`=`as.matrix.groups.`)
+```
+
+#### 6.1.5.5 plot choropleth map :: *nga_clust.sf*
+
+```{r}
+#| code-fold: false
+clusGeo.map <- tm_shape(nga_clust.sf) +
+  tm_fill(col = "cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_style("cobalt") +
+  tm_layout(main.title = "Non-Spatial Hierarchical Clustering",
+            main.title.size = 1.1,
+            main.title.position = "center",
+            legend.height = 0.3,
+            legend.width = 0.1, 
+            legend.title.size = 1,
+            legend.text.size = 1,
+            frame = TRUE,
+            asp = 0)
+
+clusGeo.map
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[The choropleth map above shows the fragmented clusters by the used of non-spatial clustering algorithm (hierarchical cluster analysis method).]{style="color:#d69c3c"}
+:::
+
+## 6.2 Spatially Constrained Clustering :: SKATER Approach
+
+SKATER function only supports sp objects in SpatialPolygonDataFrame.
+
+Hence, the *wp_ngaTrim* has to first transform into SpatialPolygonDataFrame before proceeding further.
+
+### 6.2.1 Convert SF to SP Data Frame
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***as_Spatial( )*** - sf -]{style="color:#d46e15"} to convert *wp_ngaTrim* into *nga_sp* in a SP data frame.
+:::
+
+```{r}
+nga.sp <- as_Spatial(wp_ngaTrim)
+```
+:::
+
+### 6.2.2 Compute Neighbour List
+
+::: {.callout-warning appearance="simple" icon="false"}
+First compute the neighbour list before plot it.
+
+### 6.2.2.1 compute neighbour list from polygon list
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***poly2nb( )*** - spdep -]{style="color:#d46e15"} to compute the neighbours list from polygon list.
+:::
+
+```{r}
+nga.nb <- poly2nb(nga.sp, queen = TRUE)
+
+summary(nga.nb)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[There is no LGA without a link.]{style="color:#d69c3c"}
+
+#### 6.2.2.2 plot Neighbour List by Centroid Node
+
+[Usage of the code chunk below :]{style="color:#a39f9d"} plot the boundary first before the neighbour list object to avoid any region from being clipped away.
+
+```{r}
+plot(nga.sp, 
+     border = grey(.5))
+
+plot(nga.nb, 
+     coordinates(nga.sp), 
+     col = "blue", 
+     add = TRUE)
+```
+:::
+
+### 6.2.3 Compute Minimum Spanning Tree (MST)
+
+::: {.callout-warning appearance="simple" icon="false"}
+To find a minimum path connecting all nodes in a graph, a minimum spanning tree with a minimum weight than all other spanning trees is to be used in subsequent steps.
+
+#### 6.2.3.1 calculate edge costs
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***nbcosts( )*** - spdep -]{style="color:#d46e15"} to compute the cost of each edge which is the distance between nodes.
+:::
+
+```{r}
+edge_cost <- nbcosts(nga.nb, wp_stdMM)
+```
+
+#### 6.2.3.2 specify spatial weight
+
+::: {.callout-alert appearance="simple" icon="false"}
+[***nb2listw( )*** - spdep -]{style="color:#d46e15"} to specify *edge_cost* as the spatial weights. Set the "style" to "B" to ensure the cost values are not row-standardised.
+:::
+
+```{r}
+nga.w <- nb2listw(nga.nb,
+                  edge_cost,
+                  style = "B")
+summary(nga.w)
+```
+
+#### 6.2.3.3 compute MST
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***nbcosts( )*** - spdep -]{style="color:#d46e15"} to compute the minimum spanning tree.
+:::
+
+```{r}
+nga_minSpanT <- mstree(nga.w)
+```
+
+#### 6.2.3.4 review class and dimension of the computed MST
+
+```{r}
+class(nga_minSpanT)
+```
+
+```{r}
+dim(nga_minSpanT)
+```
+
+```{r}
+head(nga_minSpanT)
+```
+
+#### 6.2.3.5 plot MST Neighbour List
+
+```{r}
+plot(nga.sp, border = gray(.5))
+
+plot.mst(nga_minSpanT,
+         coordinates(nga.sp), 
+         col = "blue", 
+         cex.lab = 0.7, 
+         cex.circles = 0.005, 
+         add = TRUE)
+```
+:::
+
+### 6.2.4 Compute Spatially Constrained Cluster
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***skater( )*** - spdep -]{style="color:#d46e15"} to compute the spatially constrained cluster.
+
+note: ncuts = number of clusters - 1
+:::
+
+```{r}
+clust3 <- spdep::skater(edges = nga_minSpanT[,1:2],
+                        data = cluster_varsNF1,
+                        method = "euclidean",
+                        ncuts = 2)
+str(clust3)
+```
+
+#### 6.2.4.1 tabulate cluster assignment
+
+```{r}
+ccs3 <- clust3$groups
+table(ccs3)
+```
+
+#### 6.2.4.2 plot the pruned tree
+
+```{r}
+plot(nga.sp, border = gray(.5))
+plot(clust3, 
+     coordinates(nga.sp), 
+     cex.lab = .7,
+     groups.colors = c("red","green","blue", "brown"),
+     cex.circles = 0.005, 
+     add = TRUE)
+```
+:::
+
+### 6.2.5 Visualise SKATER Clusters in Choropleth Map
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+groups_mat <- as.matrix(clust3$groups)
+
+nga_spClust.sf <- cbind(nga_clust.sf, 
+                        as.factor(groups_mat)) %>%
+  rename(`sp_cluster`=`as.factor.groups_mat.`)
+```
+
+To compare the output of hierarchical clustering and spatially constrained hierarchical clustering :
+
+```{r}
+#| code-fold: false
+clusGeo_SKAT.map <- tm_shape(nga_spClust.sf) +
+  tm_fill(col = "sp_cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_style("cobalt") +
+  tm_layout(main.title = "Spatially Constrained SKATER Method",
+            main.title.size = 1.1,
+            main.title.position = "center",
+            legend.height = 0.3,
+            legend.width = 0.1, 
+            legend.title.size = 1,
+            legend.text.size = 1,
+            frame = TRUE,
+            asp = 0)
+
+clusGeo_SKAT.map
+```
+:::
+
+## 6.3 ClustGeo Method
+
+This section consists of two (2) parts i.e. spatially and non-spatially Constrained Cluster analysis.
+
+### 6.3.1 Non-Spatially Constrained Hierarchical Cluster Analysis
+
+::: {.callout-warning appearance="simple" icon="false"}
+Dissimilarity matrix must be an object of class dist.
+
+#### 6.3.1.1 create Class `dist` Object
+
+```{r}
+proxmat_ngc <- dist(wp_stdMM, method = 'euclidean')
+```
+
+#### 6.3.1.2 compute Non-Spatially Constrained Hierarchical Clustering
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***hclustgeo( )*** - ClustGeo -]{style="color:#d46e15"} to perform a typical Ward-like hierarchical clustering.
+:::
+
+```{r}
+nonGeo_clust <- hclustgeo(proxmat_ngc)
+
+plot(nonGeo_clust, 
+     cex = 0.5)
+
+rect.hclust(nonGeo_clust, 
+            k = 3, 
+            border = 1:5)
+```
+
+#### 6.3.1.3 derive 5-cluster model
+
+```{r}
+groups_ngc <- as.factor(cutree(nonGeo_clust, 
+                               k = 3))
+```
+
+#### 6.3.1.4 combine *groups_ngc* with *wp_ngaTrim*
+
+```{r}
+nga_ngeo_clust.sf <- cbind(
+  wp_ngaTrim, 
+  as.matrix(groups_ngc)) %>%
+  rename(`cluster` = `as.matrix.groups_ngc.`)
+```
+
+#### 6.3.1.5 visualise Non-Spatially Constrained Hierarchical Cluster
+
+```{r}
+#| code-fold: false
+clusGeo_nSp.map <- tm_shape(nga_ngeo_clust.sf) +
+  tm_fill(col = "cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_style("cobalt") +
+  tm_layout(main.title = "Non-Spatially Constrained ClustGeo Method",
+            main.title.size = 1.1,
+            main.title.position = "center",
+            legend.height = 0.3,
+            legend.width = 0.1, 
+            legend.title.size = 1,
+            legend.text.size = 1,
+            frame = TRUE,
+            asp = 0)
+
+clusGeo_nSp.map
+```
+:::
+
+### 6.3.2 Spatially Constrained Hierarchical Cluster Analysis
+
+::: {.callout-warning appearance="simple" icon="false"}
+#### 6.3.2.1 determine Spatial Distance Matrix
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_distance( )*** - sf -]{style="color:#d46e15"} to derive the spatial distance matrix before perform spatially constrained hierarchical clustering.
+
+[***as.dist( )*** - stats -]{style="color:#d46e15"} to convert the data frame into matrix.
+:::
+
+```{r}
+#| code-fold: false
+dist <- st_distance(wp_ngaTrim, wp_ngaTrim)
+dist_mat <- as.dist(dist)
+```
+
+#### 6.3.2.2 determine Alpha value
+
+::: {.callout-alert appearance="simple" icon="false"}
+[***choicealpha( )*** - psych -]{style="color:#d46e15"} to determine a suitable value for the mixing parameter alpha.
+:::
+
+```{r}
+#| code-fold: false
+cr <- choicealpha(
+  proxmat_ngc, 
+  dist_mat, 
+  range.alpha = seq(0, 1, 0.1), 
+  K = 3, 
+  graph = TRUE)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[With reference to the plot above, multiple alpha values to be used to perform spatially constrained hierarchical clustering.]{style="color:#d69c3c"}
+
+#### 6.3.2.3 compute Spatially Constrained Hierarchical Clustering
+
+```{r}
+clustG_0.3 <- hclustgeo(proxmat_ngc, 
+                    dist_mat, 
+                    alpha = 0.3)
+```
+
+```{r}
+clustG_0.35 <- hclustgeo(proxmat_ngc, 
+                    dist_mat, 
+                    alpha = 0.35)
+```
+
+```{r}
+clustG_0.4 <- hclustgeo(proxmat_ngc, 
+                    dist_mat, 
+                    alpha = 0.4)
+```
+
+#### 6.3.2.4 derive "cluster" Object
+
+```{r}
+groups_cg_0.3 <- as.factor(cutree(clustG_0.3, k = 3))
+```
+
+```{r}
+groups_cg_0.35 <- as.factor(cutree(clustG_0.35, k = 3))
+```
+
+```{r}
+groups_cg_0.4 <- as.factor(cutree(clustG_0.4, k = 3))
+```
+
+#### 6.3.2.5 combine *groups_cg* with *wp_ngaTrim*
+
+```{r}
+#| code-fold: false
+wp_nga_clustG_0.3 <- cbind(wp_ngaTrim, as.matrix(groups_cg_0.3)) %>%
+  rename(`cluster` = `as.matrix.groups_cg_0.3.`)
+```
+
+```{r}
+#| code-fold: false
+wp_nga_clustG_0.35 <- cbind(wp_ngaTrim, as.matrix(groups_cg_0.35)) %>%
+  rename(`cluster` = `as.matrix.groups_cg_0.35.`)
+```
+
+```{r}
+#| code-fold: false
+wp_nga_clustG_0.4 <- cbind(wp_ngaTrim, as.matrix(groups_cg_0.4)) %>%
+  rename(`cluster` = `as.matrix.groups_cg_0.4.`)
+```
+
+#### 6.3.2.6 Visualise Spatially Constrained Hierarchical Clustering
+
+```{r}
+clusGeo_sp.map0.3 <- tm_shape(wp_nga_clustG_0.3) +
+  tm_fill(col = "cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_style("cobalt") +
+  tm_layout(main.title = "Spatially Constrained ClustGeo Method",
+            main.title.size = 1.1,
+            main.title.position = "center",
+            legend.height = 0.3,
+            legend.width = 0.1, 
+            legend.title.size = 1,
+            legend.text.size = 1,
+            frame = TRUE,
+            asp = 0)
+
+clusGeo_sp.map0.3
+```
+
+```{r}
+clusGeo_sp.map0.35 <- tm_shape(wp_nga_clustG_0.35) +
+  tm_fill(col = "cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_style("cobalt") +
+  tm_layout(main.title = "Spatially Constrained ClustGeo Method",
+            main.title.size = 1.1,
+            main.title.position = "center",
+            legend.height = 0.3,
+            legend.width = 0.1, 
+            legend.title.size = 1,
+            legend.text.size = 1,
+            frame = TRUE,
+            asp = 0)
+
+clusGeo_sp.map0.35
+```
+
+```{r}
+clusGeo_sp.map0.4 <- tm_shape(wp_nga_clustG_0.4) +
+  tm_fill(col = "cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_style("cobalt") +
+  tm_layout(main.title = "Spatially Constrained ClustGeo Method",
+            main.title.size = 1.1,
+            main.title.position = "center",
+            legend.height = 0.3,
+            legend.width = 0.1, 
+            legend.title.size = 1,
+            legend.text.size = 1,
+            frame = TRUE,
+            asp = 0)
+
+clusGeo_sp.map0.4
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Three threshold values were tested, i.e. 3 (crossing point in the first alpha value plot), 3.5 (crossing point in the second alpha value plot) and 4 (noticeable elbow in the alpha value plots). ]{style="color:#d69c3c"}
+
+[When the alpha value is set to :]{style="color:#d69c3c"}
+
+-   [0.3, Cluster 1 scatter around the southwestern region while Cluster 2 has the highest LGA coverage compared to alpha values of 3.5 or 4. Cluster 1 scatter around South-western region. ]{style="color:#d69c3c"}
+
+-   [0.35, Cluster 3 covers more LGA than Cluster 2 with minimal changes to Cluster 1. ]{style="color:#d69c3c"}
+
+-   [0.4, Cluster 1 has the highest LGA coverage compared to alpha values of 3.5 or 4. Cluster 2 expand LGA coverage north-eastward.]{style="color:#d69c3c"}
+:::
+
+## 6.4 Spatially Constrained Clustering :: RedCap Method
+
+### 6.4.1 Derive Queen Contiguity Spatial Weights
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***queen_weights( )*** - rgeoda -]{style="color:#d46e15"} to create a Queen contiguity weights.
+:::
+
+```{r}
+nga_queenW <- queen_weights(wp_ngaTrim)
+
+nga_queenW
+```
+:::
+
+### 6.4.2 Compute Spatially Constrained Cluster
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***redcap( )*** - rgeoda -]{style="color:#d46e15"} to compute spatially constrained cluster based on three (3) mandatory arguments:-
+
+-   k, the number of clusters to form
+
+-   w, an instance of Weight class
+
+-   df, data frame with cluster variables
+:::
+
+```{r}
+#| code-fold: false
+set.seed(12345)
+
+clust_rCap <- redcap(3, 
+                     nga_queenW, 
+                     wp_stdMM, 
+       method = "fullorder-singlelinkage",
+       scale_method = 'raw',
+       distance_method = "euclidean",
+       random_seed = 12345)
+
+str(clust_rCap)
+```
+:::
+
+### 6.4.3 Reveal Cluster Assignment
+
+```{r}
+redCap_cluster <- clust_rCap$Cluster
+
+table(redCap_cluster)
+```
+
+### 6.4.4 Visualise Spatially Constrained Cluster
+
+```{r}
+redCap_mat <- as.matrix(redCap_cluster)
+
+wp_nga_redCap <- cbind(wp_ngaTrim, as.factor(redCap_mat)) %>%
+  rename(`cluster`=`as.factor.redCap_mat.`)
+```
+
+```{r}
+#| code-fold: false
+redCap_sp.map <- tm_shape(wp_nga_redCap) +
+  tm_fill(col = "cluster",
+          title = "Cluster") +
+  tm_borders(alpha = 0.3) +
+  tm_style("cobalt") +
+  tm_layout(main.title = "Spatially Constrained RedCap Method",
+            main.title.size = 1.1,
+            main.title.position = "center",
+            legend.height = 0.3,
+            legend.width = 0.1, 
+            legend.title.size = 1,
+            legend.text.size = 1,
+            frame = TRUE,
+            asp = 0)
+
+redCap_sp.map
+```
+
+# 7. VISUAL INTERPRETATION
+
+## 7.1 Visualise Individual Clustering Variable
+
+### 7.1.1 Plot Boxplot
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+ggplot(data = nga_ngeo_clust.sf,
+       aes(x = cluster, y = pct_nonFunctional)) +
+  geom_boxplot()
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[The boxplot reveals Cluster 3 displays the highest mean of non-functional water points. This is followed by Cluster 2.]{style="color:#d69c3c"}
+:::
+
+### 7.1.2 Visualise Multivariate
+
+::: {.callout-warning appearance="simple" icon="false"}
+Create a separate data frame to ensure key variables are included.
+
+#### 7.1.2.1 prepare data frame
+
+```{r}
+#| code-fold: false
+nga_ngeo_clust.sf1 <- nga_ngeo_clust.sf %>%
+  select("shapeName",
+         "pct_nonFunctional",
+         "pct_handPump", 
+         "pct_urban0",
+         "pct_cs10",
+         "pct_stat1",
+         "cluster")
+         
+head(nga_ngeo_clust.sf1,3)
+```
+
+#### 7.1.2.2 plot parallel coordinate plot
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***ggparcoord( )*** - GGally -]{style="color:#d46e15"} to plot static parallel coordinate plots to reveal distribution of variables by cluster.
+
+-   `scale` is a character string with the following options -
+
+    -   std : **univariately**, **subtract mean** & **divide by standard deviation**.
+
+    -   robust : **univariately**, **subtract median** & **divide by median absolute deviation**.
+
+    -   uniminmax : **univariately**, scale the minimum to 0, the maximum to 1.
+
+    -   globalminmax : **no scaling**; the range of the graphs is defined by the global minimum and the global maximum.
+
+    -   center : **use uniminmax** to standardize vertical height, then center each variable at a value specified by the scaleSummary param.
+
+    -   centerObs : **use uniminmax to** standardize vertical height, then center each variable at the value of the observation specified by the centerObsID param
+:::
+
+```{r}
+#| code-fold: false
+ggparcoord(data = nga_ngeo_clust.sf1,
+           columns = c(2:6),
+           mapping = aes(
+             color = as.factor(`cluster`)),
+           scale = "uniminmax",
+           alphaLines = 0.4,
+           boxplot = TRUE,
+           groupColumn = "cluster") +
+  scale_color_manual("cluster", 
+                     values = c("maroon", "steelblue", "darkgreen"),
+                     labels = levels(nga_ngeo_clust.sf1$cluster)) +
+  labs(title = "Visual Clustering for ClustGeo Method",
+       subtitle = "Multiple Parallel Coordinates Plot",
+       xlab = "Cluster Variables") +
+  facet_grid(~ cluster,) +
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "bottom",
+        text = element_text(
+          size = 12)) +
+  facet_wrap(~ cluster)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Based on the parallel coordinate plot above, insights for the stakeholder or decision makers from :]{style="color:#d69c3c"}
+
+-   [the Federal Ministry of Agriculture & Rural Development (FMARD) -]{style="color:#d69c3c"}
+
+    -   [Cluster 2 has the highest mean of non-functional water points, followed by Cluster 3, which is slightly higher than Cluster 1.]{style="color:#d69c3c"}
+
+    -   [Cluster 3, on the other hand, has the highest mean of non-urban communities and hand pump deployment. It also has the highest mean of non-functional water points with water observed during data collection. That means other causes caused these water points not-functioning accordingly instead of due to the absence of water.]{style="color:#d69c3c"}
+:::
+
+## 7.2 Compare Clustering Method Visually
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+tmap_arrange(clusGeo.map, clusGeo_SKAT.map, 
+             clusGeo_nSp.map, clusGeo_sp.map0.35,
+             asp = 0,
+             ncol = 2)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[The output by both Hierarchical Clustering and Hierarchical Clustering by ClustGeo method are relatively similar.]{style="color:#d69c3c"}
+
+[However, for spatially constrained clustering, ClustGeo method produce a desirable output compare to SKATER and RedCap methods.]{style="color:#d69c3c"}
+:::
+
+# 8. CONCLUSION
+
+## 8.1 Conclude with Summary Statistics
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| code-fold: false
+nga_ngeo_clust.sf1 %>% 
+  st_set_geometry(NULL) %>%
+  group_by(cluster) %>%
+  summarise(mean_pct_stat1 = mean(pct_stat1),
+            mean_pct_nonFunctional = mean(pct_nonFunctional),
+            mean_pct_handPump = mean(pct_handPump), 
+            mean_pct_cs10 = mean(pct_cs10), 
+            mean_pct_urban0 = mean(pct_urban0))
+         
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+-   [Cluster 2 having the highest mean of non-functional compare to the other two clusters, may require more resources to overhaul water points as 54% of them are currently supplying from 60% up to entire communities within 1 km. These water points may need to :]{style="color:#d69c3c"}
+
+    -   [increase the limit of usage capacity. ]{style="color:#d69c3c"}
+
+    -   [reassign amount of users to the water points. ]{style="color:#d69c3c"}
+
+-   [Cluster 3, with average up to 88% of the region falls under non-urban setting, having average 72% of water points deployed with hand pump. However, water was observed in 58% of the non-funcitonal water points. Thus, resources may required to explore further what rendered these water points from being functional. ]{style="color:#d69c3c"}
+:::

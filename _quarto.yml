@@ -52,7 +52,7 @@ website:
           - text: Class Project 1 - Spatial Weights & Applications
             href: class_project/project_1/spatial_weights.qmd
           - text: Class Project 2 - Regionalisation with Spatially Constrained Cluster Analysis
-            href: class_project/project_2/Regionalisation_scca.qmd
+            href: class_project/project_2/Regionalisation_scca_v3.1.qmd
           - text: Exploration 1 - Rehabilated Non-Functional Water Points in Nigeria
             href: exploration/exploration_1/rehabilitated_wpt.qmd
     
