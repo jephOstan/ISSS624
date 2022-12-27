@@ -295,7 +295,7 @@ The following are the packages required for this exercise :
 [***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages into R environment. This function will attempt to install the package from CRAN or pacman repository list if it is not installed.
 
 ```{r}
-pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis, rgeoda)
+pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis, rgeoda, cowplot, patchwork)
 ```
 :::
 
@@ -631,7 +631,7 @@ centroid_dupl.sf[[4]]
 ```
 
 | lga      | row_id | headquarter | state    | iso3166code | dupl_shapeName_coord | lga_office_coord                                                                                                                                                                                                                                                                                                          |
-|----------|----------|----------|----------|----------|----------|----------------|
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
 | Bassa    | 94     | Oguma       | Kogi     | NG.KO.BA    | 7.791971, 7.031827   | [7.80932, 6.74853](https://goo.gl/maps/WDitgPiphRDGX52d9)                                                                                                                                                                                                                                                                 |
 | Bassa    | 95     | Bassa       | Plateau  | NG.PL.BA    | 10.08015, 8.782946   | [10.11143, 8.71559](https://goo.gl/maps/eNj4Aqan83aiM7AK8)                                                                                                                                                                                                                                                                |
 | Ifelodun | 304    | Share       | Kwara    | NG.KW.IF    | 8.544311, 5.052235   | [8.5 5.0](https://latitude.to/map/ng/nigeria/regions/kwara-state/)                                                                                                                                                                                                                                                        |
@@ -1394,6 +1394,7 @@ Create a data frame with variables for clustering analysis before visualise the 
 #### 3.7.2.1 create cluster variable data frame
 
 ```{r}
+#| code-fold: false
 cluster_vars <- wp_ngaTrim %>%
   st_set_geometry(NULL) %>%
   select("shapeName",
@@ -1420,6 +1421,7 @@ cluster_vars <- wp_ngaTrim %>%
 #### 3.7.2.2 replace row ID with "shapeName"
 
 ```{r}
+#| code-fold: false
 row.names(cluster_vars) <- cluster_vars$shapeName
 cluster_vars <- cluster_vars %>%
   select(-shapeName)
@@ -1436,6 +1438,7 @@ cluster_vars <- cluster_vars %>%
 Reference of the code chunk below source from Lin S.Y., 2022[^10].
 
 ```{r}
+#| code-fold: false
 plot_num(cluster_vars)
 ```
 :::
@@ -1448,6 +1451,7 @@ plot_num(cluster_vars)
 Boxplot shows the minimum, maximum, median, first quartile, third quartile and outliers, if any.
 
 ```{r}
+#| code-fold: false
 ggarrange(
   (ggplot(data=cluster_vars, aes(x=`pct_functional`)) + 
      geom_boxplot(color="black", fill="#19ff3fFF")), 
@@ -1468,24 +1472,25 @@ ggarrange(
    ncol = 2,
   nrow = 4)
 ```
-
-[Remarks :]{style="color:#d69c3c"}
 :::
 
-### ?.1.2 EDA Clustering Table
+### 3.7.4 Alternate EDA Approach
 
-Before standardisation,
+With references to various coursemates' assignment.
 
-#### ?.1.2.1 Helper Function 1
+#### 3.7.4.1 set helper function
+
+#### \-- set Helper Function 1
 
 The approach and the code chunk refers from Chua Y.T.[^11]
 
 [^11]: Chua Y.T. (2022). 4 Exploratory Data Analysis - Helper Function 1. https://isss624-amelia.netlify.app/exercises/take-home_ex2/take-home_ex2#exploratory-data-analysis
 
 ```{r}
-#| eval: false
+#| code-fold: false
 hist_box_plot <- function(varname, title){ 
-  func1 <- ggplot(data = wp_ngaTrim, 
+  
+  func1 <- ggplot(data = cluster_vars, 
        aes(x = varname)) + 
   geom_histogram(bins = 30,
                  color = "black", 
@@ -1493,7 +1498,7 @@ hist_box_plot <- function(varname, title){
   theme_classic() + 
   xlab(title)
   
-  func2 <- ggplot(data = wp_ngaTrim, 
+  func2 <- ggplot(data = cluster_vars, 
          aes(x = varname)) + 
     geom_boxplot(fill = "steelblue", 
                  color = "black") + 
@@ -1502,16 +1507,19 @@ hist_box_plot <- function(varname, title){
     theme(axis.text.y = element_blank(),
           axis.ticks.y = element_blank())
   
-  func1/func2
+plot_grid(func1,
+          func2,
+          align = "v",
+          ncol = 1)
 }
 ```
 
-#### ?.1.2.1 Helper Function 2
+#### \-- set Helper Function 2
 
 ```{r}
-#| eval: false
+#| code-fold: false
 hist_plot <- function(varname, title){
-  func3 <- ggplot(data = cluster_varsNF1, 
+  func3 <- ggplot(data = cluster_vars, 
        aes(x = varname)) + 
   geom_histogram(bins = 30,
                  color = "black", 
@@ -1519,83 +1527,101 @@ hist_plot <- function(varname, title){
   theme_classic() + 
   xlab(title)
 
-    func3
+  func3
 }
 ```
 
-#### ?1.2. Helper Function 3
+#### \-- set Helper Function 3
 
 ```{r}
-#| eval: false
-# Function 3
-# input: the dataframe and the variable name, chart style, title 
+#| code-fold: false
 choropleth_plot <- function(varname, style, title) {
   tm_shape(wp_ngaTrim) +
     tm_fill(varname, 
-          n= 5,
+          n = 5,
           style = style) +
     tm_borders(alpha = 0.5) +
     tm_layout(main.title = title,
-              main.title.size = 2.2,
+              main.title.size = 0.8,
               main.title.position = "center",
-              legend.height = 3.5, 
+              legend.height = 3, 
               legend.width = 3,
-              legend.title.size = 2,
-              legend.text.size = 1.5,
+              legend.title.size = 0.8,
+              legend.text.size = 0.5,
               frame = TRUE)+ 
     tm_compass(position = c('left','bottom'))
 }
 ```
 
-### ?.1.3 Univariate Distribution Analysis
+#### 3.7.4.2 Univariate Distribution Analysis
 
-#### ?.1.3.1 visualise cluster variable
+#### \-- visualise cluster variable with histogram and boxplot
 
 ```{r}
-#| eval: false
-hist_box_plot(wp_ngaTrim$wp_nonFunctional, "Non-Functional Water Points")
+hist_box_plot(cluster_vars$pct_nonFunctional, "Non-Functional Water Point")
 ```
 
 ```{r}
-#| eval: false
-wpt_functional <- hist_plot(cluster_vars$wpt_functional, "wpt_functional")
-wpt_nonfunctional <-hist_plot(cluster_vars$wpt_nonfunctional, "wpt_nonfunctional")
-pct_functional <-hist_plot(cluster_vars$pct_functional, "pct_functional")
-pct_nonfunctional <-hist_plot(cluster_vars$pct_nonfunctional, "pct_nonfunctional")
-pct_handpump <-hist_plot(cluster_vars$pct_handpump, "pct_handpump")
-pct_mechpump <-hist_plot(cluster_vars$pct_mechpump, "pct_mechpump")
-pct_lowcap <-hist_plot(cluster_vars$pct_lowcap, "pct_lowcap")
-pct_highcap <-hist_plot(cluster_vars$pct_highcap, "pct_highcap")
-pct_rural <-hist_plot(cluster_vars$pct_rural, "pct_rural")
-pct_urban <-hist_plot(cluster_vars$pct_urban, "pct_urban")
-pct_lowcrucial <-hist_plot(cluster_vars$pct_lowcrucial, "pct_lowcrucial")
-pct_withinpressure <-hist_plot(cluster_vars$pct_withinpressure, "pct_withinpressure")
-
-wpt_functional + wpt_nonfunctional + pct_functional + 
-  pct_nonfunctional + pct_handpump + pct_mechpump + 
-  plot_layout(ncol = 3)
-
-
-pct_lowcap + pct_highcap + pct_rural + 
-  pct_urban + pct_lowcrucial + pct_withinpressure +
-  plot_layout(ncol = 3)
+hist_box_plot(cluster_vars$pct_stat1, "Water Point with Water Observed")
 ```
 
-Spatial Distribution of Cluster Variables
+```{r}
+hist_box_plot(cluster_vars$pct_cs10, "Crucialness-score Greater than 0.6")
+```
+
+```{r}
+hist_box_plot(cluster_vars$pct_handPump, "Hand Pump Deployed")
+```
+
+#### \-- multiple plot histograms
+
+```{r}
+pct_functional <- hist_plot(cluster_vars$pct_functional, "pct_functional")
+pct_nonfunctional <- hist_plot(cluster_vars$pct_nonFunctional, "pct_nonFunctional")
+pct_handpump <- hist_plot(cluster_vars$pct_handPump, "pct_handPump")
+pct_mechpump <- hist_plot(cluster_vars$pct_mechPump, "pct_mechPump")
+pct_uc1000 <- hist_plot(cluster_vars$pct_uc1000, "pct_uc1000")
+pct_ucN1000 <- hist_plot(cluster_vars$pct_ucN1000, "pct_ucN1000")
+pct_urban0 <- hist_plot(cluster_vars$pct_urban0, "pct_urban0")
+pct_stat1 <- hist_plot(cluster_vars$pct_stat1, "pct_stat1")
+pct_cs10 <-hist_plot(cluster_vars$pct_cs10, "pct_cs10")
+pct_ps19 <-hist_plot(cluster_vars$pct_ps19, "pct_ps19")
+```
+
+```{r}
+pct_functional + pct_nonfunctional +
+  pct_handpump + pct_mechpump +
+  pct_uc1000 + pct_ucN1000 +
+  pct_urban0 + pct_stat1 +
+  pct_cs10 + pct_ps19 +
+  plot_layout(ncol = 2)
+```
+
+#### \-- multiple plot geospatial EDA
 
 ```{r}
 #| eval: false
-tmap_arrange(
-choropleth_plot("wpt_functional", "quantile", "Functional water points in Nigeria: \n partitioned by 'quantile' intervals"),
-choropleth_plot("wpt_nonfunctional", "quantile", "Non-functional water points in Nigeria: \n partitioned by 'quantile' intervals"), 
-choropleth_plot("pct_functional", "quantile", "Pct of functional water points in Nigeria: \n partitioned by 'quantile' intervals"),
-choropleth_plot("pct_nonfunctional", "quantile", "Pct of Non-functional water points in Nigeria: \n partitioned by 'quantile' intervals"),
-choropleth_plot("pct_handpump", "quantile", "Pct of hand pump water points in Nigeria: \n partitioned by 'quantile' intervals"),
-choropleth_plot("pct_rural", "quantile", "Pct of water points in rural areas in Nigeria: \n partitioned by 'quantile' intervals"),
-choropleth_plot("pct_lowcrucial", "quantile", "Pct of water points with <=0.30 crucialness \nscore: partitioned by 'quantile' intervals"),
-choropleth_plot("pct_withinpressure", "quantile", "Pct of water points with <=1.18 pressure\nscore: partitioned by 'quantile' intervals"),
-ncol = 2
-)
+tmap_arrange(choropleth_plot("wp_functional", "quantile", 
+                "Functional Water Point"),
+             choropleth_plot("wp_nonFunctional", "quantile", 
+                "Non-functional Water Point"), 
+             choropleth_plot("pct_functional", "quantile", 
+                "Pct of functional water point"),
+             choropleth_plot("pct_nonFunctional", "quantile", 
+                "Pct of Non-functional water point"),
+             choropleth_plot("pct_handPump", "quantile", 
+                "Pct of Hand Pump Deployed"),
+             choropleth_plot("pct_mechPump", "quantile", 
+                "Pct of Mechanical Pump Deployed"),
+             choropleth_plot("pct_urban0", "quantile", 
+                "Pct of Water Point in Non-Urban Community"),
+             choropleth_plot("pct_cs10", "quantile", 
+                "Pct of Water Points with Crucialness > 0.6"),
+             choropleth_plot("pct_ps19", "quantile", 
+                "Pct of Water Points with Reaching Usage Limit"),
+             ncol = 2,
+             heights = 5,
+             nrow = 5)
 ```
 
 # 4. CORRELATION ANALYSIS
@@ -2547,13 +2573,13 @@ clusGeo_sp.map0.4
 
 [Remarks :]{style="color:#d69c3c"}
 
-[Three threshold values were tested, i.e. 3 (crossing point in the first alpha value plot), 3.5 (crossing point in the second alpha value plot) and 4 (noticeable elbow in the alpha value plots). ]{style="color:#d69c3c"}
+[Three threshold values were tested, i.e. 3 (crossing point in the first alpha value plot), 3.5 (crossing point in the second alpha value plot) and 4 (noticeable elbow in the alpha value plots).]{style="color:#d69c3c"}
 
 [When the alpha value is set to :]{style="color:#d69c3c"}
 
--   [0.3, Cluster 1 scatter around the southwestern region while Cluster 2 has the highest LGA coverage compared to alpha values of 3.5 or 4. Cluster 1 scatter around South-western region. ]{style="color:#d69c3c"}
+-   [0.3, Cluster 1 scatter around the southwestern region while Cluster 2 has the highest LGA coverage compared to alpha values of 3.5 or 4. Cluster 1 scatter around South-western region.]{style="color:#d69c3c"}
 
--   [0.35, Cluster 3 covers more LGA than Cluster 2 with minimal changes to Cluster 1. ]{style="color:#d69c3c"}
+-   [0.35, Cluster 3 covers more LGA than Cluster 2 with minimal changes to Cluster 1.]{style="color:#d69c3c"}
 
 -   [0.4, Cluster 1 has the highest LGA coverage compared to alpha values of 3.5 or 4. Cluster 2 expand LGA coverage north-eastward.]{style="color:#d69c3c"}
 :::
@@ -2781,9 +2807,9 @@ nga_ngeo_clust.sf1 %>%
 
 -   [Cluster 2 having the highest mean of non-functional compare to the other two clusters, may require more resources to overhaul water points as 54% of them are currently supplying from 60% up to entire communities within 1 km. These water points may need to :]{style="color:#d69c3c"}
 
-    -   [increase the limit of usage capacity. ]{style="color:#d69c3c"}
+    -   [increase the limit of usage capacity.]{style="color:#d69c3c"}
 
-    -   [reassign amount of users to the water points. ]{style="color:#d69c3c"}
+    -   [reassign amount of users to the water points.]{style="color:#d69c3c"}
 
--   [Cluster 3, with average up to 88% of the region falls under non-urban setting, having average 72% of water points deployed with hand pump. However, water was observed in 58% of the non-funcitonal water points. Thus, resources may required to explore further what rendered these water points from being functional. ]{style="color:#d69c3c"}
+-   [Cluster 3, with average up to 88% of the region falls under non-urban setting, having average 72% of water points deployed with hand pump. However, water was observed in 58% of the non-funcitonal water points. Thus, resources may required to explore further what rendered these water points from being functional.]{style="color:#d69c3c"}
 :::
