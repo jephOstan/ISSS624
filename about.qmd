@@ -1,9 +1,91 @@
 ---
-title: "About"
+title: "Profile"
 ---
 
-About this site
+[Name]{style="color:#a39f9d"} : [**Tan Zexeong, Joseph**](www.linkedin.com/in/joseph-zexeong-tan)
 
-```{r}
-1 + 1
-```
+[Residency]{style="color:#a39f9d"} : Singapore Permanent Resident
+
+## WORKING EXPERIENCES
+
+### [Environmental Consultancy]{style="color:#d69c3c"}
+
+-   environmental impact assessment (EIA) consultant
+
+### [Food & Beverages]{style="color:#d69c3c"}
+
+-   operational management, business-startup
+
+### [Wall & Glass Decal & Retail]{style="color:#d69c3c"}
+
+-   operational management, designer, installer
+
+### [Software Solutions Consultancy]{style="color:#d69c3c"}
+
+-   project management, quality assurance, ui/ux design, digital marketing, account supports, business development
+
+## **EDUCATION**
+
+### [Advanced Degree]{style="color:#d69c3c"}
+
+[Institute]{style="color:#a39f9d"} : **Singapore Management University - SMU**
+
+[Course]{style="color:#a39f9d"} : **Master of IT in Business, major in Analytics** \| Aug 2022 - Ongoing
+
+[Some of the Modules Undertaken]{style="color:#a39f9d"} :
+
+-   [**Visual Analytics & Applications**](https://visual-analytics-jeph0stan.netlify.app/)
+
+-   **Data Management**
+
+-   **Data Science for Business**
+
+-   **Applied Geospatial Analytics**
+
+-   **Data Analytics Lab with JMP Pro**
+
+-   **Spreadsheets Modeling for Decision Making**
+
+-   **Python Programming & Data Analysis**
+
+-   **Applied Statistical Analysis with R**
+
+### [Bachelor's Degree]{style="color:#d69c3c"}
+
+[Institute]{style="color:#a39f9d"} : **University Malaysia Sabah - UMS**
+
+[Course]{style="color:#a39f9d"} : **Bachelor of Science with Honours, major in Environmental Science** \| July 2006 - Oct 2009
+
+[Some of the Modules Undertaken]{style="color:#a39f9d"} :
+
+-   **Physics & Environmental Remote Sensing**
+
+-   **Geographical Information System & Environmental Modelling**
+
+-   **Environmental Statistics**
+
+-   **Environmental Monitoring & Assessment**
+
+-   **Soil Science**
+
+-   **Ecology & Microbiology**
+
+-   **Environmental Chemistry & Chemodynamics**
+
+-   **Air Quality Analysis and Noise**
+
+-   **Hydrology & Water Quality Analysis**
+
+-   **Pollution Control Technology**
+
+-   **Environmental Health & Toxicology**
+
+-   **Solid & Toxic Waste Management**
+
+-   **Natural Resources & Environmental Management**
+
+-   **Macro and Micro Economy**
+
+-   **Principles of Entrepreneurship**
+
+-   **French**

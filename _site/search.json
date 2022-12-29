@@ -9,9 +9,9 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "Profile",
     "section": "",
-    "text": "1 + 1\n\n[1] 2"
+    "text": "Name : Tan Zexeong, Joseph\nResidency : Singapore Permanent Resident"
   },
   {
     "objectID": "personal_note/Acronym_Terminology.html",
@@ -1888,5 +1888,19 @@
     "title": "Regionalisation with Spatially Constrained Cluster Analysis",
     "section": "8.1 Conclude with Summary Statistics",
     "text": "8.1 Conclude with Summary Statistics\n\n\n\n\n\n\n\nnga_ngeo_clust.sf1 %>% \n  st_set_geometry(NULL) %>%\n  group_by(cluster) %>%\n  summarise(mean_pct_stat1 = mean(pct_stat1),\n            mean_pct_nonFunctional = mean(pct_nonFunctional),\n            mean_pct_handPump = mean(pct_handPump), \n            mean_pct_cs10 = mean(pct_cs10), \n            mean_pct_urban0 = mean(pct_urban0))\n\n# A tibble: 3 × 6\n  cluster mean_pct_stat1 mean_pct_nonFunctional mean_pct_handP…¹ mean_…² mean_…³\n  <chr>            <dbl>                  <dbl>            <dbl>   <dbl>   <dbl>\n1 1                 57.8                   30.5             38.5    14.7    15.7\n2 2                 36.4                   43.4             14.9    54.4    77.9\n3 3                 58.3                   34.5             72.1    26.8    88.7\n# … with abbreviated variable names ¹​mean_pct_handPump, ²​mean_pct_cs10,\n#   ³​mean_pct_urban0\n\n\nRemarks :\n\nCluster 2 having the highest mean of non-functional compare to the other two clusters, may require more resources to overhaul water points as 54% of them are currently supplying from 60% up to entire communities within 1 km. These water points may need to :\n\nincrease the limit of usage capacity.\nreassign amount of users to the water points.\n\nCluster 3, with average up to 88% of the region falls under non-urban setting, having average 72% of water points deployed with hand pump. However, water was observed in 58% of the non-funcitonal water points. Thus, resources may required to explore further what rendered these water points from being functional."
+  },
+  {
+    "objectID": "about.html#working-experiences",
+    "href": "about.html#working-experiences",
+    "title": "Profile",
+    "section": "WORKING EXPERIENCES",
+    "text": "WORKING EXPERIENCES\n\nEnvironmental Consultancy\n\nenvironmental impact assessment (EIA) consultant\n\n\n\nFood & Beverages\n\noperational management, business-startup\n\n\n\nWall & Glass Decal & Retail\n\noperational management, designer, installer\n\n\n\nSoftware Solutions Consultancy\n\nproject management, quality assurance, ui/ux design, digital marketing, account supports, business development"
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "Profile",
+    "section": "EDUCATION",
+    "text": "EDUCATION\n\nAdvanced Degree\nInstitute : Singapore Management University - SMU\nCourse : Master of IT in Business, major in Analytics | Aug 2022 - Ongoing\nSome of the Modules Undertaken :\n\nVisual Analytics & Applications\nData Management\nData Science for Business\nApplied Geospatial Analytics\nData Analytics Lab with JMP Pro\nSpreadsheets Modeling for Decision Making\nPython Programming & Data Analysis\nApplied Statistical Analysis with R\n\n\n\nBachelor’s Degree\nInstitute : University Malaysia Sabah - UMS\nCourse : Bachelor of Science with Honours, major in Environmental Science | July 2006 - Oct 2009\nSome of the Modules Undertaken :\n\nPhysics & Environmental Remote Sensing\nGeographical Information System & Environmental Modelling\nEnvironmental Statistics\nEnvironmental Monitoring & Assessment\nSoil Science\nEcology & Microbiology\nEnvironmental Chemistry & Chemodynamics\nAir Quality Analysis and Noise\nHydrology & Water Quality Analysis\nPollution Control Technology\nEnvironmental Health & Toxicology\nSolid & Toxic Waste Management\nNatural Resources & Environmental Management\nMacro and Micro Economy\nPrinciples of Entrepreneurship\nFrench"
   }
 ]
