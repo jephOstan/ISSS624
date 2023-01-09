@@ -1,0 +1,22 @@
+---
+title: "Note2"
+editor: visual
+date: 9 Jan 2023
+code-copy: true
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
+---
+
+Differences between Geospatial Analytics & Descriptive/Visualisation
+
+-   Geospatial descriptive = proportion non-functional choropleth map
+
+-   Geospatial analytics = LISA Cluster(Non-Functional)
+
+    -   High-High indicates non-functional surrounded by non-functional

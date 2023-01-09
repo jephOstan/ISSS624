@@ -4,7 +4,7 @@ website:
     google-analytics: "G-VVFCV6MNHG"
 ---
 
-# **GEOSPATIAL ANALYSIS**
+# **GEOSPATIAL ANALYTICS**
 
 <font size = "6pt">with R Markdown, R Studio and Quarto</font>
 
@@ -18,11 +18,15 @@ All content on this site is for informational purposes only. This site's owner m
 
 [module]{style="color:#a39f9d"} : [**ISSS624-AY2022023Nov Applied Geospatial Analytics**](https://isss624-ay2022-23nov.netlify.app/ "syllabus for this module")
 
+[**IS415-AY2022023Jan Geospatial Analytics and Applications**](https://is415-ay2022-23t2.netlify.app/)
+
 [instructor]{style="color:#a39f9d"} : [**Dr. Kam Tin Seong**](https://www.smu.edu.sg/faculty/profile/9618/KAM-Tin-Seong), Associate Professor of Information Systems (Practice)
 
 [institute]{style="color:#a39f9d"} : [**MITB-Analytics Track**](https://scis.smu.edu.sg/master-it-business/analytics-track/curriculum "MITB_analyticsTrack") , Singapore Management University (SMU)
 
-[timeline]{style="color:#a39f9d"} : November 19, 2022 to December 17, 2022
+[timeline]{style="color:#a39f9d"} : ISSS624 - November 19, 2022 to December 17, 2022
+
+IS415 - January 9, 2023 to March 2023
 
 <br>
 

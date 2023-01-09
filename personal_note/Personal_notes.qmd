@@ -107,7 +107,7 @@ Foundation of :
 ## CODE REFERENCES
 
 | EPSG code                           | geodetic CRS | datum | ellipsoid     | area of use                      |
-|-------------------|-------------|-------------|-------------|-----------------|
+|-------------------------------------|--------------|-------|---------------|----------------------------------|
 | [3414 - 4326](https://epsg.io/3414) | SVY21        | SVY21 | WGS 84 (4326) | Singapore - onshore and offshore |
 
 <br>
