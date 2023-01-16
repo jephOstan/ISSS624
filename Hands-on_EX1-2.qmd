@@ -2,6 +2,17 @@
 title: "Choropleth Mapping with R [2]"
 editor: visual
 date: 18 Nov 2022
+reference-location: margin
+citation-location: margin
+code-copy: true
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
 ---
 
 ## 2.1 OVERVIEW

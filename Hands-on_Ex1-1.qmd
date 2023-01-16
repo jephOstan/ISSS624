@@ -74,7 +74,7 @@ pacman::p_load(sf, tidyverse, readr, readxl, ggplot2, dplyr, tidyr, units)
 
 [Remarks :]{style="color:#d69c3c"}
 
-[sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis, rgeoda, cowplot, patchwork.]{style="color:#d69c3c"}
+[sf, sp, (rgdal, rgeos both are retiring by year 2023), tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis, rgeoda, cowplot, patchwork.]{style="color:#d69c3c"}
 
 [Alternate code chunk -]{style="color:#d69c3c"}
 
@@ -222,7 +222,7 @@ Two (2) key functions i.e. Convert and Inspect.
 ```{r}
 listings_sf <- st_as_sf(listings, 
                        coords = c("longitude", "latitude"),
-                       crs=4326) %>%
+                       crs = 4326) %>%
   st_transform(crs = 3414)
 ```
 
@@ -405,8 +405,8 @@ solution :
 
 ```{r}
 mpsz3414$preSch_count <- lengths(
-  st_intersects(mpsz3414, preschool3414)
-  )
+  st_intersects(mpsz3414, 
+                preschool3414))
 
 summary(mpsz3414$preSch_count)
 ```
@@ -460,15 +460,15 @@ hist(mpsz3414$preSch_density)
 :::
 
 ```{r}
-ggplot(data=mpsz3414, 
-       aes(x= as.numeric(preSch_density)))+
-  geom_histogram(bins=20, 
-                 color="black", 
-                 fill="light blue") +
+ggplot(data = mpsz3414, 
+       aes(x = as.numeric(preSch_density))) +
+  geom_histogram(bins = 20,
+                 color = "black",
+                 fill = "light blue") +
   labs(title = "Are pre-school even distributed in Singapore?",
-       subtitle= "There are many planning sub-zones with a single pre-school, on the other hand, \nthere are two planning sub-zones with at least 20 pre-schools",
-      x = "Pre-school density (per km sq)",
-      y = "Frequency")
+       subtitle = "There are many planning sub-zones with a single pre-school, on the other hand, \nthere are two planning sub-zones with at least 20 pre-schools",
+       x = "Pre-school density (per km sq)",
+       y = "Frequency")
 ```
 :::
 
