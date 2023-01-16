@@ -2,9 +2,21 @@
 title: "Spatial Weights & Applications [3]"
 editor: visual
 date: 19 Nov 2022
+date-modified: "`r Sys.Date()`"
+reference-location: margin
+citation-location: margin
+code-copy: true
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
 ---
 
-## 3.1 OVERVIEW
+# 1. OVERVIEW
 
 Learning outcome to be expected from this exercise :
 
@@ -12,9 +24,10 @@ Learning outcome to be expected from this exercise :
 
 <br>
 
-## 3.2 R PACKAGE REQUIRED
+# 2. R PACKAGE REQUIRED
 
-Following are the packages require for this exercise :
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**R packages require for this exercise :**]{style="color:#93c54b"}
 
 -   **spdep** compute :
 
@@ -73,15 +86,26 @@ Following are the packages require for this exercise :
 
 -   *lapply( )* = returns a list of the same length as **`X`**, each element of which is the result of applying **`FUN`** to the corresponding element of **`X`**.
 
+:::
+
+## 2.1 Load R Packages
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages into R environment. This function will attempt to install the package from CRAN or the pacman repository list if it is not installed.
+:::
+
 ```{r}
 pacman::p_load(spdep, tmap, sf, tidyverse, readr, dplyr)
 ```
 
 <br>
 
-## 3.3 GEOSPATIAL DATA
+# 3 GEOSPATIAL DATA
 
-### 3.3.1 acquire data source
+## 3.1 Acquire Data Source
 
 Two data sets for this exercise are :
 
@@ -89,9 +113,10 @@ Two data sets for this exercise are :
 
 -   [***Hunan_2012.csv***]{.underline} : Contains selected Hunan's local development indicators.
 
-### 3.3.2 import shapefile data
+## 3.2 Import Shapefile Data
 
 ```{r}
+#| code-fold: false
 hunan <- st_read(dsn = "data/geospatial",
                  layer = "Hunan")
 ```

@@ -54,7 +54,9 @@ website:
           - text: Class Project 2 - Regionalisation with Spatially Constrained Cluster Analysis
             href: class_project/project_2/Regionalisation_scca_v3.1.qmd
           - text: Exploration 1 - Rehabilated Non-Functional Water Points in Nigeria
-            href: exploration/exploration_1/rehabilitated_wpt.qmd
+            href: exploration/exploration_1/exp1_rehabilitated_wpt.qmd
+          - text: Exploration 2 - Thematic Mapping Water Points in Nigeria
+            href: exploration/exploration_2/exp2_thematic_mapping.qmd
     
     right:
       - href: index.qmd

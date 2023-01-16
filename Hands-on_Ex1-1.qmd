@@ -2,6 +2,7 @@
 title: "Geospatial Data Wrangling with R [1]"
 editor: visual
 date: 18 Nov 2022
+date-modified: "`r Sys.Date()`"
 reference-location: margin
 citation-location: margin
 code-copy: true

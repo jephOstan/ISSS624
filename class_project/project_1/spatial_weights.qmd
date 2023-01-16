@@ -2,6 +2,18 @@
 title: "Geospatial Analytics for Social Good"
 editor: visual
 date: 29 Nov 2022
+date-modified: "`r Sys.Date()`"
+reference-location: margin
+citation-location: margin
+code-copy: true
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
 ---
 
 ## 1. OVERVIEW
@@ -691,7 +703,7 @@ plot(k1, coords, add = TRUE, col = "red", length = 0.08)
 ```
 
 |                                          | W~d=3~   | W~d=5~   | W~d=6~   | W~d=8~   |
-|------------------------------------------|----------|----------|----------|----------|
+|----------------------------|-----------|-----------|-----------|-----------|
 | Largest first nearest neighbour distance | 39.08489 | 40.08029 | 42.28107 | 44.87575 |
 
 #### 3.6.1.4 compute Adaptive Distance Weight Matrix

@@ -1,0 +1,403 @@
+---
+title: "Explore2 : Thematic Mapping"
+editor: visual
+date: 16 Jan 2023
+date-modified: "`r Sys.Date()`"
+code-copy: true
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
+---
+
+# 1 OVERVIEW
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Expected learning outcome**]{style="color:#93c54b"}
+
+-   installing and loading [sf](https://r-spatial.github.io/sf/) and [tidyverse](https://www.tidyverse.org/) packages into R environment,
+
+-   importing geospatial data by using appropriate functions of **sf** package,
+
+-   importing aspatial data by using appropriate function of **readr** package,
+
+-   exploring the content of simple feature data frame by using appropriate **Base R** and **sf** functions,
+
+-   assigning or transforming coordinate systems by using using appropriate *sf* functions,
+
+-   converting an aspatial data into a sf data frame by using appropriate function of **sf** package,
+
+-   performing geoprocessing tasks by using appropriate functions of **sf** package,
+
+-   performing data wrangling tasks by using appropriate functions of **dplyr** package and
+
+-   performing Exploratory Data Analysis (EDA) by using appropriate functions from **ggplot2** package.
+:::
+
+# 2. R PACKAGE REQUIRED
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Following are the packages require for this exercise :**]{style="color:#93c54b"}
+
+-   **sf** for importing, managing, and processing geospatial data.
+
+-   **tidyverse** for performing data science tasks such as importing, wrangling and visualising data.
+
+    -   **readr** for importing csv data
+
+    -   **readxl** for importing Excel worksheet
+
+    -   **tidyr** for manipulating data
+
+    -   **dplyr** for transforming data
+
+    -   **ggplot2** for visualising data
+:::
+
+## 2.1 Load R Packages
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages into R environment. This function will attempt to install the package from CRAN or the pacman repository list if it is not installed.
+:::
+
+```{r}
+pacman::p_load(sf, tidyverse, readr, readxl, ggplot2, dplyr, tidyr, units)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[sf, sp, (rgdal, rgeos both are retiring by year 2023), tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis, rgeoda, cowplot, patchwork.]{style="color:#d69c3c"}
+
+[Alternate code chunk -]{style="color:#d69c3c"}
+
+```{r}
+#| code-fold: false
+#| eval: false
+packages = c('tidyverse', 'sf', 'readr', 'readxl','ggplot2','dplyr','tidyr')
+for(p in packages){
+  if(!require(p, character.only = T)){
+    install.packages(p)
+  }
+  library(p, character.only = T)
+}
+```
+:::
+
+# 3. GEOSPATIAL DATA
+
+## 3.1 Acquire Data
+
+-   **Aspatial Data**
+
+    1.  Download the Nigeria data set in shapefile format via [Access WPdx+ Global Data Repository](https://data.waterpointdata.org/dataset/Water-Point-Data-Exchange-Plus-WPDx-/eqje-vguj/data) from [WPdx Global Data Repositories](https://www.waterpointdata.org/access-data/).
+    2.  Rename the title of the data set to "***geo_export***".
+
+::: callout-note
+[The file size of the downloaded data is about 422 MB due to water points data from multiple countries.]{style="color:#d69c3c"}
+
+    -   [Such file size may require extra effort and time to manage the code chunks and files in the R environment before pushing them to GitHub.]{style="color:#d69c3c"}
+
+    [Hence, to avoid any error in pushing files larger than 100 MB to Git, filtered Nigeria water points and removed unnecessary variables before uploading into the R environment.]{style="color:#d69c3c"}
+
+    [Therewith, the CSV file size should be lesser than 100 MB.]{style="color:#d69c3c"}
+:::
+
+-   **Geospatial Data**
+
+    1.  Download the Nigeria geoBoundaries data set at ADM2 level[^1] from [geoBoundaries.org](https://www.geoboundaries.org/index.html#getdata) or the [Humanitarian Data Exchange portal](https://data.humdata.org/).
+    2.  Rename the title of the data set to "***nga_admbnda_adm2_osgof_20190417***"
+
+[^1]: Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866. https://doi.org/10.1371/journal.pone.0231866
+
+## 3.2 Import Data
+
+### 3.2.1 Import Boundary Data
+
+::: {.callout-warning appearance="simple" icon="false"}
+Included two extra functions when importing the data :
+
+-   transform the boundary data to "26392"
+
+-   check parsing error.
+
+#### 3.2.1.1 import data
+
+```{r}
+#| code-fold: false
+bdy_nga.sf <- st_read(dsn = "data/geospatial",
+               layer = "geoBoundaries-NGA-ADM2") %>%
+  select(shapeName) %>%
+  st_transform(crs = 26392)
+
+problems(bdy_nga.sf)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Observations : 774 in multipolygon]{style="color:#d69c3c"}
+
+[CRS : Projected CRS i.e. WGS 84]{style="color:#d69c3c"}
+
+### 3.2.1.2 save sf data frame into RDS format
+
+```{r}
+write_rds(bdy_nga.sf,
+          "data/geodata/bdy_nga.sf.rds")
+```
+
+### 3.2.1.3 read RDS file
+
+```{r}
+#| code-fold: false
+bdy_nga.sf <- read_rds("data/geodata/bdy_nga.sf.rds")
+```
+:::
+
+### 3.2.2 Import Attribute Data
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| code-fold: false
+wp_attribute <- read_csv("data/aspatial/WPdx_NGAv1.2.1.csv",
+                       col_select = c(`row_id`,
+                                      `#lat_deg`,
+                                      `#lon_deg`,
+                                      `New Georeferenced Column`,
+                                      `lat_lon_deg`,
+                                      `#water_source`,
+                                      `#water_source_clean`,
+                                      `#water_source_category`,
+                                      `#water_tech_clean`,
+                                      `#water_tech_category`,
+                                      `#status_clean`,
+                                      `#status`,
+                                      `#status_id`,
+                                      `#clean_adm1`,
+                                      `#clean_adm2`,
+                                      `water_point_population`,
+                                      `local_population_1km`,
+                                      `crucialness_score`,
+                                      `pressure_score`,
+                                      `usage_capacity`,
+                                      `staleness_score`,
+                                      `rehab_priority`,
+                                      `is_urban`)) %>%
+  rename(lat_deg = `#lat_deg`, 
+         lon_deg = `#lon_deg`,
+         water_source = `#water_source`,
+         water_source_clean = `#water_source_clean`, 
+         water_source_category = `#water_source_category`, 
+         water_tech_clean = `#water_tech_clean`, 
+         water_tech_category = `#water_tech_category`,
+         status_clean = `#status_clean`,
+         status = `#status`,
+         status_id = `#status_id`,
+         clean_adm1 = `#clean_adm1`,
+         clean_adm2 = `#clean_adm2`)
+
+problems(wp_attribute)
+```
+
+#### 3.2.2.1 inspect for missing value
+
+```{r}
+skimr::skim(wp_attribute)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+[Observation : 95,008 water points]{style="color:#d69c3c"}
+
+[Variable : Out of 23 variables, there are 7 variables with missing value n percent.]{style="color:#d69c3c"}
+
+#### 3.2.2.2 derive "geometry" variable
+
+```{r}
+wp_attribute$geometry = st_as_sfc(wp_attribute$`New Georeferenced Column`)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+Need to have "geometry" variable, else will encounter the following error -
+
+" Error in st_sf(wp_attribute, crs = 26392) : no simple features geometry column present "
+
+#### 3.2.2.3 convert to sf data frame
+
+```{r}
+wp.sf<- st_sf(wp_attribute, 
+              crs = 26392)
+st_crs(wp.sf)
+```
+
+### 3.2.2.4 write sf data frame into RDS format
+
+```{r}
+#| code-fold: false
+write_rds(wp.sf,
+          "data/geodata/wp.sf.rds",
+          compress = "xz")
+```
+
+#### 3.2.2.5 read RDS file
+
+```{r}
+#| code-fold: false
+wp.sf <- read_rds("data/geodata/wp.sf.rds")
+```
+:::
+
+## 3.3 Data Wrangling
+
+### 3.3.1 Ensure Unique References
+
+::: {.callout-warning appearance="simple" icon="false"}
+In order to use "shapeName" as the unique reference id, the duplicated shapeName will be append with state name respectively to become unique value.
+
+#### 3.3.1.1 update "shapeName" with list of row id
+
+```{r}
+bdy_nga.sf$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)] <- 
+  c("Bassa Kogi",
+    "Bassa Plateau",
+    "Ifelodun Kwara",
+    "Ifelodun Osun",
+    "Irepodun Kwara",
+    "Irepodun Osun",
+    "Nasarawa Kano",
+    "Nasarawa Nasarawa",
+    "Obi Nasarawa",
+    "Obi Benue",
+    "Surulere Lagos",
+    "Surulere Oyo")
+
+bdy_nga.sf$shapeName[c(94,95,304,305,355,356,519,520,546,547,693,694)]
+```
+
+#### 3.3.1.2 varify output
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"} The codechunk below is to verify the output from previous step.
+:::
+
+```{r}
+dupl_shapeName_val.sf <- bdy_nga.sf %>%
+  add_count(bdy_nga.sf$shapeName) %>%
+  filter(n != 1) %>%
+  select(-n)
+
+dupl_shapeName_val.sf
+```
+:::
+
+### 3.3.2 Perform Point-in-Polygon Overlay
+
+::: {.callout-warning appearance="simple" icon="false"}
+Compare different approaches in combining the attribute and boundary of the water points into a simple feature object :
+
+| x          | y          | left |
+|------------|------------|------|
+| wp.sf      | bdy_nga.sf | TRUE |
+| wp.sf      | bdy_nga.sf | NULL |
+| bdy_nga.sf | wp.sf      | NULL |
+
+#### 3.3.2.1 join objects :: wp.sf, bdy_nga.sf
+
+```{r}
+wp_point.left <- st_join(x = wp.sf,
+                     y = bdy_nga.sf,
+                     join = st_intersects,
+                     left = TRUE)
+
+st_geometry(wp_point.left)
+```
+
+```{r}
+wp_point <- st_join(x = wp.sf,
+                     y = bdy_nga.sf,
+                     join = st_intersects)
+
+st_geometry(wp_point)
+```
+
+```{r}
+wp_mpolygon <- st_join(x = bdy_nga.sf,
+                     y = wp.sf,
+                     join = st_intersects,
+                     left = TRUE)
+
+st_geometry(wp_mpolygon)
+```
+
+https://cengel.github.io/R-spatial/spatialops.html
+
+```{r}
+
+```
+
+#### 3.3.2.2 save and read RDS Files
+
+```{r}
+write_rds(wp_point,
+          "data/geodata/wp_point.rds")
+```
+
+```{r}
+wp_point <- read_rds("data/geodata/wp_point.rds")
+```
+:::
+
+# 4. GEOSPATIAL VISUALISATION
+
+## 4.1 Plot with graphics package
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***plot( )*** - graphics -]{style="color:#d46e15"} to plot map for each field / variable in mpsz.
+:::
+
+```{r}
+plot(wp_point,
+     max.plot = 15,
+     asp = 1)
+```
+:::
+
+## 4.2 Plot with sf package
+
+### 4.2.1 Plot Boundary
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_geometry( )*** - sf -]{style="color:#d46e15"} to get the map boundary for the plot( ) function.
+:::
+
+```{r}
+plot(st_geometry(wp_point))
+```
+:::
+
+### 4.2.2 Plot Specific Attribute
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+plot(wp_point["status_clean"])
+```
+:::
+
+# 5. REFERENCES
+
+-   r4gdsa.netlify.app. https://r4gdsa.netlify.app/chap02.html#data-preparation
+
+-   STHDA (Statistical tools for high-throughput data analysis), (N.A.), ggplot2 scatter plots : Quick start guide - R software and data visualization. http://www.sthda.com/english/wiki/ggplot2-scatter-plots-quick-start-guide-r-software-and-data-visualization
