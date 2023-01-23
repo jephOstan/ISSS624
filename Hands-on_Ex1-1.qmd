@@ -178,7 +178,7 @@ Two (2) key functions i.e. Import and Inspect.
 :::
 
 ```{r}
-listings <- read_csv("/jephOstan/ISSS624/data/aspatial/listings.csv")
+listings <- read_csv("data/aspatial/listings.csv")
 ```
 
 [Remarks :]{style="color:#d69c3c"}
