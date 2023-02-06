@@ -85,17 +85,13 @@ Learning outcome to be expected from this exercise :
 -   [*unlist( )*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/unlist) = remove the list structure of the returned object.
 
 -   *lapply( )* = returns a list of the same length as **`X`**, each element of which is the result of applying **`FUN`** to the corresponding element of **`X`**.
-
 :::
 
 ## 2.1 Load R Packages
 
-::: {.callout-warning appearance="simple" icon="false"}
-::: {.callout-alert appearance="simple" icon="false"}
-[Usage of the code chunk below :]{style="color:#a39f9d"}
+::: {.callout-warning appearance="simple" icon="false"} ::: {.callout-alert appearance="simple" icon="false"} [Usage of the code chunk below :]{style="color:#a39f9d"}
 
-[***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages into R environment. This function will attempt to install the package from CRAN or the pacman repository list if it is not installed.
-:::
+[***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages into R environment. This function will attempt to install the package from CRAN or the pacman repository list if it is not installed. :::
 
 ```{r}
 pacman::p_load(spdep, tmap, sf, tidyverse, readr, dplyr)

@@ -159,6 +159,22 @@ gtag('config', 'G-VVFCV6MNHG', { 'anonymize_ip': true});
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-references--notes">    
         <li>
+    <a class="dropdown-item" href="../../personal_note/is415_l1/is415_l1.html">
+ <span class="dropdown-text">Extra In-Class 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../personal_note/is415_l2/is415_l2.html">
+ <span class="dropdown-text">Extra In-Class 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../personal_note/is415_l4/is415_l4.html">
+ <span class="dropdown-text">Extra In-Class 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../personal_note/is415_l5/is415_l5.html">
+ <span class="dropdown-text">Extra In-Class 5</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../../personal_note/Acronym_Terminology.html">
  <span class="dropdown-text">Acronym &amp; Terminology</span></a>
   </li>  
@@ -351,7 +367,7 @@ gtag('config', 'G-VVFCV6MNHG', { 'anonymize_ip': true});
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 23, 2023</p>
+      <p class="date-modified">February 6, 2023</p>
     </div>
   </div>
     
@@ -571,7 +587,7 @@ arguments
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>hunan <span class="ot">&lt;-</span> <span class="fu">left_join</span>(hunan,hunan2012)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Joining, by = "County"</code></pre>
+<pre><code>Joining with `by = join_by(County)`</code></pre>
 </div>
 </div>
 <pre style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"><code>
@@ -2032,7 +2048,7 @@ B 88 7744 8.786867 0.3776535 3.8137</code></pre>
 <span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>hunan <span class="ot">&lt;-</span> <span class="fu">left_join</span>(hunan,lag.res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Joining, by = "NAME_3"</code></pre>
+<pre><code>Joining with `by = join_by(NAME_3)`</code></pre>
 </div>
 </div>
 </section>
@@ -2188,7 +2204,7 @@ B 88 7744 448 896 10224</code></pre>
 <div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>hunan <span class="ot">&lt;-</span> <span class="fu">left_join</span>(hunan, lag.res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Joining, by = "NAME_3"</code></pre>
+<pre><code>Joining with `by = join_by(NAME_3)`</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -2293,7 +2309,7 @@ W 88 7744 88 37.86334 365.9147</code></pre>
 <div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>hunan <span class="ot">&lt;-</span> <span class="fu">left_join</span>(hunan, lag_wm_q1.res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Joining, by = "NAME_3"</code></pre>
+<pre><code>Joining with `by = join_by(NAME_3)`</code></pre>
 </div>
 </div>
 <p><em>qtm()</em> of <strong>tmap</strong> package is used to plot the GDPPC and lag_window_avg GDPPC map next to each other for quick comparison.</p>
@@ -2444,7 +2460,7 @@ B 88 7744 448 896 10224</code></pre>
 <div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>hunan <span class="ot">&lt;-</span> <span class="fu">left_join</span>(hunan, w_sum_gdppc.res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Joining, by = "NAME_3"</code></pre>
+<pre><code>Joining with `by = join_by(NAME_3)`</code></pre>
 </div>
 </div>
 <p><em>qtm()</em> of <strong>tmap</strong> package is used to plot the GDPPC and lag_sum GDPPC map next to each other for quick comparison.</p>

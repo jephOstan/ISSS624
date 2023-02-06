@@ -20,3 +20,11 @@ Differences between Geospatial Analytics & Descriptive/Visualisation
 -   Geospatial analytics = LISA Cluster(Non-Functional)
 
     -   High-High indicates non-functional surrounded by non-functional
+
+dbf = database engine
+
+shp = shape file, cant plot just by shp
+
+shx = extend of the data, to frame the plot
+
+prj = projection of the data

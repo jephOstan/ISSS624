@@ -419,7 +419,7 @@ write_rds(wp_attribute,
 ```
 :::
 
-### 3.2.4 Save Imported Data Frame into RDS Format
+### 3.2.4 Read RDS File
 
 ::: {.callout-warning appearance="simple" icon="false"}
 ::: {.callout-alert appearance="simple" icon="false"}
@@ -701,9 +701,9 @@ Combine the attribute and boundary of the water points into a simple feature obj
 ```{r}
 #| eval: false
 wp_joined.sf <- st_join(x = wp.sf,
-                     y = bdy_nga.sf,
-                     join = st_intersects,
-                     left = TRUE)
+                        y = bdy_nga.sf,
+                        join = st_intersects,
+                        left = TRUE)
 ```
 
 #### 3.4.2.2 save and read RDS File :: *wp_joined.sf*
@@ -726,8 +726,7 @@ wp_joined.sf <- read_rds("data/geodata/wp_joined.sf.rds")
 
 ```{r}
 #| code-fold: false
-wp_joined.sf %>% janitor::get_dupes(shapeName,
-                                 lat_lon_deg)
+wp_joined.sf %>% janitor::get_dupes(shapeName,lat_lon_deg)
 ```
 
 [Remarks :]{style="color:#d69c3c"}

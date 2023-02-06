@@ -1,0 +1,210 @@
+---
+title: "Extra In-Class2"
+editor: visual
+date:  23 Jan 2023
+date-modified: "`r Sys.Date()`"
+code-copy: true
+execute: 
+  echo: true
+  eval: true
+  warning: false
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
+---
+
+# 1. OVERVIEW
+
+## 1.1 Study Area Introduction
+
+::: {.callout-tip .column-page collapse="true" appearance="simple" icon="false"}
+## [**Water points in Federal Republic of Nigeria**]{style="color:#93c54b"}
+
+Alpha-3 Code : **NGA**
+
+Population : **225 million** (1st in Africa, 6th globally)
+
+Local Government Areas (LGA) : **774**
+
+Water Point Observations : **95,008**
+
+Environmental Aspects :
+
+-   **Geography** :
+
+    -   Southwest - "rugged" highland.
+
+    -   Southeast - hills and mountains, which form the Mambilla Plateau, the highest plateau in Nigeria.
+
+-   **Hydrology** :
+
+    -   Two (2) main catchment areas - Chad Basin & Niger catchment area.
+
+    -   Surface area of lake Chad is shrinking recent decades due to irrigation activities.[^1]
+
+    -   Untreated wastes dump in places resulted in waterways and groundwater pollution.[^2]
+
+-   **Vegetation Coverage** :
+
+    -   Lost nearly 80% of primary forest by 2012.[^3]
+
+    -   States with dense forests concentrated : Bayelsa, Cross River, Edo, Ekiti, Ondo, Osun, Rivers, and Taraba.
+:::
+
+[^1]: Wikipedia. *Nigeria.* https://en.wikipedia.org/wiki/Nigeria
+
+[^2]: Ogbonna, D.N., Ekweozor, I.K.E., Igwe, F.U. (2002). "Waste Management: A Tool for Environmental Protection in Nigeria". *Ambio: A Journal of the Human Environment*. **31** (1): 55--57. [doi](https://en.wikipedia.org/wiki/Doi_(identifier) "Doi (identifier)"):[10.1639/0044-7447(2002)031\[0055:wmatfe\]2.0.co;2](https://doi.org/10.1639%2F0044-7447%282002%29031%5B0055%3Awmatfe%5D2.0.co%3B2).
+
+[^3]: https://rainforests.mongabay.com/20nigeria.htm
+
+# 2. R PACKAGE REQUIRED
+
+## 2.1 Load R Packages
+
+::: {.callout-warning appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages into R environment. This function will attempt to install the package from CRAN or pacman repository list if it is not installed.
+
+```{r}
+pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis, rgeoda, cowplot, patchwork)
+```
+:::
+
+# 3. GEOSPATIAL DATA
+
+## 3.1 Read Data from RDS File
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+NGA_wp <- read_rds("data/rds/NGA_wp.rds")
+```
+:::
+
+## 3.2 Visualise Data
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+p1 <- tm_shape(NGA_wp) +
+  tm_fill("wp_functional",
+          n = 10,
+          style = "equal",
+          palette = "Blues") +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Distribution of\n functional water points",
+            legend.outside = FALSE)
+
+p2 <- tm_shape(NGA_wp) +
+  tm_fill("wp_nonFunctional",
+          n = 10,
+          style = "equal",
+          palette = "Blues") +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Distribution of\n non-functional water points",
+            legend.outside = FALSE)
+```
+:::
+
+```{r}
+tmap_arrange(p2, p1, nrow = 1)
+```
+
+```{r}
+tmap_arrange(p2, p1,
+             ncol = 1,
+             nrow = 2)
+```
+
+Remarks :
+
+View as absolute value. Can be significantly different if view by percentage.
+
+## 4.2 Plotting Map of Rate
+
+plot a choropleth map showing the distribution of percentage functional water point by LGA
+
+other usage - plot for population percentage, e.g. Tampines population.
+
+```{r}
+NGA_wp <- NGA_wp %>%
+  mutate(pct_functional = wp_functional/total_wp) %>%
+  mutate(pct_nonfunctional = wp_nonFunctional/total_wp)
+
+```
+
+```{r}
+tm_shape(NGA_wp) +
+  tm_fill("pct_functional",
+          n = 10,
+          style = "equal",
+          palette = "Blues") +
+  tm_borders(lwd = 0.1,
+             alpha = 1) +
+  tm_layout(main.title = "Rate map of functional water points",
+            legend.outside = TRUE)
+```
+
+## 5.1 Percentile Map
+
+lower percentile = 0 - 1%
+
+upper percentile = 99 - 100%
+
+vector of cumulative percentile = c(0, .01, .1, .5, .9, .99 ,1)
+
+```{r}
+NGA_wp <- NGA_wp %>%
+  drop_na()
+```
+
+```{r}
+percent <- c(0,.01,.1,.5,.9,.99,1)
+
+var <- NGA_wp["pct_functional"] %>%
+  st_set_geometry(NULL)
+
+quantile(var[,1], percent)
+```
+
+```{r}
+get.var <- function(vname, df){
+  v <- df[vname] %>%
+    st_set_geometry(NULL)
+  v <- unname(v[,1])
+  return(v)
+}
+```
+
+```{r}
+percentmap <- function (vnam, 
+                        df, 
+                        legtitle = NA, 
+                        mtitle = "Percentile Map")
+  {
+  percent <- c(0,.01,.1,.5,.9,.99,1)
+  var <- get.var(vnam, df)
+  bperc <- quantile(var, percent)
+  tm_shape(df) +
+    tm_polygons() +
+    tm_shape(df) +
+    tm_fill(vnam,
+            title = legtitle,
+            breaks = bperc,
+            palette = "Blues",
+            labels = c("< 1%", "1% - 10%", "10% - 50%","50% - 90%","90%")) +
+    tm_borders() +
+    tm_layout(main.title = mtitle,
+              title.position = c("right", "bottom"))
+  }
+```
+
+```{r}
+percentmap("wp_functional", NGA_wp)
+```

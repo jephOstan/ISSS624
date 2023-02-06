@@ -1,0 +1,170 @@
+---
+title: "Lesson 5 : Advanced Spatial Point Patterns Analysis"
+subtitle: "This study explores the concept of Local Colocation Quotients (Local CLQs)"
+editor: visual
+date:  6 Feb 2023
+date-modified: "`r Sys.Date()`"
+code-copy: true
+execute: 
+  echo: true
+  eval: true
+  warning: false
+  error: false
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
+---
+
+# **1. OVERVIEW**
+
+This study explores the concept and application of Local Colocation Quotients (Local CLQs) with sfdep package.
+
+There are three type CLQs :
+
+-   Global
+
+-   Pairwise
+
+-   Local
+
+## 1.1 Study Area
+
+Taiwan
+
+Refers to [EPSG.io](https://epsg.io/3829) for more details about CRS.
+
+# 2. R PACKAGE REQUIRED
+
+## **2.1 Load R Packages**
+
+```{r}
+#| code-fold: false
+pacman::p_load(sfdep, sf, tmap, tidyverse) 
+```
+
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**⇳ Highlights of the R Packages :**]{style="color:#3a9c88"}
+:::
+
+# **3. DATA PREPARATION**
+
+## **3.1 Acquire Data Source**
+
+This study will be based on trimmed data set provided with this lesson.
+
+## **3.2 Import Data**
+
+### **3.2.1 Import Attribute Data**
+
+```{r}
+studyArea <- st_read(dsn = "data",
+                     layer = "study_area") %>%
+  st_transform(crs = 3829)
+
+```
+
+```{r}
+stores <- st_read(dsn = "data",
+                  layer = "stores") %>%
+  st_transform(crs = 3829)
+```
+
+### **3.2.2 Visualise sf Layers**
+
+```{r}
+tmap_mode("view")
+tm_shape(studyArea) + 
+  tm_polygons() +
+  tm_shape(stores) +
+  tm_dots(col = "Name",
+          size = 0.01,
+          border.col = "black",
+          border.lwd = 0.5) +
+  tm_view(set.zoom.limits = c(12,16))
+```
+
+```{r}
+tmap_mode("plot")
+```
+
+# **4. LOCAL COLOCATION QUOTIENTS (LCLQ)**
+
+## **4.1 Derive Arguments' Value**
+
+### **4.1.1 Compute Neighbour List**
+
+```{r}
+nb <- include_self(st_knn
+                   (st_geometry
+                     (stores), 
+                     6))
+
+```
+
+Remarks :
+
+When using include_self( ) function, use even number to avoid 3-3 split scenario.
+
+### **4.1.2 Derive Weight Matrix**
+
+```{r}
+wt <- st_kernel_weights(nb,
+                        stores,
+                        "gaussian",
+                        adaptive = TRUE)
+```
+
+### **4.1.3 Derive Target Lists - A and B**
+
+```{r}
+FamilyMart <- stores %>%
+  filter(Name == "Family Mart")
+
+A <- FamilyMart$Name
+```
+
+```{r}
+SevenEleven <- stores %>%
+  filter(Name == "7-Eleven")
+B <- SevenEleven$Name
+```
+
+## **4.2 Compute Local Simulations**
+
+```{r}
+LCLQ <- local_colocation(A,B,nb, wt, 49)
+```
+
+## **4.3 Visualise**
+
+### **4.3.1 Combine Data Sets**
+
+```{r}
+LCLQ_stores <- cbind(stores, LCLQ)
+```
+
+Remarks :
+
+-   Cannot use relational join such as left join as there is no unique identifier in LCLQ.
+
+-   Do not sort LCLQ's data. Else, it won't be able to match back to stores.
+
+-   Stores should be on the left side so that the geometry info in stores can be inherited. Else, it won't.
+
+```{r}
+tmap_mode("view")
+tm_shape(studyArea) + 
+  tm_polygons() +
+  tm_shape(LCLQ_stores) +
+  tm_dots(col = "X7.Eleven",
+          size = 0.01,
+          border.col = "black",
+          border.lwd = 0.5) +
+  tm_view(set.zoom.limits = c(12,16))
+
+```

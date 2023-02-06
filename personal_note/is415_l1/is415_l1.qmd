@@ -1,0 +1,413 @@
+---
+title: "Extra In-Class"
+editor: visual
+date: 25 Jan 2023
+date-modified: "`r Sys.Date()`"
+reference-location: margin
+citation-location: margin
+code-copy: true
+website: 
+    google-analytics: "G-VVFCV6MNHG"
+format:
+  html:
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
+    css: styles.css
+---
+
+# 1. OVERVIEW
+
+## 1.1 Study Area Introduction
+
+::: {.callout-tip .column-page collapse="true" appearance="simple" icon="false"}
+## [**Water points in Federal Republic of Nigeria**]{style="color:#93c54b"}
+
+Alpha-3 Code : **NGA**
+
+Population : **225 million** (1st in Africa, 6th globally)
+
+Local Government Areas (LGA) : **774**
+
+Water Point Observations : **95,008**
+
+Environmental Aspects :
+
+-   **Geography** :
+
+    -   Southwest - "rugged" highland.
+
+    -   Southeast - hills and mountains, which form the Mambilla Plateau, the highest plateau in Nigeria.
+
+-   **Hydrology** :
+
+    -   Two (2) main catchment areas - Chad Basin & Niger catchment area.
+
+    -   Surface area of lake Chad is shrinking recent decades due to irrigation activities.[^1]
+
+    -   Untreated wastes dump in places resulted in waterways and groundwater pollution.[^2]
+
+-   **Vegetation Coverage** :
+
+    -   Lost nearly 80% of primary forest by 2012.[^3]
+
+    -   States with dense forests concentrated : Bayelsa, Cross River, Edo, Ekiti, Ondo, Osun, Rivers, and Taraba.
+:::
+
+[^1]: Wikipedia. *Nigeria.* https://en.wikipedia.org/wiki/Nigeria
+
+[^2]: Ogbonna, D.N., Ekweozor, I.K.E., Igwe, F.U. (2002). "Waste Management: A Tool for Environmental Protection in Nigeria". *Ambio: A Journal of the Human Environment*. **31** (1): 55--57. [doi](https://en.wikipedia.org/wiki/Doi_(identifier) "Doi (identifier)"):[10.1639/0044-7447(2002)031\[0055:wmatfe\]2.0.co;2](https://doi.org/10.1639%2F0044-7447%282002%29031%5B0055%3Awmatfe%5D2.0.co%3B2).
+
+[^3]: https://rainforests.mongabay.com/20nigeria.htm
+
+# 2. R PACKAGE REQUIRED
+
+## 2.1 Load R Packages
+
+::: {.callout-warning appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***p_load( )*** - pacman -]{style="color:#d46e15"} to load packages into R environment. This function will attempt to install the package from CRAN or pacman repository list if it is not installed.
+
+```{r}
+pacman::p_load(sf, tidyverse, questionr, janitor, psych, ggplot2, gcookbook, tmap, ggpubr, egg, corrplot, gtsummary, regclass, caret, heatmaply, ggdendro, cluster, factoextra, spdep, ClustGeo, GGally, skimr, stringr, funModeling, knitr, caTools, viridis, rgeoda, cowplot, patchwork)
+```
+:::
+
+# 3. GEOSPATIAL DATA
+
+## 3.1 Acquire Data
+
+-   **Aspatial Data**
+
+    1.  Download the Nigeria data set in shapefile format via [Access WPdx+ Global Data Repository](https://data.waterpointdata.org/dataset/Water-Point-Data-Exchange-Plus-WPDx-/eqje-vguj/data) from [WPdx Global Data Repositories](https://www.waterpointdata.org/access-data/).
+    2.  Rename the title of the data set to "***geo_export***".
+
+::: callout-note
+[The file size of the downloaded data is about 422 MB due to water points data from multiple countries.]{style="color:#d69c3c"}
+
+-   [Such file size may require extra effort and time to manage the code chunks and files in the R environment before pushing them to GitHub.]{style="color:#d69c3c"}
+
+[Hence, to avoid any error in pushing files larger than 100 MB to Git, filtered Nigeria water points and removed unnecessary variables before uploading into the R environment.]{style="color:#d69c3c"}
+
+[Therewith, the CSV file size should be lesser than 100 MB.]{style="color:#d69c3c"}
+:::
+
+-   **Geospatial Data**
+
+    1.  Download the Nigeria geoBoundaries data set at ADM2 level[^4] from [geoBoundaries.org](https://www.geoboundaries.org/index.html#getdata) or the [Humanitarian Data Exchange portal](https://data.humdata.org/).
+    2.  Rename the title of the data set to "***nga_admbnda_adm2_osgof_20190417***"
+
+[^4]: Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866. https://doi.org/10.1371/journal.pone.0231866
+
+## 3.2 Import Attribute Data
+
+### 3.2.1 Import Aspatial Data
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+wp_attribute <- read_csv("data/aspatial/WPdx.csv") %>%
+  filter(`#clean_country_name` == "Nigeria") %>%
+  select(`row_id`,
+         `#lat_deg`,
+         `#lon_deg`,
+         `New Georeferenced Column`,
+         `lat_lon_deg`,
+         `#water_source`,
+         `#water_source_clean`,
+         `#water_source_category`,
+         `#water_tech_clean`,
+         `#water_tech_category`,
+         `#status_clean`,
+         `#status`,
+         `#status_id`,
+         `#clean_adm1`,
+         `#clean_adm2`,
+         `water_point_population`,
+         `local_population_1km`,
+         `crucialness_score`,
+         `pressure_score`,
+         `usage_capacity`,
+         `staleness_score`,
+         `rehab_priority`,
+         `is_urban`) %>%
+  rename(lat_deg = `#lat_deg`, 
+         lon_deg = `#lon_deg`,
+         water_source = `#water_source`,
+         water_source_clean = `#water_source_clean`, 
+         water_source_category = `#water_source_category`, 
+         water_tech_clean = `#water_tech_clean`, 
+         water_tech_category = `#water_tech_category`,
+         status_clean = `#status_clean`,
+         status = `#status`,
+         status_id = `#status_id`,
+         clean_adm1 = `#clean_adm1`,
+         clean_adm2 = `#clean_adm2`)
+
+problems(wp_attribute)
+```
+
+Remarks :
+
+Alternately, can use the code chunk below :
+
+NGA %\>%
+
+select(c(3:4, 8:9))
+:::
+
+### 3.2.2 Get Imported Data Frame Overview
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***skim( )*** - skimr -]{style="color:#d46e15"} to get a broad overview of *wp_coord* data frame.
+:::
+
+```{r}
+#| eval: false
+skim(wp_attribute)
+```
+:::
+
+### 3.2.3 Save Imported Data Frame into RDS Format
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***write_rds( )*** - readr -]{style="color:#d46e15"} to save *wp_attribute* data table into an RDS format.
+
+**note : reduce the file size with this function -\> compress = "xz".**
+:::
+
+```{r}
+#| eval: false
+write_rds(wp_attribute,
+          "data/geodata/wp_attribute.rds",
+          compress = "xz")
+```
+:::
+
+### 3.2.4 Read RDS File
+
+::: {.callout-warning appearance="simple" icon="false"}
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***read_rds( )*** - readr -]{style="color:#d46e15"} to read *wp_attribute* RDS file into *wp_attribute*.
+:::
+
+```{r}
+#| code-fold: false
+wp_attribute <- read_rds("data/geodata/wp_attribute.rds")
+```
+:::
+
+### 3.2.5 Convert Well Known Text (WKT) Data to SF Data Frame
+
+::: {.callout-warning appearance="simple" icon="false"}
+The "New Georeferenced Column" in *wp_attribute* contains spatial data in a WKT format.
+
+Two (2) steps to convert the WKT data format into an sf data frame :
+
+-   derive "geometry" variable.
+
+-   conversion to sf data frame.
+
+#### 3.2.5.1 derive new field :: "geometry"
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_as_sfc( )*** - sf -]{style="color:#d46e15"} to convert foreign geometry object \`New Georeferenced Column\` to an sfc object
+:::
+
+```{r}
+wp_attribute$geometry = st_as_sfc(wp_attribute$`New Georeferenced Column`)
+```
+
+#### 3.2.5.2 convert to SF Data Frame
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***st_sf( )*** - sf -]{style="color:#d46e15"} to convert the tibble data frame into sf data frame with crs first set to WGS 84 (EPSG : 4326).
+
+[***st_crs( )*** - sf -]{style="color:#d46e15"} to retrieve coordinate reference system from the object.
+:::
+
+```{r}
+wp.sf<- st_sf(wp_attribute, crs = 4326)
+st_crs(wp.sf)
+```
+
+a
+
+```{r}
+wp_sf <- wp.sf %>% 
+  st_transform(crs = 26392)
+```
+:::
+
+## 3.3 Import Boundary Data
+
+### 3.3.1 Import Geospatial Data
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+bdy_nga.sf <- st_read(dsn = "data/geospatial",
+               layer = "geoBoundaries-NGA-ADM2") %>%
+  st_transform(crs = 26392)
+```
+
+Remarks :
+
+If there are different source of data with same amount of observations, look for the one with more variables like state details.
+:::
+
+### 3.3.2 Save and read RDS file :: *bdy_nga.sf*
+
+::: {.callout-warning appearance="simple" icon="false"}
+```{r}
+#| eval: false
+write_rds(bdy_nga.sf,
+          "data/geodata/bdy_nga.sf.rds",
+          compress = "xz")
+```
+
+```{r}
+#| code-fold: false
+bdy_nga.sf <- read_rds("data/geodata/bdy_nga.sf.rds")
+```
+:::
+
+## 3.4 Data Wrangling For Water Point Data
+
+#### 3.4.1 Check Missing and Duplicated Data
+
+::: {.callout-warning .column-page-right appearance="simple" icon="false"}
+```{r}
+skim(bdy_nga.sf)
+```
+
+[Remarks :]{style="color:#d69c3c"}
+
+-   [There is no missing data.]{style="color:#d69c3c"}
+
+-   [There are 774 unique "geometry" but only 768 unique "shapeName"]{style="color:#d69c3c"}
+
+    -   [That means there are 6 values of "shapeName" duplicated among the identified unique "shapeName".]{style="color:#d69c3c"}
+:::
+
+### 3.4.2 Identify Duplicated "shapeName"
+
+```{r}
+bdy_nga.sf$shapeName[duplicated(bdy_nga.sf$shapeName) == TRUE]
+```
+
+#### 3.4.2.1 update duplicated "shapeName"
+
+```{r}
+bdy_nga.sf$shapeName[94] <- "Bassa, Kogi"
+bdy_nga.sf$shapeName[95] <- "Bassa, Plateau"
+bdy_nga.sf$shapeName[304] <- "Ifelodun, Kwara"
+bdy_nga.sf$shapeName[305] <- "Ifelodun, Osun"
+bdy_nga.sf$shapeName[355] <- "Irepodun, Kwara"
+bdy_nga.sf$shapeName[356] <- "Irepodun, Osun"
+bdy_nga.sf$shapeName[519] <- "Nasarawa, Kano"
+bdy_nga.sf$shapeName[520] <- "Nasarawa, Nasarawa"
+bdy_nga.sf$shapeName[546] <- "Obi, Benue"
+bdy_nga.sf$shapeName[547] <- "Obi, Nasarawa"
+bdy_nga.sf$shapeName[693] <- "Surelere, Lagos"
+bdy_nga.sf$shapeName[694] <- "Surelere, Oyo"
+```
+
+### 3.4.3 Review "status_clean"
+
+```{r}
+freq(data = wp_sf,
+     input = "status_clean")
+```
+
+#### 3.4.3.1 replace NA with "unknown"
+
+```{r}
+wp_sf_nga <- wp_sf %>%
+  select(status_clean) %>%
+  mutate(status_clean =  replace_na(status_clean, "unknown"))
+```
+
+### 3.4.4 Extract Water Point Data
+
+#### 3.4.4.1 Water Points with Functional Status
+
+```{r}
+wpt_functional.sf <- wp_sf_nga %>%
+  filter(status_clean %in%
+           c("Functional", 
+             "Functional but not in use",
+             "Functional but needs repair"))
+```
+
+#### 3.4.4.2 Water Points with Non-Functional Status
+
+```{r}
+wpt_nonFunctional.sf <- wp_sf_nga %>%
+  filter(status_clean %in%
+           c("Abandoned/Decommissioned",
+             "Abandoned",
+             "Non-Functional",
+             "Non-Functional due to dry season",
+             "Non functional due to dry season"))
+```
+
+#### 3.4.4.3 Water Points with Unknown Status
+
+```{r}
+wpt_unknown.sf <- wp_sf_nga %>%
+  filter(status_clean == "unknown")
+```
+
+#### 3.4.4.4 EDA
+
+```{r}
+freq(wpt_unknown.sf$status_clean)
+```
+
+```{r}
+NGA_wp <- bdy_nga.sf %>%
+  mutate(`total_wp` = lengths(
+    st_intersects(bdy_nga.sf, wp_sf_nga))) %>%
+  mutate(`wp_functional` = lengths(
+    st_intersects(bdy_nga.sf, wpt_functional.sf))) %>%
+  mutate(`wp_nonFunctional` = lengths(
+    st_intersects(bdy_nga.sf, wpt_nonFunctional.sf))) %>%
+  mutate(`wp_unknown` = lengths(
+    st_intersects(bdy_nga.sf, wpt_unknown.sf)))
+```
+
+```{r}
+write_rds(NGA_wp,
+          "data/geodata/NGA_wp.rds",
+          )
+```
+
+```{r}
+ggplot(data = NGA_wp,
+       aes(x = total_wp)) +
+  geom_histogram(bins = 20,
+                 color = "black",
+                 fill = "lightblue") +
+  geom_vline(aes(xintercept = mean(
+    total_wp, na.rm = T)),
+    color = "red",
+    linetype = "dashed",
+    size = 0.8) +
+  ggtitle("Distribution of total water points by LGA") +
+  xlab("No. of water points") +
+  ylab("No. of \nLGAs") +
+  theme(axis.title.y = element_text(angle = 0))
+```
