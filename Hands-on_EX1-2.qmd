@@ -2,6 +2,7 @@
 title: "Choropleth Mapping with R [2]"
 editor: visual
 date: 18 Nov 2022
+date-modified: "`r Sys.Date()`"
 reference-location: margin
 citation-location: margin
 code-copy: true
@@ -15,7 +16,7 @@ format:
     css: styles.css
 ---
 
-## 2.1 OVERVIEW
+# 1. OVERVIEW
 
 Choropleth mapping involves the symbolisation of enumeration units, such as countries, provinces, states, counties or census units, using **area patterns** or **graduated colors**.
 
@@ -25,9 +26,10 @@ This exercise focuses on usage of tmap package to create choropleth map.
 
 <br>
 
-## 2.2 R PACKAGE REQUIRED
+# 2. R PACKAGE REQUIRED
 
-Following are the packages require for this exercise :
+::: {.callout-tip collapse="true" appearance="simple" icon="false"}
+## [**Following are the packages require for this exercise :**]{style="color:#93c54b"}
 
 -   **tmap** :
 
@@ -82,18 +84,23 @@ Following are the packages require for this exercise :
         -   *group_by( )*
 
         -   *select( )*
+:::
 
+## 2.1 Load R Packages
+
+::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 pacman::p_load(sf, tmap, tidyverse)
 ```
+:::
 
 <br>
 
-## 2.3 GEOSPATIAL DATA
+# 3 GEOSPATIAL DATA
 
-### 2.3.1 acquire data source
+## 3.1 Acquire Data
 
--   [***Master Plan 2014 Subzone Boundary (Web***)]{.underline} : (i.e. `MP14_SUBZONE_WEB_PL`) in ESRI shapefile format from [data.gov.sg](https://data.gov.sg/)
+-   [***Master Plan 2014 Subzone Boundary (Web***)]{.underline} : (i.e. `MP14_SUBZONE_WEB_PL`) in ESRI shapefile format from [data.gov.sg](https://data.gov.sg/)
 
     -   This is a geospatial data.
 
@@ -105,60 +112,38 @@ pacman::p_load(sf, tmap, tidyverse)
 
     -   Although it does not contain any coordinates values, but it's PA and SZ fields can be used as unique identifiers to geocode to `MP14_SUBZONE_WEB_PL` shapefile.
 
-### 2.3.2 import data into R
+## 3.2 Import Data
 
+### 3.2.1 Import Geospatial Data
+
+::: {.callout-warning appearance="simple" icon="false"}
 ```{r}
 mpsz <- st_read(dsn = "data/geospatial", 
                 layer = "MP14_SUBZONE_WEB_PL")
 ```
 
-### 2.3.3 examine the content of mpsz
+#### 3.2.1.1 examine imported data
 
 ```{r}
-mpsz
+glimpse(mpsz, 60)
 ```
 
-<br>
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
 
-**syntax of sample()**
-
-``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;"}
-
-sample(x, size, replace = FALSE, prob = NULL)
-
-arguments :
-
-* x = vector or a data set.
-* size = sample size.
-* replace = with or without replacement of values.
-* prob = probability weights.
-```
+[***sample( )*** - base -]{style="color:#d46e15"} to display only first 2 rows of data.
+:::
 
 ```{r}
 mpsz[sample(2, ),]
 ```
-
-::: {.column-margin style="color: #9e6024; border-width: 3px;   border-style: solid;   border-color: #ebbd8f;"}
-![](images/Asset%209.png){width="25"}
-
-mpsz\[sample(2, ),\] != mpsz\[sample(2,),\]
-
--   with space (2, ) = display 2nd OBJECTID first.
-
--   without space (2,) = normal display first 2 rows.
-
-mpsz\[sample(2, )\] \>\> display only first 2 columns i.e. OBJECTID & SUBZONE
 :::
 
-<br>
-
-### 2.3.4 import attribute data
+### 3.2.2 Import Attribute Data
 
 ```{r}
-popdata <- read_csv("/jephOstan/ISSS624/data/aspatial/respopagesextod2011to2020.csv")
+popdata <- read_csv("data/aspatial/respopagesextod2011to2020.csv")
 ```
-
-<br>
 
 ### 2.3.5 prepare data
 
@@ -175,6 +160,12 @@ Prepare data table to plot thematic map. The variables are :
 -   **dependency** : the ratio between young and aged against economy active group
 
 ### 2.3.5.1 wrangling data
+
+::: {.callout-alert appearance="simple" icon="false"}
+[Usage of the code chunk below :]{style="color:#a39f9d"}
+
+[***pivot_wider( )*** - -]{style="color:#d46e15"} to display only first 2 rows of data.
+:::
 
 ``` {style="color: #ffffff; background-color: #9e6024; border-width: 2.5px;   border-style: solid;   border-color: #ebbd8f;  wrap: auto;"}
 
@@ -230,6 +221,17 @@ arguments :
 "none" doesn't retain any extra columns from .data. Only the grouping variables and columns created by ... are kept.
 
 * .before, .after = Optionally, control where new columns should appear (the default is to add to the right hand side).
+```
+
+```{r}
+poptest <- popdata %>%
+  filter(Time == 2020) %>%
+  group_by(PA, SZ, AG) %>%
+  summarise(`POP` = sum(`Pop`)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = AG, 
+              values_from = POP)
+
 ```
 
 ```{r}

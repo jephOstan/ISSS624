@@ -7,7 +7,15 @@ website:
   navbar:
     left: 
       - text: References & Notes
-        menu: 
+        menu:
+          - text: Extra In-Class 1
+            href: personal_note/is415_l1/is415_l1.qmd 
+          - text: Extra In-Class 2
+            href: personal_note/is415_l2/is415_l2.qmd 
+          - text: Extra In-Class 4
+            href: personal_note/is415_l4/is415_l4.qmd
+          - text: Extra In-Class 5
+            href: personal_note/is415_l5/is415_l5.qmd
           - text: Acronym & Terminology
             href: personal_note/Acronym_Terminology.qmd
           - text: Common Errors and Basic Concepts
@@ -46,7 +54,8 @@ website:
             href: in-class_ex/in-class_ex4/In-class_Ex4.qmd
           - text: In-class Exercise 5 - Case Study 2.2 GWLR
             href: in-class_ex/in-class_ex5/In-class_Ex5.qmd  
-            
+
+
       - text: Projects
         menu: 
           - text: Class Project 1 - Spatial Weights & Applications

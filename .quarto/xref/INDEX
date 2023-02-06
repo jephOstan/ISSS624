@@ -88,5 +88,44 @@
   },
   "exploration/exploration_1/exp1_rehabilitated_wpt.qmd": {
     "exp1_rehabilitated_wpt.html": "b0883a02"
+  },
+  "in-class_ex/extra1/ug_inClass1_v1.qmd": {
+    "ug_inClass1_v1.html": "e677020f"
+  },
+  "in-class_ex/extra2/ug_inClass2_v1.qmd": {
+    "ug_inClass2_v1.html": "b6b70a8e"
+  },
+  "in-class_ex/extra4/ug_inClass4_v1.qmd": {
+    "ug_inClass4_v1.html": "d1b5386c"
+  },
+  "in-class_ex/is415_l5/is415_l5.qmd": {
+    "is415_l5.html": "d1a63d8e"
+  },
+  "in-class_ex/is415_l1/is415_l1.qmd": {
+    "is415_l1.html": "41d9bb80"
+  },
+  "in-class_ex/is415_l2/is415_l2.qmd": {
+    "is415_l2.html": "b141d606"
+  },
+  "in-class_ex/is415_l4/is415_l4.qmd": {
+    "is415_l4.html": "a4425445"
+  },
+  "personal_note/is415_l1/is415_l1.qmd": {
+    "is415_l1.html": "90ca8405"
+  },
+  "personal_note/is415_l2/is415_l2.qmd": {
+    "is415_l2.html": "84cbfb55"
+  },
+  "personal_note/is415_l4/is415_l4.qmd": {
+    "is415_l4.html": "b4b08aa3"
+  },
+  "personal_note/is415_l5/data/stores.qmd": {
+    "stores.html": "389b810b"
+  },
+  "personal_note/is415_l5/data/study_area.qmd": {
+    "study_area.html": "b7c54ea0"
+  },
+  "personal_note/is415_l5/is415_l5.qmd": {
+    "is415_l5.html": "60cea30a"
   }
 }
